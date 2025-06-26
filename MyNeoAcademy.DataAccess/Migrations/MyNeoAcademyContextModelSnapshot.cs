@@ -171,9 +171,6 @@ namespace MyNeoAcademy.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseID"));
 
-                    b.Property<int>("CategoryID")
-                        .HasColumnType("int");
-
                     b.Property<int>("CourseCategoryID")
                         .HasColumnType("int");
 

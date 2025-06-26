@@ -1,21 +1,32 @@
 using Microsoft.EntityFrameworkCore;
+using MyNeoAcademy.Business.Abstract;
+using MyNeoAcademy.Business.Concrete;
+using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.DataAccess.Context;
+using MyNeoAcademy.DataAccess.Repositories;
 using System;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IGenericService<>),typeof(GenericManager<>));
 
 // AppDbContext'i servise ekle
 builder.Services.AddDbContext<MyNeoAcademyContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
 });
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
 
 var app = builder.Build();
 

@@ -12,7 +12,7 @@ using MyNeoAcademy.DataAccess.Context;
 namespace MyNeoAcademy.DataAccess.Migrations
 {
     [DbContext(typeof(MyNeoAcademyContext))]
-    [Migration("20250608122849_mig_initial")]
+    [Migration("20250626123144_mig_initial")]
     partial class mig_initial
     {
         /// <inheritdoc />
@@ -173,9 +173,6 @@ namespace MyNeoAcademy.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseID"));
-
-                    b.Property<int>("CategoryID")
-                        .HasColumnType("int");
 
                     b.Property<int>("CourseCategoryID")
                         .HasColumnType("int");

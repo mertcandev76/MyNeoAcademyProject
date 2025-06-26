@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "PKkcTR//p3JH4wmwtbK2SDKYffvxmFQEXfPauuvAXOSuM6e35w3RVWV9FvWjJlpd+skEnPTRObv8XMOf3LEm3Q==",
+  "dgSpecHash": "9j07qKO0LtnKjCsVWqyyd9xBISImDOh6Lv0BZ8/d0xUbNxtYeP8hv3NoIVH4YAStjGrVfrdSHMmeLbnRITQ2rg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\MyNeoAcademy.API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\adsiz\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\adsiz\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\adsiz\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\adsiz\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
