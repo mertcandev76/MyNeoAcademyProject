@@ -20,43 +20,54 @@ namespace MyNeoAcademy.API.Controllers
             _socialMediaService = socialMediaService;
             _mapper = mapper;
         }
-        //Listeleme
+
+        // Listeleme
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var values = await _socialMediaService.TGetListAsync();
-            return Ok(values);
+            var socialMediaList = await _socialMediaService.GetListAsync();
+            var dtos = _mapper.Map<List<ResultSocialMediaDTO>>(socialMediaList);
+            return Ok(dtos);
         }
-        //ID ile Getirme
+
+        // ID ile Getirme
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var values = await _socialMediaService.TGetByIdAsync(id);
-            return Ok(values);
+            var socialMedia = await _socialMediaService.GetByIdAsync(id);
+            if (socialMedia == null) return NotFound();
+            var dto = _mapper.Map<ResultSocialMediaDTO>(socialMedia);
+            return Ok(dto);
         }
-        //Ekleme
+
+        // Ekleme
         [HttpPost]
         public async Task<IActionResult> Create(CreateSocialMediaDTO createSocialMediaDTO)
         {
-            var dtos = _mapper.Map<SocialMedia>(createSocialMediaDTO);
-            await _socialMediaService.TCreateAsync(dtos);
-            return Ok("Yeni Sosyal Media Alanı Oluşturuldu");
+            var entity = _mapper.Map<SocialMedia>(createSocialMediaDTO);
+            await _socialMediaService.CreateAsync(entity);
+            return Ok("Yeni Sosyal Medya Kaydı Oluşturuldu");
         }
-        //Güncelleme
+
+        // Güncelleme
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateSocialMediaDTO  updateSocialMediaDTO)
+        public async Task<IActionResult> Update(UpdateSocialMediaDTO updateSocialMediaDTO)
         {
-            var dtos = _mapper.Map<SocialMedia>(updateSocialMediaDTO);
-            await _socialMediaService.TUpdateAsync(dtos);
-            return Ok("Sosyal Media Alanı Güncellendi");
+            var entity = _mapper.Map<SocialMedia>(updateSocialMediaDTO);
+            await _socialMediaService.UpdateAsync(entity);
+            return Ok("Sosyal Medya Kaydı Güncellendi");
         }
-        //Silme
+
+        // Silme
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _socialMediaService.TDeleteAsync(id);
-            return Ok("Sosyal Media Silindi");
-        }
+            var socialMedia = await _socialMediaService.GetByIdAsync(id);
+            if (socialMedia == null)
+                return NotFound();
 
+            await _socialMediaService.DeleteAsync(socialMedia);
+            return Ok();
+        }
     }
 }

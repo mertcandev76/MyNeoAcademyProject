@@ -1,0 +1,91 @@
+﻿@model List<ResultSubscriberDTO>
+@{
+    ViewData["Title"] = "Abone Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-3">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">@ViewData["Title"]</h3>
+            <a asp-action="Create" asp-area="Admin" class="btn btn-primary btn-sm">+ Yeni Abone Ekle</a>
+        </div>
+        <div class="card-body p-0">
+            @if (Model != null && Model.Any())
+            {
+                <table class="table table-bordered mb-0 text-center align-middle">
+                    <thead class="table">
+                        <tr>
+                            <th>#</th>
+                            <th>Email</th>
+                            <th>Aktif mi?</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.SubscriberID</td>
+                                <td>@item.Email</td>
+                                <td>
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge bg-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Pasif</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.SubscriberID" asp-area="Admin" class="btn btn-primary btn-sm me-1">
+                                        <i class="fas fa-eye"></i> Detay
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.SubscriberID" asp-area="Admin" class="btn btn-warning btn-sm me-1">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </a>
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#deleteModal"
+                                            data-id="@item.SubscriberID"
+                                            data-name="@item.Email"
+                                            data-controller="Subscriber">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-warning m-3 text-center">Henüz abone bulunmamaktadır.</div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Silme onay modalı -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong id="deleteItemName"></strong> adlı aboneyi silmek istediğinizden emin misiniz?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <a id="confirmDeleteBtn" class="btn btn-danger">Sil</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

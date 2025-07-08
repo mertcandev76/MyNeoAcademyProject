@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.DTO.DTOs.SubscriberDTOs
 {
-    public class UpdateSubscriberDTO
+    public class UpdateSubscriberDTO:CreateSubscriberDTO
     {
         public int SubscriberID { get; set; }
-        public string Email { get; set; }
-        public bool IsActive { get; set; }
     }
 }

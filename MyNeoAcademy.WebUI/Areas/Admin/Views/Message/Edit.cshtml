@@ -1,0 +1,45 @@
+﻿@model UpdateMessageDTO
+@{
+    ViewData["Title"] = "Mesaj Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" asp-area="Admin" method="post">
+                <input type="hidden" asp-for="MessageID" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Gönderen Adı</label>
+                    <input asp-for="Name" class="form-control" placeholder="Ad Soyad" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Subject" class="form-label">Konu</label>
+                    <input asp-for="Subject" class="form-control" placeholder="Mesaj Konusu" />
+                    <span asp-validation-for="Subject" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label">Mesaj İçeriği</label>
+                    <textarea asp-for="Content" class="form-control" rows="4" placeholder="Mesaj metni..."></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

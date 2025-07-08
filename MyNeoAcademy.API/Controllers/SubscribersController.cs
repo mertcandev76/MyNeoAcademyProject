@@ -24,22 +24,26 @@ namespace MyNeoAcademy.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var values = await _subscriberService.TGetListAsync();
-            return Ok(values);
+
+            var subscriberList = await _subscriberService.GetListAsync();
+            var dtos = _mapper.Map<List<ResultSubscriberDTO>>(subscriberList);
+            return Ok(dtos);
         }
         //ID ile Getirme
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var values = await _subscriberService.TGetByIdAsync(id);
-            return Ok(values);
+            var subscribers = await _subscriberService.GetByIdAsync(id);
+            if (subscribers == null) return NotFound();
+            var dtos = _mapper.Map<ResultSubscriberDTO>(subscribers);
+            return Ok(dtos);
         }
         //Ekleme
         [HttpPost]
         public async Task<IActionResult> Create(CreateSubscriberDTO  createSubscriberDTO)
         {
             var dtos = _mapper.Map<Subscriber>(createSubscriberDTO);
-            await _subscriberService.TCreateAsync(dtos);
+            await _subscriberService.CreateAsync(dtos);
             return Ok("Yeni Abonelik Alanı Oluşturuldu");
         }
         //Güncelleme
@@ -47,15 +51,19 @@ namespace MyNeoAcademy.API.Controllers
         public async Task<IActionResult> Update(UpdateSubscriberDTO  updateSubscriberDTO)
         {
             var dtos = _mapper.Map<Subscriber>(updateSubscriberDTO);
-            await _subscriberService.TUpdateAsync(dtos);
+            await _subscriberService.UpdateAsync(dtos);
             return Ok("Abonelik Alanı Güncellendi");
         }
         //Silme
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _subscriberService.TDeleteAsync(id);
-            return Ok("Abonelik Alanı Silindi");
+            var subscribers = await _subscriberService.GetByIdAsync(id);
+            if (subscribers == null)
+                return NotFound();
+
+            await _subscriberService.DeleteAsync(subscribers);
+            return Ok();
         }
     }
 }

@@ -36,14 +36,8 @@
               "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Business\\MyNeoAcademy.Business.csproj": {
                 "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Business\\MyNeoAcademy.Business.csproj"
               },
-              "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DataAccess\\MyNeoAcademy.DataAccess.csproj": {
-                "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DataAccess\\MyNeoAcademy.DataAccess.csproj"
-              },
               "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DTO\\MyNeoAcademy.DTO.csproj": {
                 "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DTO\\MyNeoAcademy.DTO.csproj"
-              },
-              "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Entity\\MyNeoAcademy.Entity.csproj": {
-                "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Entity\\MyNeoAcademy.Entity.csproj"
               }
             }
           }
@@ -146,6 +140,9 @@
               "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DataAccess\\MyNeoAcademy.DataAccess.csproj": {
                 "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DataAccess\\MyNeoAcademy.DataAccess.csproj"
               },
+              "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DTO\\MyNeoAcademy.DTO.csproj": {
+                "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DTO\\MyNeoAcademy.DTO.csproj"
+              },
               "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Entity\\MyNeoAcademy.Entity.csproj": {
                 "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Entity\\MyNeoAcademy.Entity.csproj"
               }
@@ -162,6 +159,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[7.0.20, )"
@@ -232,6 +233,9 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
+              "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DTO\\MyNeoAcademy.DTO.csproj": {
+                "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.DTO\\MyNeoAcademy.DTO.csproj"
+              },
               "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Entity\\MyNeoAcademy.Entity.csproj": {
                 "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Entity\\MyNeoAcademy.Entity.csproj"
               }
@@ -267,6 +271,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.20, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             }
           },
           "imports": [

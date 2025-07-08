@@ -1,0 +1,53 @@
+﻿@model ResultCourseCategoryDTO
+@{
+    ViewData["Title"] = "Kurs Kategoriler Detayı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+
+            <dl class="row">
+                <dt class="col-sm-3">Kategori Adı</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
+
+                <dt class="col-sm-3">Açıklama</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">İkon</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.Icon))
+                    {
+                        <i class="@Model.Icon fa-lg"></i> <span class="ms-2">@Model.Icon</span>
+                    }
+                    else
+                    {
+                        <span>İkon belirtilmemiş.</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Anasayfada Görünsün mü?</dt>
+                <dd class="col-sm-9">
+                    @if (Model.IsShown)
+                    {
+                        <span class="badge bg-success">Evet</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Hayır</span>
+                    }
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-action="Edit" asp-area="Admin" asp-route-id="@Model.CourseCategoryID" class="btn btn-warning">Güncelle</a>
+            </div>
+        </div>
+    </div>
+</div>
+

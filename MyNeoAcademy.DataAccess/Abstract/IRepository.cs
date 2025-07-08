@@ -18,7 +18,7 @@ namespace MyNeoAcademy.DataAccess.Abstract
         //Var olan nesneyi günceller.
         Task UpdateAsync(T entity);
         //ID ile eşleşen kaydı siler.
-        Task DeleteAsync(int id);
+        Task DeleteAsync(T entity);
 
         //Toplam kayıt sayısını döner.
         Task<int> CountAsync();

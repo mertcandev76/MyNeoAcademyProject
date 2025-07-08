@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MyNeoAcademy.DTO.DTOs.AboutDTOs;
 using MyNeoAcademy.DTO.DTOs.BannerDTOs;
 using MyNeoAcademy.Entity.Entities;
 
@@ -8,8 +9,10 @@ namespace MyNeoAcademy.API.Mapping
     {
         public BannerMapping()
         {
-            CreateMap<CreateBannerDTO, Banner>().ReverseMap();
-            CreateMap<UpdateBannerDTO, Banner>().ReverseMap();
+
+            CreateMap<Banner, CreateBannerDTO>().ReverseMap();
+            CreateMap<Banner, UpdateBannerDTO>().ReverseMap();
+            CreateMap<Banner, ResultBannerDTO>().ReverseMap();
         }
     }
 }

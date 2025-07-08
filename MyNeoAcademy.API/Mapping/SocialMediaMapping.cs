@@ -9,8 +9,9 @@ namespace MyNeoAcademy.API.Mapping
     {
         public SocialMediaMapping()
         {
-            CreateMap<CreateSocialMediaDTO, SocialMedia>().ReverseMap();
-            CreateMap<UpdateSocialMediaDTO, SocialMedia>().ReverseMap();
+            CreateMap<SocialMedia, CreateSocialMediaDTO>().ReverseMap();
+            CreateMap<SocialMedia, UpdateSocialMediaDTO>().ReverseMap();
+            CreateMap<SocialMedia, ResultSocialMediaDTO>().ReverseMap();
         }
     }
 }

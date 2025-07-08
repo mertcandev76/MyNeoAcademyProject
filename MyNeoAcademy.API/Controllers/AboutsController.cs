@@ -19,42 +19,54 @@ namespace MyNeoAcademy.API.Controllers
             _mapper = mapper;
         }
 
-        //Listeleme
+        //Listeleme(GET: api/About)
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var values = await _aboutService.TGetListAsync();
-            return Ok(values);
+            var aboutList = await _aboutService.GetListAsync();
+            return Ok(_mapper.Map<List<ResultAboutDTO>>(aboutList));
         }
-        //ID ile Getirme
+        //ID ile Getirme(GET: api/About/5)
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var values = await _aboutService.TGetByIdAsync(id);
-            return Ok(values);
+            var abouts = await _aboutService.GetByIdAsync(id);
+            if (abouts == null) return NotFound();
+            return Ok(_mapper.Map<ResultAboutDTO>(abouts));
         }
 
-        //Silme
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _aboutService.TDeleteAsync(id);
-            return Ok("Hakkımızda Silindi");
+            var abouts = await _aboutService.GetByIdAsync(id);
+            if (abouts == null)
+                return NotFound();
+
+            await _aboutService.DeleteAsync(abouts);
+            return Ok();
         }
-        //Ekleme
+
+        ////Silme( DELETE: api/About/5)
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    await _aboutService.DeleteAsync(id);
+        //    return Ok("Hakkımızda Silindi");
+        //}
+        //Ekleme(POST: api/About)
         [HttpPost]
         public async Task<IActionResult> Create(CreateAboutDTO createAboutDTO)
         {
-            var newValues= _mapper.Map<About>(createAboutDTO);
-            await _aboutService.TCreateAsync(newValues);
+            var dtos= _mapper.Map<About>(createAboutDTO);
+            await _aboutService.CreateAsync(dtos);
             return Ok("Yeni Hakkımzda Alanı Oluşturuldu");
         }
-        //Güncelleme
+        //Güncelleme(PUT: api/About/5)
         [HttpPut]
         public async Task<IActionResult> Update(UpdateAboutDTO updateAboutDTO)
         {
-            var newValues= _mapper.Map<About>(updateAboutDTO);
-            await _aboutService.TUpdateAsync(newValues);
+            var dtos= _mapper.Map<About>(updateAboutDTO);
+            await _aboutService.UpdateAsync(dtos);
             return Ok("Hakkımızda Alanı Güncellendi");
         }
 

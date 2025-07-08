@@ -1,0 +1,46 @@
+﻿@model ResultBlogDTO
+@{
+    ViewData["Title"] = "Blog Detay";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Başlık</dt>
+                <dd class="col-sm-9">@Model.Title</dd>
+
+                <dt class="col-sm-3">Kategori</dt>
+                <dd class="col-sm-9">@Model.BlogCategory?.Name</dd>
+
+                <dt class="col-sm-3">Tarih</dt>
+                <dd class="col-sm-9">@Model.BlogDate.ToString("dd.MM.yyyy")</dd>
+
+                <dt class="col-sm-3">İçerik</dt>
+                <dd class="col-sm-9">@Html.Raw(Model.Content ?? "(İçerik yok)")</dd>
+
+                <dt class="col-sm-3">Resim</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" alt="Blog Resmi" class="img-fluid rounded" style="max-height:300px;" />
+                    }
+                    else
+                    {
+                        <span>(Resim yok)</span>
+                    }
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-action="Edit" asp-area="Admin" asp-route-id="@Model.BlogID" class="btn btn-warning">Güncelle</a>
+            </div>
+        </div>
+    </div>
+</div>
+

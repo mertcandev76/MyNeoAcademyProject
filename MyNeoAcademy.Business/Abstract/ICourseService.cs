@@ -1,0 +1,16 @@
+﻿using MyNeoAcademy.Entity.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyNeoAcademy.Business.Abstract
+{
+    public interface ICourseService:IGenericService<Course>
+    {
+        //Özel Metotlar
+        Task<List<Course>> GetAllWithCourseCategoryAsync();
+        Task<Course?> GetByIdWithCourseCategoryAsync(int id);
+    }
+}

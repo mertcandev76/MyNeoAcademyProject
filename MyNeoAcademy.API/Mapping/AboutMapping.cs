@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyNeoAcademy.DTO.DTOs.AboutDTOs;
+using MyNeoAcademy.DTO.DTOs.BlogCategoryDTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Mapping
@@ -8,8 +9,10 @@ namespace MyNeoAcademy.API.Mapping
     {
         public AboutMapping()
         {
-            CreateMap<CreateAboutDTO, About>().ReverseMap();
-            CreateMap<UpdateAboutDTO, About>().ReverseMap();
+
+            CreateMap<About, CreateAboutDTO>().ReverseMap();
+            CreateMap<About, UpdateAboutDTO>().ReverseMap();
+            CreateMap<About, ResultAboutDTO>().ReverseMap();
         }
     }
 }

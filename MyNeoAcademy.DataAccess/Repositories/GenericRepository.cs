@@ -12,7 +12,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {
-        private readonly MyNeoAcademyContext _myNeoAcademyContext;
+        protected readonly MyNeoAcademyContext _myNeoAcademyContext;
 
         public GenericRepository(MyNeoAcademyContext myNeoAcademyContext)
         {
@@ -42,16 +42,22 @@ namespace MyNeoAcademy.DataAccess.Repositories
             Table.Update(entity);
             await _myNeoAcademyContext.SaveChangesAsync();
         }
-        //ID ile eşleşen kaydı siler.
-        public async Task DeleteAsync(int id)
+
+        public async Task DeleteAsync(T entity)
         {
-            var entity = await GetByIdAsync(id);
-            if (entity != null)
-            {
-                Table.Remove(entity);
-                await _myNeoAcademyContext.SaveChangesAsync();
-            }
+            Table.Remove(entity);
+            await _myNeoAcademyContext.SaveChangesAsync();
         }
+        ////ID ile eşleşen kaydı siler.
+        //public async Task DeleteAsync(int id)
+        //{
+        //    var entity = await GetByIdAsync(id);
+        //    if (entity != null)
+        //    {
+        //        Table.Remove(entity);
+        //        await _myNeoAcademyContext.SaveChangesAsync();
+        //    }
+        //}
         //Toplam kayıt sayısını döner.
         public async Task<int> CountAsync()
         {

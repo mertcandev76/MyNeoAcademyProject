@@ -10,22 +10,27 @@ namespace MyNeoAcademy.Business.Abstract
     public interface IGenericService<T> where T : class
     {
         //Tüm verileri getirir
-        Task<List<T>> TGetListAsync();
+        Task<List<T>> GetListAsync();
         //Verilen id'ye sahip olan nesneyi getirir.
-        Task<T> TGetByIdAsync(int id);
+        Task<T> GetByIdAsync(int id);
         //Yeni bir nesneyi veritabanına ekler.
-        Task TCreateAsync(T entity);
+        Task CreateAsync(T entity);
         //Var olan nesneyi günceller.
-        Task TUpdateAsync(T entity);
+        Task UpdateAsync(T entity);
         //ID ile eşleşen kaydı siler.
-        Task TDeleteAsync(int id);
+        Task DeleteAsync(T entity);
+
         //Toplam kayıt sayısını döner.
-        Task<int> TCountAsync();
+        Task<int> CountAsync();
+
         //Belirli bir filtreye göre kayıt sayısını döner.
-        Task<int> TFilteredCountAsync(Expression<Func<T, bool>> predicate);
+        Task<int> FilteredCountAsync(Expression<Func<T, bool>> predicate);
+
         //Belirli bir filtreye göre liste döner.
-        Task<List<T>> TGetFilteredListAsync(Expression<Func<T, bool>> predicate);
+        Task<List<T>> GetFilteredListAsync(Expression<Func<T, bool>> predicate);
+
         //Belirli bir şarta uyan ilk nesneyi döner.
-        Task<T> TGetByFilterAsync(Expression<Func<T, bool>> predicate);
+        Task<T> GetByFilterAsync(Expression<Func<T, bool>> predicate);
+
     }
 }

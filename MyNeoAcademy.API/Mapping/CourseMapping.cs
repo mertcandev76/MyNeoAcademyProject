@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MyNeoAcademy.DTO.DTOs.BlogDTOs;
 using MyNeoAcademy.DTO.DTOs.CourseDTOs;
 using MyNeoAcademy.Entity.Entities;
 
@@ -8,9 +9,10 @@ namespace MyNeoAcademy.API.Mapping
     {
         public CourseMapping()
         {
-            CreateMap<CreateCourseDTO, Course>().ReverseMap();
-            CreateMap<UpdateCourseDTO, Course>().ReverseMap();
-            CreateMap<ResultCourseDTO, Course>().ReverseMap();
+            CreateMap<Course, CreateCourseDTO>().ReverseMap();
+            CreateMap<Course, UpdateCourseDTO>().ReverseMap();
+            CreateMap<Course, ResultCourseDTO>().ReverseMap();
+
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyNeoAcademy.DTO.DTOs.AboutDTOs;
+using MyNeoAcademy.DTO.DTOs.CourseCategoryDTOs;
 using MyNeoAcademy.DTO.DTOs.MessageDTOs;
 using MyNeoAcademy.Entity.Entities;
 
@@ -9,8 +10,9 @@ namespace MyNeoAcademy.API.Mapping
     {
         public MessageMapping()
         {
-            CreateMap<CreateMessageDTO, Message>().ReverseMap();
-            CreateMap<UpdateMessageDTO, Message>().ReverseMap();
+            CreateMap<Message, CreateMessageDTO>().ReverseMap();
+            CreateMap<Message, UpdateMessageDTO>().ReverseMap();
+            CreateMap<Message, ResultMessageDTO>().ReverseMap();
         }
     }
 }

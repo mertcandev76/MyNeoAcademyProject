@@ -24,9 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyNeoAcademy.Business\MyNeoAcademy.Business.csproj" />
-    <ProjectReference Include="..\MyNeoAcademy.DataAccess\MyNeoAcademy.DataAccess.csproj" />
     <ProjectReference Include="..\MyNeoAcademy.DTO\MyNeoAcademy.DTO.csproj" />
-    <ProjectReference Include="..\MyNeoAcademy.Entity\MyNeoAcademy.Entity.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,8 +9,9 @@ namespace MyNeoAcademy.API.Mapping
     {
         public SubscriberMapping()
         {
-            CreateMap<CreateSubscriberDTO, Subscriber>().ReverseMap();
-            CreateMap<UpdateSubscriberDTO, Subscriber>().ReverseMap();
+            CreateMap<Subscriber, CreateSubscriberDTO>().ReverseMap();
+            CreateMap<Subscriber, UpdateSubscriberDTO>().ReverseMap();
+            CreateMap<Subscriber, ResultSubscriberDTO>().ReverseMap();
         }
     }
 }

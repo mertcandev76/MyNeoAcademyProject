@@ -17,3 +17,5 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\obj\Debu
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\obj\Debug\net7.0\ref\MyNeoAcademy.Business.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\bin\Debug\net7.0\MyNeoAcademy.Business.runtimeconfig.json
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\obj\Debug\net7.0\MyNeoAcademy.Business.genruntimeconfig.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\bin\Debug\net7.0\MyNeoAcademy.DTO.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\bin\Debug\net7.0\MyNeoAcademy.DTO.pdb

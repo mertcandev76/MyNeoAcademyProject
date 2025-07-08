@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MyNeoAcademy.DTO.DTOs.BlogCategoryDTOs;
 using MyNeoAcademy.DTO.DTOs.CourseCategoryDTOs;
 using MyNeoAcademy.Entity.Entities;
 
@@ -8,9 +9,9 @@ namespace MyNeoAcademy.API.Mapping
     {
         public CourseCategoryMapping()
         {
-            CreateMap<CreateCourseCategoryDTO, CourseCategory>().ReverseMap();
-            CreateMap<UpdateCourseCategoryDTO, CourseCategory>().ReverseMap();
-            CreateMap<ResultCourseCategoryDTO, CourseCategory>().ReverseMap();
+            CreateMap<CourseCategory, CreateCourseCategoryDTO>().ReverseMap();
+            CreateMap<CourseCategory, UpdateCourseCategoryDTO>().ReverseMap();
+            CreateMap<CourseCategory, ResultCourseCategoryDTO>().ReverseMap();
 
         }
     }

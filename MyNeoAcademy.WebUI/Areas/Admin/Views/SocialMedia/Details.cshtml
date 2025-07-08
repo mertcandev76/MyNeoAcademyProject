@@ -1,0 +1,40 @@
+﻿@model ResultSocialMediaDTO
+@{
+    ViewData["Title"] = "Sosyal Medya Detayı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Sosyal Medya ID</dt>
+                <dd class="col-sm-9">@Model.SocialMediaID</dd>
+
+                <dt class="col-sm-3">Başlık</dt>
+                <dd class="col-sm-9">@Model.Title</dd>
+
+                <dt class="col-sm-3">İkon</dt>
+                <dd class="col-sm-9">
+                    <i class="@Model.Icon fa-lg me-2"></i>
+                    <code>@Model.Icon</code>
+                </dd>
+
+                <dt class="col-sm-3">Bağlantı</dt>
+                <dd class="col-sm-9">
+                    <a href="@Model.IconUrl" target="_blank">@Model.IconUrl</a>
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Edit" asp-route-id="@Model.SocialMediaID" asp-area="Admin" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Düzenle
+                </a>
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+            </div>
+        </div>
+    </div>
+</div>

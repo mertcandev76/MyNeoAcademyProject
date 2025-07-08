@@ -9,8 +9,10 @@ namespace MyNeoAcademy.API.Mapping
     {
         public TestimonialMapping()
         {
-            CreateMap<CreateTestimonialDTO, Testimonial>().ReverseMap();
-            CreateMap<UpdateTestimonialDTO, Testimonial>().ReverseMap();
+
+            CreateMap<Testimonial, CreateTestimonialDTO>().ReverseMap();
+            CreateMap<Testimonial, UpdateTestimonialDTO>().ReverseMap();
+            CreateMap<Testimonial, ResultTestimonialDTO>().ReverseMap();
         }
     }
 }

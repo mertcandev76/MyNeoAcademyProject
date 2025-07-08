@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.DTO.DTOs.BlogCategoryDTOs
 {
-    public class UpdateBlogCategoryDTO
+    public class UpdateBlogCategoryDTO:CreateBlogCategoryDTO
     {
         public int BlogCategoryID { get; set; }
-        public string Name { get; set; }
 
     }
 }

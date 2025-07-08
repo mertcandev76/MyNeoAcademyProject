@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.DTO.DTOs.MessageDTOs
 {
-    public class UpdateMessageDTO
+    public class UpdateMessageDTO:CreateMessageDTO
     {
         public int MessageID { get; set; }
-        public string Name { get; set; }
-        public string Subject { get; set; }
-        public string Content { get; set; }
     }
 }

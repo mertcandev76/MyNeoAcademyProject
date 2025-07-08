@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,49 +20,22 @@ namespace MyNeoAcademy.Business.Concrete
             _repository = repository;
         }
 
-        public async Task<List<T>> TGetListAsync()
-        {
-            return await _repository.GetListAsync();
-        }
+        public async Task<List<T>> GetListAsync() =>  await _repository.GetListAsync();
 
-        public async Task<T> TGetByIdAsync(int id)
-        {
-            return await _repository.GetByIdAsync(id);
-        }
+        public async Task<T> GetByIdAsync(int id) =>   await _repository.GetByIdAsync(id);
 
-        public async Task TCreateAsync(T entity)
-        {
-            await _repository.CreateAsync(entity);
-        }
+        public async Task CreateAsync(T entity) => await _repository.CreateAsync(entity);
 
-        public async Task TUpdateAsync(T entity)
-        {
-            await _repository.UpdateAsync(entity);
-        }
+        public async Task UpdateAsync(T entity) => await _repository.UpdateAsync(entity);
 
-        public async Task TDeleteAsync(int id)
-        {
-            await _repository.DeleteAsync(id);
-        }
+        public async Task DeleteAsync(T entity) => await _repository.DeleteAsync(entity);
 
-        public async Task<int> TCountAsync()
-        {
-            return await _repository.CountAsync();
-        }
+        public async Task<int> CountAsync() =>    await _repository.CountAsync();
 
-        public async Task<int> TFilteredCountAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _repository.FilteredCountAsync(predicate);
-        }
+        public async Task<int> FilteredCountAsync(Expression<Func<T, bool>> predicate) =>  await _repository.FilteredCountAsync(predicate);
 
-        public async Task<List<T>> TGetFilteredListAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _repository.GetFilteredListAsync(predicate);
-        }
+        public async Task<List<T>> GetFilteredListAsync(Expression<Func<T, bool>> predicate) =>   await _repository.GetFilteredListAsync(predicate);
 
-        public async Task<T> TGetByFilterAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _repository.GetByFilterAsync(predicate);
-        }
+        public async Task<T> GetByFilterAsync(Expression<Func<T, bool>> predicate) =>   await _repository.GetByFilterAsync(predicate);
     }
 }

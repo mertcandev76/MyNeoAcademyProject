@@ -8,9 +8,9 @@ namespace MyNeoAcademy.API.Mapping
     {
         public BlogCategoryMapping()
         {
-            CreateMap<CreateBlogCategoryDTO, BlogCategory>().ReverseMap();
-            CreateMap<UpdateBlogCategoryDTO, BlogCategory>().ReverseMap();
-            CreateMap<ResultBlogCategoryDTO, BlogCategory>().ReverseMap();
+            CreateMap<BlogCategory, CreateBlogCategoryDTO>().ReverseMap();
+            CreateMap<BlogCategory, UpdateBlogCategoryDTO>().ReverseMap();
+            CreateMap<BlogCategory, ResultBlogCategoryDTO>().ReverseMap();
         }
     }
 }
