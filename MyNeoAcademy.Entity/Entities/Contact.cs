@@ -10,11 +10,14 @@ namespace MyNeoAcademy.Entity.Entities
     public class Contact
     {
         public int ContactID { get; set; }
-        public string? MapUrl { get; set; }
-        public string? Address { get; set; }
-        [Phone]
-        public string? Phone { get; set; }
-        [EmailAddress]
+
+        public string Name { get; set; } = null!;
+
         public string? Email { get; set; }
+
+        public string? Subject { get; set; }
+
+        public string? Message { get; set; }
+        public DateTime CreatedDate { get; set; } 
     }
 }

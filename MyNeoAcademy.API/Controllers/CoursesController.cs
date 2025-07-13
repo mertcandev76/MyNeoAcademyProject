@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.BlogCategoryDTOs;
-using MyNeoAcademy.DTO.DTOs.CourseCategoryDTOs;
 using MyNeoAcademy.DTO.DTOs.CourseDTOs;
 using MyNeoAcademy.Entity.Entities;
 
@@ -26,14 +24,14 @@ namespace MyNeoAcademy.API.Controllers
         public async Task<IActionResult> Get()
         {
 
-            var courseList = await _courseService.GetAllWithCourseCategoryAsync(); // Entity List<Blog>
+            var courseList = await _courseService.GetAllWithCategoryAsync(); // Entity List<Blog>
             var dtos = _mapper.Map<List<ResultCourseDTO>>(courseList); // DTO List<ResultBlogDTO>
             return Ok(dtos); // DTO döndür
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Detail(int id)
         {
-            var course = await _courseService.GetByIdWithCourseCategoryAsync(id);
+            var course = await _courseService.GetByIdWithCategoryAsync(id);
             if (course == null) return NotFound();
             var dtos = _mapper.Map<ResultCourseDTO>(course);
             return Ok(dtos);

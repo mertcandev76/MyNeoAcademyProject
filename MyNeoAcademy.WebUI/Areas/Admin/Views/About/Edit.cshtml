@@ -1,6 +1,6 @@
 ﻿@model UpdateAboutDTO
 @{
-    ViewData["Title"] = "Hakkımızda Bilgisi Güncelle";
+    ViewData["Title"] = "Hakkımda Güncelle";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -9,50 +9,68 @@
         <div class="card-header">
             <h5 class="mb-0">@ViewData["Title"]</h5>
         </div>
+
         <div class="card-body">
-            <form asp-action="Edit" asp-area="Admin" method="post">
+            <form asp-action="Edit" asp-area="Admin" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="AboutID" />
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
                 <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Başlık</label>
+                    <input asp-for="Title" class="form-control" placeholder="Hakkımda başlığı..." />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Subtitle" class="form-label">Alt Başlık</label>
+                    <input asp-for="Subtitle" class="form-control" placeholder="Alt başlık girin..." />
+                    <span asp-validation-for="Subtitle" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
                     <label asp-for="Description" class="form-label">Açıklama</label>
-                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Hakkımızda açıklaması"></textarea>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Açıklama..."></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="ImageUrl1" class="form-label">Görsel URL 1</label>
-                    <input asp-for="ImageUrl1" class="form-control" placeholder="https://example.com/image1.jpg" />
-                    <span asp-validation-for="ImageUrl1" class="text-danger"></span>
+                    <label asp-for="ButtonText" class="form-label">Buton Metni</label>
+                    <input asp-for="ButtonText" class="form-control" />
+                    <span asp-validation-for="ButtonText" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="ImageUrl2" class="form-label">Görsel URL 2</label>
-                    <input asp-for="ImageUrl2" class="form-control" placeholder="https://example.com/image2.jpg" />
-                    <span asp-validation-for="ImageUrl2" class="text-danger"></span>
+                    <label asp-for="ButtonLink" class="form-label">Buton Linki</label>
+                    <input asp-for="ButtonLink" class="form-control" />
+                    <span asp-validation-for="ButtonLink" class="text-danger"></span>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label asp-for="Item1" class="form-label"></label>
-                        <input asp-for="Item1" class="form-control" placeholder="Örneğin: Tecrübe, Güvenilirlik" />
-                        <span asp-validation-for="Item1" class="text-danger"></span>
+                <!-- Mevcut ön görsel gösterimi -->
+                @if (!string.IsNullOrWhiteSpace(Model.ImageFrontUrl))
+                {
+                    <div class="mb-3">
+                        <label class="form-label d-block">Mevcut Ön Görsel:</label>
+                        <img src="@Model.ImageFrontUrl" class="img-thumbnail" style="max-height:100px;" />
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label asp-for="Item2" class="form-label"></label>
-                        <input asp-for="Item2" class="form-control" placeholder="Örneğin: Kalite, Destek" />
-                        <span asp-validation-for="Item2" class="text-danger"></span>
+                }
+
+                <div class="mb-3">
+                    <label class="form-label">Yeni Ön Görsel (isteğe bağlı)</label>
+                    <input type="file" name="ImageFrontFile" class="form-control" accept="image/*" />
+                </div>
+
+                <!-- Mevcut arka görsel gösterimi -->
+                @if (!string.IsNullOrWhiteSpace(Model.ImageBackUrl))
+                {
+                    <div class="mb-3">
+                        <label class="form-label d-block">Mevcut Arka Görsel:</label>
+                        <img src="@Model.ImageBackUrl" class="img-thumbnail" style="max-height:100px;" />
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label asp-for="Item3" class="form-label"></label>
-                        <input asp-for="Item3" class="form-control" placeholder="Örneğin: Müşteri Memnuniyeti" />
-                        <span asp-validation-for="Item3" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label asp-for="Item4" class="form-label"></label>
-                        <input asp-for="Item4" class="form-control" placeholder="Opsiyonel bir madde" />
-                        <span asp-validation-for="Item4" class="text-danger"></span>
-                    </div>
+                }
+
+                <div class="mb-3">
+                    <label class="form-label">Yeni Arka Görsel (isteğe bağlı)</label>
+                    <input type="file" name="ImageBackFile" class="form-control" accept="image/*" />
                 </div>
 
                 <div class="d-flex justify-content-between">
@@ -63,3 +81,7 @@
         </div>
     </div>
 </div>
+
+@*@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}*@

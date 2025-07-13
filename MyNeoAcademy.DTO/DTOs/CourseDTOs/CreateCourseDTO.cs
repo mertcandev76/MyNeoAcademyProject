@@ -11,12 +11,27 @@ namespace MyNeoAcademy.DTO.DTOs.CourseDTOs
     public class CreateCourseDTO
     {
 
-        [Required, StringLength(100)]
-        public string CourseName { get; set; } = null!;
+        public int CourseID { get; set; }
+
+        public string? Title { get; set; }
+
+        public string? Description { get; set; }
+
         public string? ImageUrl { get; set; }
-        public int CourseCategoryID { get; set; }
-        public decimal Price { get; set; }
-        public bool IsShown { get; set; } = false;  // default false burada verilebilir
+
+        public int Rating { get; set; } 
+        public int ReviewCount { get; set; }
+
+        public int StudentCount { get; set; }
+
+        public int LikeCount { get; set; }
+
+        public decimal? Price { get; set; } 
+
+        public int CategoryID { get; set; }
+
+        public int? InstructorID { get; set; }      
+
 
     }
 }

@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.SocialMediaDTOs;
-using MyNeoAcademy.DTO.DTOs.SubscriberDTOs;
 using MyNeoAcademy.DTO.DTOs.TestimonialDTOs;
 using MyNeoAcademy.Entity.Entities;
 

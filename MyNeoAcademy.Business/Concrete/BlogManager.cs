@@ -18,8 +18,8 @@ namespace MyNeoAcademy.Business.Concrete
             _repository = repository;
         }
 
-        public Task<List<Blog>> GetAllWithBlogCategoryAsync() => _repository.GetAllWithBlogCategoryAsync();
+        public Task<List<Blog>> GetAllWithCategoryAndAuthorAsync() => _repository.GetAllWithCategoryAndAuthorAsync();
 
-        public Task<Blog?> GetByIdWithBlogCategoryAsync(int id) => _repository.GetByIdWithBlogCategoryAsync(id);
+        public Task<Blog?> GetByIdWithCategoryAndAuthorAsync(int id) => _repository.GetByIdWithCategoryAndAuthorAsync(id);
     }
 }

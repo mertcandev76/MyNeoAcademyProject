@@ -1,4 +1,5 @@
-﻿using MyNeoAcademy.DTO.DTOs.BlogCategoryDTOs;
+﻿using MyNeoAcademy.DTO.DTOs.AuthorDTOs;
+using MyNeoAcademy.DTO.DTOs.CategoryDTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,15 @@ namespace MyNeoAcademy.DTO.DTOs.BlogDTOs
 {
     public class CreateBlogDTO
     {
-        [Required]
-        public string Title { get; set; } = null!;
-
+        public string? Title { get; set; }
+        public string? ShortDescription { get; set; }
         public string? Content { get; set; }
         public string? ImageUrl { get; set; }
+        public DateTime PublishDate { get; set; }
 
-        [Required]
-        public DateTime BlogDate { get; set; }
+        public int AuthorID { get; set; }
 
-        [Required]
-        public int BlogCategoryID { get; set; }
+        public int CategoryID { get; set; }
 
     }
 }

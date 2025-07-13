@@ -1,58 +1,53 @@
-﻿    using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.Business.Concrete;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.DataAccess.Context;
 using MyNeoAcademy.DataAccess.Repositories;
-using System;
-using System.Reflection;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 using MyNeoAcademy.API.Extensions;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 🔹 AutoMapper – Tüm profilleri tara (Mapping klasöründeki profiller dahil)
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+// 🔹 FluentValidation – Tüm validator sınıflarını tara
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly()); // API katmanı içindeki validator'lar
+builder.Services.AddValidatorsFromAssemblyContaining<MyNeoAcademy.DTO.Validators.SliderValidator.CreateSliderValidator>();
+// DTO tarafındaki validator'lar
 
+// 🔹 FluentValidation AutoValidation (ModelState otomatik dolar)
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
 
-//-->-->Manuel
-//AutoMapper Servis Kayıt (Dependency Injection) İşlemi
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // ✅ Tüm mapping profillerini tarar
+// 🔹 JSON Serileştirme Ayarları
+builder.Services.AddControllers()
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
-
-
-//-->Manuel
-//Dependency Injection(Manuel) 
-builder.Services.AddDependencyResolvers();
-
-
-// AppDbContext'i servise ekle
+// 🔹 DbContext – SQL Server bağlantısı
 builder.Services.AddDbContext<MyNeoAcademyContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
 });
 
+// 🔹 Katman bağımlılıkları (Business, DAL)
+builder.Services.AddDependencyResolvers();
 
-//-->Manuel
-//AddControllers ile JSON Serileştirme Yapılandırması
-builder.Services.AddControllers()
-    .AddJsonOptions(x =>
-    {
-        // JSON çıktılarını camelCase formatında döner (örneğin: FullName → fullName)
-        x.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-
-        // Nesneler arası döngüsel referansları yoksayar, hata oluşmasını engeller
-        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // Preserve değil
-    });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// 🔹 Swagger (API dokümantasyonu)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 🔹 Geliştirme ortamında Swagger aç
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

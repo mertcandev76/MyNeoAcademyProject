@@ -10,7 +10,7 @@ namespace MyNeoAcademy.Business.Abstract
     public interface IBlogService:IGenericService<Blog>
     {
         //Özel Metotlar
-        Task<List<Blog>> GetAllWithBlogCategoryAsync();
-        Task<Blog?> GetByIdWithBlogCategoryAsync(int id);
+        Task<List<Blog>> GetAllWithCategoryAndAuthorAsync();
+        Task<Blog?> GetByIdWithCategoryAndAuthorAsync(int id);
     }
 }

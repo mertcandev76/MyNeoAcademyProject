@@ -1,66 +1,86 @@
 ﻿@model List<ResultAboutDTO>
 @{
-    ViewData["Title"] = "Hakkımızda Bilgileri";
+    ViewData["Title"] = "Hakkımda Listesi";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="container-fluid px-3">
     <div class="card shadow-sm">
+        <!-- Başlık + Yeni Ekle butonu -->
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="mb-0">@ViewData["Title"]</h3>
-            <a asp-action="Create" asp-area="Admin" class="btn btn-primary btn-sm">+ Yeni Bilgi Ekle</a>
+            <a asp-action="Create" asp-area="Admin" class="btn btn-primary btn-sm">+ Yeni “About” Ekle</a>
         </div>
+
         <div class="card-body p-0">
-            @if (Model != null && Model.Any())
+            @if (Model?.Any() == true)
             {
                 <table class="table table-bordered mb-0 text-center align-middle">
                     <thead class="table">
                         <tr>
-                            <th>#</th>
-                            <th>Açıklama</th>
-                            <th>Görsel 1</th>
-                            <th>Görsel 2</th>
-                            <th>Öğe 1</th>
-                            <th>Öğe 2</th>
-                            <th>Öğe 3</th>
-                            <th>Öğe 4</th>
-                            <th>İşlemler</th>
+                            <th style="width: 4%;">#</th>
+                            <th style="width: 16%;">Başlık</th>
+                            <th style="width: 16%;">Alt&nbsp;Başlık</th>
+                            <th style="width: 12%;">Buton&nbsp;Metni</th>
+                            <th style="width: 14%;">Ön&nbsp;Görsel</th>
+                            <th style="width: 14%;">Arka&nbsp;Görsel</th>
+                            <th style="width: 24%;">İşlemler</th>
                         </tr>
                     </thead>
+
                     <tbody class="table">
                         @foreach (var item in Model)
                         {
                             <tr>
                                 <td>@item.AboutID</td>
-                                <td>@item.Description</td>
+                                <td>@item.Title</td>
+                                <td>@item.Subtitle</td>
+                                <td>@item.ButtonText</td>
+
+                                <!-- Ön görsel -->
                                 <td>
-                                    @if (!string.IsNullOrEmpty(item.ImageUrl1))
+                                    @if (!string.IsNullOrWhiteSpace(item.ImageFrontUrl))
                                     {
-                                        <img src="@item.ImageUrl1" alt="Görsel 1" style="height: 40px;" />
+                                        <img src="@item.ImageFrontUrl"
+                                             alt="Ön Görsel"
+                                             class="img-fluid rounded shadow-sm"
+                                             style="max-height:60px;" />
                                     }
                                 </td>
+
+                                <!-- Arka görsel -->
                                 <td>
-                                    @if (!string.IsNullOrEmpty(item.ImageUrl2))
+                                    @if (!string.IsNullOrWhiteSpace(item.ImageBackUrl))
                                     {
-                                        <img src="@item.ImageUrl2" alt="Görsel 2" style="height: 40px;" />
+                                        <img src="@item.ImageBackUrl"
+                                             alt="Arka Görsel"
+                                             class="img-fluid rounded shadow-sm"
+                                             style="max-height:60px;" />
                                     }
                                 </td>
-                                <td>@item.Item1</td>
-                                <td>@item.Item2</td>
-                                <td>@item.Item3</td>
-                                <td>@item.Item4</td>
+
+                                <!-- İşlemler -->
                                 <td>
-                                    <a asp-action="Details" asp-route-id="@item.AboutID" asp-area="Admin" class="btn btn-primary btn-sm me-1">
+                                    <a asp-action="Details"
+                               asp-area="Admin"
+                               asp-route-id="@item.AboutID"
+                                       class="btn btn-primary btn-sm me-1">
                                         <i class="fas fa-eye"></i> Detay
                                     </a>
-                                    <a asp-action="Edit" asp-route-id="@item.AboutID" asp-area="Admin" class="btn btn-warning btn-sm me-1">
+
+                                    <a asp-action="Edit"
+                               asp-area="Admin"
+                               asp-route-id="@item.AboutID"
+                                       class="btn btn-warning btn-sm me-1">
                                         <i class="fas fa-edit"></i> Düzenle
                                     </a>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                            data-toggle="modal"
-                                            data-target="#deleteModal"
+
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
                                             data-id="@item.AboutID"
-                                            data-name="@item.Item1"
+                                            data-name="@item.Title"
                                             data-controller="About">
                                         <i class="fas fa-trash"></i> Sil
                                     </button>
@@ -72,13 +92,15 @@
             }
             else
             {
-                <div class="alert alert-warning m-3 text-center">Henüz bilgi eklenmemiş.</div>
+                <div class="alert alert-warning m-3 text-center">
+                    Henüz bir “About” kaydı eklenmemiş.
+                </div>
             }
         </div>
     </div>
 </div>
 
-<!-- Silme Modal -->
+<!-- Silme onay modalı (ortak partial) -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow">
@@ -98,3 +120,7 @@
         </div>
     </div>
 </div>
+
+
+@*
+<partial name="~/Views/Shared/_DeleteConfirmModal.cshtml" />*@

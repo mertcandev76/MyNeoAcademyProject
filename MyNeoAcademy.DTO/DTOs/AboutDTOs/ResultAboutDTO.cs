@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyNeoAcademy.Entity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace MyNeoAcademy.DTO.DTOs.AboutDTOs
     public class ResultAboutDTO:CreateAboutDTO
     {
         public int AboutID { get; set; }
+
     }
 }

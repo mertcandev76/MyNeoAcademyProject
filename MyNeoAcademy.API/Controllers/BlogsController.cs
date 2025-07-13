@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.BlogCategoryDTOs;
 using MyNeoAcademy.DTO.DTOs.BlogDTOs;
 using MyNeoAcademy.Entity.Entities;
 
@@ -24,7 +23,7 @@ namespace MyNeoAcademy.API.Controllers
         [HttpGet]
          public async Task<IActionResult> Get()
         {
-            var blogList = await _blogService.GetAllWithBlogCategoryAsync(); // Entity List<Blog>
+            var blogList = await _blogService.GetAllWithCategoryAndAuthorAsync(); // Entity List<Blog>
             var dtos = _mapper.Map<List<ResultBlogDTO>>(blogList); // DTO List<ResultBlogDTO>
             return Ok(dtos); // DTO döndür
 
@@ -33,7 +32,7 @@ namespace MyNeoAcademy.API.Controllers
         public async Task<IActionResult> Detail(int id)
         {
 
-            var blogs = await _blogService.GetByIdWithBlogCategoryAsync(id);
+            var blogs = await _blogService.GetByIdWithCategoryAndAuthorAsync(id);
             if (blogs == null)
                 return NotFound();
 

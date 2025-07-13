@@ -1,0 +1,34 @@
+﻿@*<div class="about-area section-padding2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="about-caption mb-50">
+                    <!-- Section Tittle -->
+                    <div class="section-tittle mb-35">
+                        <span>@Model.Subtitle</span>
+                        <h2>@Model.Title</h2>
+                    </div>
+                    <p>@Model.Description</p>
+                    <ul>
+                        @foreach (var feature in Model.Features)
+                        {
+                            <li><span class="@feature.IconClass"></span> @feature.Text</li>
+                        }
+                    </ul>
+                    <a href="@Model.ButtonLink" class="btn">@Model.ButtonText</a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <!-- about-img -->
+                <div class="about-img ">
+                    <div class="about-font-img d-none d-lg-block">
+                        <img src="@Model.ImageFrontUrl" alt="About Front Image">
+                    </div>
+                    <div class="about-back-img ">
+                        <img src="@Model.ImageBackUrl" alt="About Back Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@

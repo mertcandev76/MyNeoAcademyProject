@@ -1,0 +1,30 @@
+﻿@*<div class="testimonial-area fix pt-180 pb-180 section-bg" data-background="/onlineedu-master/assets/img/gallery/section_bg03.png">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 col-lg-9 col-md-9">
+                <div class="h1-testimonial-active">
+                    @foreach (var item in Model)
+                    {
+                        <div class="single-testimonial pt-65">
+                            <div class="testimonial-icon mb-45">
+                                <img src="@item.AuthorImageUrl" class="ani-btn " alt="testimonial-img">
+                            </div>
+                            <div class="testimonial-caption text-center">
+                                <p>@item.Message</p>
+                                <div class="testimonial-ratting">
+                                    @for (int i = 0; i < item.StarRating; i++)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+                                </div>
+                                <div class="rattiong-caption">
+                                    <span>@item.AuthorName<span> - @item.AuthorTitle</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@

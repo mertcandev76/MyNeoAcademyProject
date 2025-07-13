@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MyNeoAcademy.DTO.DTOs.BlogDTOs;
 using MyNeoAcademy.DTO.DTOs.CourseDTOs;
 using MyNeoAcademy.Entity.Entities;
 

@@ -13,10 +13,13 @@ namespace MyNeoAcademy.API.Controllers
     {
         private readonly IGenericService<About> _aboutService;
         private readonly IMapper _mapper;
-        public AboutsController(IGenericService<About> aboutService, IMapper mapper)
+        private readonly IWebHostEnvironment _env; // Dosya kaydetmek için
+
+        public AboutsController(IGenericService<About> aboutService, IMapper mapper, IWebHostEnvironment env)
         {
             _aboutService = aboutService;
             _mapper = mapper;
+            _env = env;
         }
 
         //Listeleme(GET: api/About)
@@ -46,29 +49,74 @@ namespace MyNeoAcademy.API.Controllers
             return Ok();
         }
 
-        ////Silme( DELETE: api/About/5)
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    await _aboutService.DeleteAsync(id);
-        //    return Ok("Hakkımızda Silindi");
-        //}
-        //Ekleme(POST: api/About)
         [HttpPost]
-        public async Task<IActionResult> Create(CreateAboutDTO createAboutDTO)
+        public async Task<IActionResult> Create([FromForm] CreateAboutWithFileDTO dto)
         {
-            var dtos= _mapper.Map<About>(createAboutDTO);
-            await _aboutService.CreateAsync(dtos);
+            var aboutEntity = _mapper.Map<About>(dto);
+
+            // Dosyaları kaydet
+            if (dto.ImageFrontFile != null)
+            {
+                var frontUrl = await SaveFileAsync(dto.ImageFrontFile);
+                aboutEntity.ImageFrontUrl = frontUrl;
+            }
+
+            if (dto.ImageBackFile != null)
+            {
+                var backUrl = await SaveFileAsync(dto.ImageBackFile);
+                aboutEntity.ImageBackUrl = backUrl;
+            }
+
+            await _aboutService.CreateAsync(aboutEntity);
             return Ok("Yeni Hakkımzda Alanı Oluşturuldu");
         }
         //Güncelleme(PUT: api/About/5)
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateAboutDTO updateAboutDTO)
+        public async Task<IActionResult> Update([FromForm] UpdateAboutWithFileDTO dto)
         {
-            var dtos= _mapper.Map<About>(updateAboutDTO);
-            await _aboutService.UpdateAsync(dtos);
+            var aboutEntity = await _aboutService.GetByIdAsync(dto.AboutID);
+            if (aboutEntity == null)
+                return NotFound();
+
+            // Mevcut entity'yi güncelle (manuel yapabiliriz veya otomapper yeniden harcayabiliriz)
+            aboutEntity.Subtitle = dto.Subtitle;
+            aboutEntity.Title = dto.Title;
+            aboutEntity.Description = dto.Description;
+            aboutEntity.ButtonText = dto.ButtonText;
+            aboutEntity.ButtonLink = dto.ButtonLink;
+
+            if (dto.ImageFrontFile != null)
+            {
+                var frontUrl = await SaveFileAsync(dto.ImageFrontFile);
+                aboutEntity.ImageFrontUrl = frontUrl;
+            }
+            // else varsa mevcut URL aynen kalsın
+
+            if (dto.ImageBackFile != null)
+            {
+                var backUrl = await SaveFileAsync(dto.ImageBackFile);
+                aboutEntity.ImageBackUrl = backUrl;
+            }
+
+            await _aboutService.UpdateAsync(aboutEntity);
             return Ok("Hakkımızda Alanı Güncellendi");
         }
+        private async Task<string> SaveFileAsync(IFormFile file)
+        {
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "abouts");
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
 
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            // Kaydedilen dosyanın URL’si (örnek: /uploads/abouts/xyz.jpg)
+            return $"/uploads/abouts/{uniqueFileName}";
+        }
     }
 }

@@ -1,8 +1,38 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_MainLayout.cshtml"; // veya _Layout.cshtml
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!--? Slider Area Start -->
+@await Component.InvokeAsync("HomeSlider")
+<!--? Slider Area End -->
+
+@*<!--? Categories Area Start -->
+@await Component.InvokeAsync("HomeCategory")
+<!-- Categories Area End -->
+
+<!--? Count Down Start -->
+@await Component.InvokeAsync("HomeStatistic")
+<!-- Count Down End -->
+
+<!--? Popular Course Start -->
+@await Component.InvokeAsync("HomeCourse")
+<!-- Popular Course End -->
+
+<!--? Team Ara Start -->
+@await Component.InvokeAsync("HomeInstructor")
+<!-- Team Ara End -->
+
+<!--? About Law Start-->
+@await Component.InvokeAsync("HomeAbout")
+<!-- About Law End-->
+
+<!--? Testimonial Start -->
+@await Component.InvokeAsync("HomeTestimonial")
+<!-- Testimonial End -->
+
+<!--? Blog Area Start -->
+@await Component.InvokeAsync("HomeBlog")
+<!-- Blog Area End -->
+
+*@

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MyNeoAcademy.DTO.DTOs.AboutDTOs;
-using MyNeoAcademy.DTO.DTOs.BlogCategoryDTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Mapping
@@ -13,6 +12,8 @@ namespace MyNeoAcademy.API.Mapping
             CreateMap<About, CreateAboutDTO>().ReverseMap();
             CreateMap<About, UpdateAboutDTO>().ReverseMap();
             CreateMap<About, ResultAboutDTO>().ReverseMap();
+            CreateMap<About, CreateAboutWithFileDTO>().ReverseMap();
+            CreateMap<About, UpdateAboutWithFileDTO>().ReverseMap();
         }
     }
 }

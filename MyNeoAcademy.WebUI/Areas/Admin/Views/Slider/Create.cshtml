@@ -1,0 +1,80 @@
+﻿@model CreateSliderDTO
+
+@{
+    ViewData["Title"] = "Yeni Slider Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" asp-area="Admin" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Başlık</label>
+                    <input asp-for="Title" class="form-control" placeholder="Slider başlığı girin..." />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SubTitle" class="form-label">Alt Başlık</label>
+                    <input asp-for="SubTitle" class="form-control" placeholder="Slider alt başlık girin..." />
+                    <span asp-validation-for="SubTitle" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ButtonText" class="form-label">Buton Metni</label>
+                    <input asp-for="ButtonText" class="form-control" placeholder="Buton metni girin..." />
+                    <span asp-validation-for="ButtonText" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ButtonUrl" class="form-label">Buton URL</label>
+                    <input asp-for="ButtonUrl" class="form-control" placeholder="Butonun yönlendireceği URL" />
+                    <span asp-validation-for="ButtonUrl" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Slider Resmi</label>
+                    <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- 🔻 JavaScript kodunu buraya ekle -->
+<script>
+    document.querySelector('#sliderForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Sayfanın reload olmasını engeller
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        fetch('/api/sliders', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.text()) // veya .json(), API ne döndürüyorsa
+            .then(data => {
+                console.log("Slider eklendi:", data);
+                alert("Slider başarıyla eklendi");
+                form.reset(); // formu temizle
+            })
+            .catch(err => {
+                console.error("Hata:", err);
+                alert("Hata oluştu");
+            });
+    });
+</script>

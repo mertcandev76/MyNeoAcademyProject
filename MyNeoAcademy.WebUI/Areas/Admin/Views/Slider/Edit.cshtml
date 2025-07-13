@@ -1,0 +1,65 @@
+﻿@model UpdateSliderDTO
+
+@{
+    ViewData["Title"] = "Slider Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Edit" asp-area="Admin" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="SliderID" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Başlık</label>
+                    <input asp-for="Title" class="form-control" placeholder="Slider başlığı..." />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SubTitle" class="form-label">Alt Başlık</label>
+                    <input asp-for="SubTitle" class="form-control" placeholder="Slider alt başlık..." />
+                    <span asp-validation-for="SubTitle" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ButtonText" class="form-label">Buton Metni</label>
+                    <input asp-for="ButtonText" class="form-control" placeholder="Buton metni..." />
+                    <span asp-validation-for="ButtonText" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ButtonUrl" class="form-label">Buton URL</label>
+                    <input asp-for="ButtonUrl" class="form-control" placeholder="Butonun yönlendireceği URL" />
+                    <span asp-validation-for="ButtonUrl" class="text-danger"></span>
+                </div>
+
+                <!-- Mevcut görsel gösterimi -->
+                @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                {
+                    <div class="mb-3">
+                        <label class="form-label d-block">Mevcut Slider Resmi:</label>
+                        <img src="@Model.ImageUrl" class="img-thumbnail" style="max-height:120px;" alt="Mevcut Slider Resmi" />
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label class="form-label">Yeni Slider Resmi (isteğe bağlı)</label>
+                    <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

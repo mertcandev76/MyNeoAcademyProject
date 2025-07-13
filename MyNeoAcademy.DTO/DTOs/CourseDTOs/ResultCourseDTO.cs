@@ -1,5 +1,5 @@
-﻿using MyNeoAcademy.DTO.DTOs.BlogCategoryDTOs;
-using MyNeoAcademy.DTO.DTOs.CourseCategoryDTOs;
+﻿using MyNeoAcademy.DTO.DTOs.CategoryDTOs;
+using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,13 +13,26 @@ namespace MyNeoAcademy.DTO.DTOs.CourseDTOs
     public class ResultCourseDTO
     {
         public int CourseID { get; set; }
-        public string CourseName { get; set; } = null!;
+
+        public string? Title { get; set; }
+
+        public string? Description { get; set; }
+
         public string? ImageUrl { get; set; }
-        public int CourseCategoryID { get; set; }
-        public decimal Price { get; set; }
-        public bool IsShown { get; set; }
 
-        public ResultCourseCategoryDTO? CourseCategory { get; set; }
+        public int Rating { get; set; } 
+        public int ReviewCount { get; set; }
 
+        public int StudentCount { get; set; }
+
+        public int LikeCount { get; set; }
+
+        public decimal? Price { get; set; } 
+
+        public int CategoryID { get; set; }
+        public ResultCategoryDTO? Category { get; set; }
+
+        public int? InstructorID { get; set; }
+        public ResultInstructorDTO? Instructor { get; set; } // Navigasyon property
     }
 }

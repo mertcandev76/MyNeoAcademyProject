@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.BlogCategoryDTOs;
 using MyNeoAcademy.DTO.DTOs.BlogDTOs;
 using MyNeoAcademy.DTO.DTOs.ContactDTOs;
 using MyNeoAcademy.Entity.Entities;

@@ -1,0 +1,43 @@
+﻿@{
+    Layout = null;
+}
+
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    @await Component.InvokeAsync("SiteHead")
+</head>
+<body>
+    <!--? Preloader Start -->
+    @await Component.InvokeAsync("SitePreloader")
+    <!-- Preloader Start -->
+    <header>
+        <!-- Header Start -->
+        @await Component.InvokeAsync("SiteHeader")
+        <!-- Header End -->
+    </header>
+
+    <main>
+        @RenderBody()
+
+    </main>
+
+
+
+
+    <footer>
+        <!--? Footer Start-->
+        @await Component.InvokeAsync("SiteFooter")
+        <!-- Footer End-->
+    </footer>
+
+
+    <!-- Scroll Up -->
+    @await Component.InvokeAsync("SiteScrollUp")
+
+    <!-- JS here -->
+    @await Component.InvokeAsync("SiteScripts")
+
+
+</body>
+</html>

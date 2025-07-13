@@ -10,7 +10,7 @@ namespace MyNeoAcademy.DataAccess.Abstract
     public interface IBlogRepository:IRepository<Blog>
     {
         //Özel Metotlar
-        Task<List<Blog>> GetAllWithBlogCategoryAsync();
-        Task<Blog?> GetByIdWithBlogCategoryAsync(int id);
+        Task<List<Blog>> GetAllWithCategoryAndAuthorAsync();
+        Task<Blog?> GetByIdWithCategoryAndAuthorAsync(int id);
     }
 }

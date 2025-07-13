@@ -16,17 +16,17 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
         }
 
-        public async Task<List<Course>> GetAllWithCourseCategoryAsync()
+        public async Task<List<Course>> GetAllWithCategoryAsync()
         {
             return await Table
-                .Include(c=>c.CourseCategory)
+                .Include(c=>c.Category)
                 .ToListAsync();
         }
 
-        public async Task<Course?> GetByIdWithCourseCategoryAsync(int id)
+        public async Task<Course?> GetByIdWithCategoryAsync(int id)
         {
             return await Table
-              .Include(c => c.CourseCategory)
+              .Include(c => c.Category)
               .FirstOrDefaultAsync(c=>c.CourseID==id);
         }
     }

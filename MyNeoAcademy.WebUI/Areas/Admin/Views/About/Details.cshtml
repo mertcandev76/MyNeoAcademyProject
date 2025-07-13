@@ -1,6 +1,6 @@
-﻿@model ResultAboutDTO
+﻿@model MyNeoAcademy.DTO.DTOs.AboutDTOs.ResultAboutDTO
 @{
-    ViewData["Title"] = "Hakkımızda İçeriği Detayı";
+    ViewData["Title"] = "Hakkımda Detayı";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -9,29 +9,62 @@
         <div class="card-header">
             <h5 class="mb-0">@ViewData["Title"]</h5>
         </div>
-        <div class="card-body">
 
+        <div class="card-body">
             <dl class="row">
+                <dt class="col-sm-3">Başlık</dt>
+                <dd class="col-sm-9">@Model.Title</dd>
+
+                <dt class="col-sm-3">Alt Başlık</dt>
+                <dd class="col-sm-9">@Model.Subtitle</dd>
+
                 <dt class="col-sm-3">Açıklama</dt>
                 <dd class="col-sm-9">@Model.Description</dd>
 
-                <dt class="col-sm-3">Görsel 1</dt>
-                <dd class="col-sm-9"><a href="@Model.ImageUrl1" target="_blank">@Model.ImageUrl1</a></dd>
+                <dt class="col-sm-3">Buton Metni</dt>
+                <dd class="col-sm-9">@Model.ButtonText</dd>
 
-                <dt class="col-sm-3">Görsel 2</dt>
-                <dd class="col-sm-9"><a href="@Model.ImageUrl2" target="_blank">@Model.ImageUrl2</a></dd>
+                <dt class="col-sm-3">Buton Linki</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.ButtonLink))
+                    {
+                        <a href="@Model.ButtonLink" target="_blank">@Model.ButtonLink</a>
+                    }
+                    else
+                    {
+                        <span>Bağlantı yok</span>
+                    }
+                </dd>
 
-                <dt class="col-sm-3">Item 1</dt>
-                <dd class="col-sm-9">@Model.Item1</dd>
+                <dt class="col-sm-3">Ön Görsel</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.ImageFrontUrl))
+                    {
+                        <a href="@Model.ImageFrontUrl" target="_blank">Görseli Görüntüle</a>
 
-                <dt class="col-sm-3">Item 2</dt>
-                <dd class="col-sm-9">@Model.Item2</dd>
+                        <br />
+                        <img src="@Model.ImageFrontUrl" alt="Ön Görsel" class="img-fluid mt-2 rounded shadow-sm" style="max-height: 150px;" />
+                    }
+                    else
+                    {
+                        <span>Ön görsel bulunamadı.</span>
+                    }
+                </dd>
 
-                <dt class="col-sm-3">Item 3</dt>
-                <dd class="col-sm-9">@Model.Item3</dd>
+                <dt class="col-sm-3">Arka Görsel</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.ImageBackUrl))
+                    {
+                        <a href="@Model.ImageBackUrl" target="_blank">Görseli Görüntüle</a>
 
-                <dt class="col-sm-3">Item 4</dt>
-                <dd class="col-sm-9">@Model.Item4</dd>
+                        <br />
+                        <img src="@Model.ImageBackUrl" alt="Arka Görsel" class="img-fluid mt-2 rounded shadow-sm" style="max-height: 150px;" />
+                    }
+                    else
+                    {
+                        <span>Arka görsel bulunamadı.</span>
+                    }
+                </dd>
             </dl>
 
             <div class="d-flex justify-content-between">
@@ -41,4 +74,3 @@
         </div>
     </div>
 </div>
-

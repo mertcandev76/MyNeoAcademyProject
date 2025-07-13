@@ -12,6 +12,18 @@ namespace MyNeoAcademy.API.Extensions
         public static IServiceCollection AddDependencyResolvers(this IServiceCollection services)
         {
             // Scoped servis kayıtları
+
+            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ICommentService, CommentManager>();
+
+            services.AddScoped<IBlogTagRepository, BlogTagRepository>();
+            services.AddScoped<IBlogTagService, BlogTagManager>();
+
+
+            services.AddScoped<IAboutFeatureRepository, AboutFeatureRepository>();
+            services.AddScoped<IAboutFeatureService, AboutFeatureManager>();
+
+
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<ICourseService, CourseManager>();
 

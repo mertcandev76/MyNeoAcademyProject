@@ -30,49 +30,122 @@ namespace MyNeoAcademy.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AboutID"));
 
+                    b.Property<string>("ButtonLink")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ButtonText")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrl1")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ImageBackUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("ImageUrl2")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ImageFrontUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Item1")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Subtitle")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("Item2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Item3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Item4")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Title")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("AboutID");
 
                     b.ToTable("Abouts");
                 });
 
-            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Banner", b =>
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.AboutDetail", b =>
                 {
-                    b.Property<int>("BannerID")
+                    b.Property<int>("AboutDetailID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BannerID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AboutDetailID"));
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("Paragraph1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Paragraph2")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("AboutDetailID");
+
+                    b.ToTable("AboutDetails");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.AboutFeature", b =>
+                {
+                    b.Property<int>("AboutFeatureID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AboutFeatureID"));
+
+                    b.Property<int>("AboutID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IconClass")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Text")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("AboutFeatureID");
+
+                    b.HasIndex("AboutID");
+
+                    b.ToTable("AboutFeatures");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Author", b =>
+                {
+                    b.Property<int>("AuthorID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorID"));
+
+                    b.Property<string>("Bio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("BannerID");
+                    b.Property<string>("FacebookUrl")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.ToTable("Banners");
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("TwitterUrl")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("WebsiteUrl")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("AuthorID");
+
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Blog", b =>
@@ -83,44 +156,117 @@ namespace MyNeoAcademy.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BlogID"));
 
-                    b.Property<int>("BlogCategoryID")
+                    b.Property<int?>("AuthorID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("BlogDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int?>("CategoryID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("PublishDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ShortDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("BlogID");
 
-                    b.HasIndex("BlogCategoryID");
+                    b.HasIndex("AuthorID");
+
+                    b.HasIndex("CategoryID");
 
                     b.ToTable("Blogs");
                 });
 
-            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.BlogCategory", b =>
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.BlogTag", b =>
                 {
-                    b.Property<int>("BlogCategoryID")
+                    b.Property<int>("BlogTagID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BlogCategoryID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BlogTagID"));
+
+                    b.Property<int>("BlogID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagID")
+                        .HasColumnType("int");
+
+                    b.HasKey("BlogTagID");
+
+                    b.HasIndex("BlogID");
+
+                    b.HasIndex("TagID");
+
+                    b.ToTable("BlogTags");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Category", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IconClass")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Comment", b =>
+                {
+                    b.Property<int>("CommentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentID"));
+
+                    b.Property<int>("BlogID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("BlogCategoryID");
+                    b.HasKey("CommentID");
 
-                    b.ToTable("BlogCategories");
+                    b.HasIndex("BlogID");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Contact", b =>
@@ -131,17 +277,24 @@ namespace MyNeoAcademy.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContactID"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MapUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Subject")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("ContactID");
 
@@ -156,124 +309,164 @@ namespace MyNeoAcademy.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseID"));
 
-                    b.Property<int>("CourseCategoryID")
+                    b.Property<int>("CategoryID")
                         .HasColumnType("int");
-
-                    b.Property<string>("CourseName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsShown")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("CourseID");
-
-                    b.HasIndex("CourseCategoryID");
-
-                    b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.CourseCategory", b =>
-                {
-                    b.Property<int>("CourseCategoryID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseCategoryID"));
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Icon")
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("InstructorID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReviewCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("CourseID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("InstructorID");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Instructor", b =>
+                {
+                    b.Property<int>("InstructorID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InstructorID"));
+
+                    b.Property<string>("Bio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsShown")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                    b.Property<string>("FacebookUrl")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FullName")
                         .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Title")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("CourseCategoryID");
+                    b.Property<string>("TwitterUrl")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.ToTable("CourseCategories");
+                    b.Property<string>("WebsiteUrl")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("InstructorID");
+
+                    b.ToTable("Instructors");
                 });
 
-            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Message", b =>
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Slider", b =>
                 {
-                    b.Property<int>("MessageID")
+                    b.Property<int>("SliderID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SliderID"));
 
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ButtonText")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ButtonUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Subject")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.HasKey("MessageID");
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.SocialMedia", b =>
-                {
-                    b.Property<int>("SocialMediaID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SocialMediaID"));
-
-                    b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IconUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("SubTitle")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.HasKey("SocialMediaID");
+                    b.HasKey("SliderID");
 
-                    b.ToTable("SocialMedias");
+                    b.ToTable("Sliders");
                 });
 
-            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Subscriber", b =>
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Statistic", b =>
                 {
-                    b.Property<int>("SubscriberID")
+                    b.Property<int>("StatisticID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriberID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatisticID"));
 
-                    b.Property<string>("Email")
+                    b.Property<string>("ColorClass")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Label")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("SvgBase64")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
+                    b.HasKey("StatisticID");
+
+                    b.ToTable("Statistics");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Tag", b =>
+                {
+                    b.Property<int>("TagID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("int");
 
-                    b.HasKey("SubscriberID");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagID"));
 
-                    b.ToTable("Subscribers");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("TagID");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Testimonial", b =>
@@ -284,58 +477,138 @@ namespace MyNeoAcademy.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestimonialID"));
 
-                    b.Property<string>("Comment")
+                    b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Star")
+                    b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("TestimonialID");
 
                     b.ToTable("Testimonials");
                 });
 
-            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Blog", b =>
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.AboutFeature", b =>
                 {
-                    b.HasOne("MyNeoAcademy.Entity.Entities.BlogCategory", "BlogCategory")
-                        .WithMany("Blogs")
-                        .HasForeignKey("BlogCategoryID")
+                    b.HasOne("MyNeoAcademy.Entity.Entities.About", "About")
+                        .WithMany("Features")
+                        .HasForeignKey("AboutID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BlogCategory");
+                    b.Navigation("About");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Blog", b =>
+                {
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Author", "Author")
+                        .WithMany("Blogs")
+                        .HasForeignKey("AuthorID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Category", "Category")
+                        .WithMany("Blogs")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.BlogTag", b =>
+                {
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Blog", "Blog")
+                        .WithMany("BlogTags")
+                        .HasForeignKey("BlogID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Tag", "Tag")
+                        .WithMany("BlogTags")
+                        .HasForeignKey("TagID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Blog");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Comment", b =>
+                {
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Blog", "Blog")
+                        .WithMany("Comments")
+                        .HasForeignKey("BlogID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Blog");
                 });
 
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Course", b =>
                 {
-                    b.HasOne("MyNeoAcademy.Entity.Entities.CourseCategory", "CourseCategory")
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Category", "Category")
                         .WithMany("Courses")
-                        .HasForeignKey("CourseCategoryID")
+                        .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CourseCategory");
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Instructor", "Instructor")
+                        .WithMany("Courses")
+                        .HasForeignKey("InstructorID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Instructor");
                 });
 
-            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.BlogCategory", b =>
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.About", b =>
+                {
+                    b.Navigation("Features");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Author", b =>
                 {
                     b.Navigation("Blogs");
                 });
 
-            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.CourseCategory", b =>
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Blog", b =>
+                {
+                    b.Navigation("BlogTags");
+
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Category", b =>
+                {
+                    b.Navigation("Blogs");
+
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Instructor", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Tag", b =>
+                {
+                    b.Navigation("BlogTags");
                 });
 #pragma warning restore 612, 618
         }
