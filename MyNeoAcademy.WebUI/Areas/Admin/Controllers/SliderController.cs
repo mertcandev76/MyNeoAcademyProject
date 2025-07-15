@@ -6,6 +6,9 @@ using AutoMapper;
 using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.Entity.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MyNeoAcademy.DTO.DTOs.CategoryDTOs;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
@@ -13,114 +16,148 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]/{id?}")]
     public class SliderController : Controller
     {
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _client;
+        private readonly JsonSerializerOptions _jsonOptions;
 
         public SliderController(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClientFactory.CreateClient("MyApiClient");
-            // veya doğrudan base address verebilirsin
+            _client = httpClientFactory.CreateClient("MyApiClient");
+
+            // JSON ayarları (büyük-küçük harf duyarsız deserialization)
+            _jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
         }
 
-        // Listeleme
+        // 🔹 Listeleme
         public async Task<IActionResult> Index()
         {
-            var sliders = await _httpClient.GetFromJsonAsync<List<ResultSliderDTO>>("sliders");
-            return View(sliders);
+            var response = await _client.GetAsync("sliders");
+
+            if (!response.IsSuccessStatusCode)
+                return View(new List<ResultSliderDTO>());
+
+            var jsonData = await response.Content.ReadAsStringAsync();
+            var data = JsonSerializer.Deserialize<List<ResultSliderDTO>>(jsonData, _jsonOptions);
+
+            return View(data);
         }
 
-        // Yeni slider oluşturma sayfası
+        // 🔹 Detay
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var response = await _client.GetAsync($"sliders/{id}");
+
+            if (!response.IsSuccessStatusCode)
+                return RedirectToAction("Index");
+
+            var jsonData = await response.Content.ReadAsStringAsync();
+            var slider = JsonSerializer.Deserialize<ResultSliderDTO>(jsonData, _jsonOptions);
+
+            return View(slider);
+        }
+
+        // 🔹 Ekleme (GET)
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // Yeni slider oluşturma POST
+        // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateSliderWithFileDTO dto)
         {
-            if (!ModelState.IsValid)
-                return View(dto);
-
-            using var content = new MultipartFormDataContent();
-
-            content.Add(new StringContent(dto.Title ?? ""), "Title");
-            content.Add(new StringContent(dto.SubTitle ?? ""), "SubTitle");
-            content.Add(new StringContent(dto.ButtonText ?? ""), "ButtonText");
-            content.Add(new StringContent(dto.ButtonUrl ?? ""), "ButtonUrl");
+            var formData = new MultipartFormDataContent
+            {
+                { new StringContent(dto.Title ?? ""), "Title" },
+                { new StringContent(dto.SubTitle ?? ""), "SubTitle" },
+                { new StringContent(dto.ButtonText ?? ""), "ButtonText" },
+                { new StringContent(dto.ButtonUrl ?? ""), "ButtonUrl" }
+            };
 
             if (dto.ImageFile != null)
             {
                 var streamContent = new StreamContent(dto.ImageFile.OpenReadStream());
                 streamContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageFile.ContentType);
-                content.Add(streamContent, "ImageFile", dto.ImageFile.FileName);
+                formData.Add(streamContent, "ImageFile", dto.ImageFile.FileName);
             }
 
-            var response = await _httpClient.PostAsync("sliders", content);
+            var response = await _client.PostAsync("sliders", formData);
 
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
 
-            var error = await response.Content.ReadAsStringAsync();
-            ModelState.AddModelError("", error);
+            ModelState.AddModelError("", "Slider eklenemedi.");
             return View(dto);
         }
 
-        // Düzenleme GET
+        // 🔹 Güncelleme (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var slider = await _httpClient.GetFromJsonAsync<UpdateSliderWithFileDTO>($"sliders/{id}");
-            if (slider == null)
-                return NotFound();
+            var response = await _client.GetAsync($"sliders/{id}");
 
-            return View(slider);
+            if (!response.IsSuccessStatusCode)
+                return RedirectToAction("Index");
+
+            var jsonData = await response.Content.ReadAsStringAsync();
+            var resultSlider = JsonSerializer.Deserialize<ResultSliderDTO>(jsonData, _jsonOptions);
+
+            var dto = new UpdateSliderWithFileDTO
+            {
+                SliderID = resultSlider.SliderID,
+                Title = resultSlider.Title,
+                SubTitle = resultSlider.SubTitle,
+                ButtonText = resultSlider.ButtonText,
+                ButtonUrl = resultSlider.ButtonUrl,
+                ImageUrl = resultSlider.ImageUrl
+            };
+
+            return View(dto);
         }
 
-        // Düzenleme POST
+        // 🔹 Güncelleme (POST)
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateSliderWithFileDTO dto)
         {
-            if (!ModelState.IsValid)
-                return View(dto);
-
-            using var content = new MultipartFormDataContent();
-
-            content.Add(new StringContent(dto.SliderID.ToString()), "SliderID");
-            content.Add(new StringContent(dto.Title ?? ""), "Title");
-            content.Add(new StringContent(dto.SubTitle ?? ""), "SubTitle");
-            content.Add(new StringContent(dto.ButtonText ?? ""), "ButtonText");
-            content.Add(new StringContent(dto.ButtonUrl ?? ""), "ButtonUrl");
+            var formData = new MultipartFormDataContent
+            {
+                { new StringContent(dto.SliderID.ToString()), "SliderID" },
+                { new StringContent(dto.Title ?? ""), "Title" },
+                { new StringContent(dto.SubTitle ?? ""), "SubTitle" },
+                { new StringContent(dto.ButtonText ?? ""), "ButtonText" },
+                { new StringContent(dto.ButtonUrl ?? ""), "ButtonUrl" }
+            };
 
             if (dto.ImageFile != null)
             {
                 var streamContent = new StreamContent(dto.ImageFile.OpenReadStream());
                 streamContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageFile.ContentType);
-                content.Add(streamContent, "ImageFile", dto.ImageFile.FileName);
+                formData.Add(streamContent, "ImageFile", dto.ImageFile.FileName);
             }
 
-            var response = await _httpClient.PutAsync("sliders", content);
+            var response = await _client.PutAsync("sliders", formData);
 
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
 
-            var error = await response.Content.ReadAsStringAsync();
-            ModelState.AddModelError("", error);
+            ModelState.AddModelError("", "Slider güncellenemedi.");
             return View(dto);
         }
 
-        // Silme
-        [HttpPost]
+        // 🔹 Silme
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _httpClient.DeleteAsync($"sliders/{id}");
+            var response = await _client.DeleteAsync($"sliders/{id}");
 
-            if (!response.IsSuccessStatusCode)
-            {
-                var error = await response.Content.ReadAsStringAsync();
-                TempData["Error"] = error;
-            }
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction("Index");
 
+            TempData["Error"] = "Slider silinemedi.";
             return RedirectToAction("Index");
         }
     }

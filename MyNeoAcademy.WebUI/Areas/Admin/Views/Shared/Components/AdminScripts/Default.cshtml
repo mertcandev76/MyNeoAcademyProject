@@ -1,0 +1,32 @@
+﻿@* Ortak script dosyaları *@
+<script src="~/matrix-admin-master/assets/libs/jquery/dist/jquery.min.js"></script>
+@*CDN*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+@*CDN*@
+<script src="~/matrix-admin-master/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+<script src="~/matrix-admin-master/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/matrix-admin-master/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+<script src="~/matrix-admin-master/assets/extra-libs/sparkline/sparkline.js"></script>
+<script src="~/matrix-admin-master/dist/js/waves.js"></script>
+<script src="~/matrix-admin-master/dist/js/sidebarmenu.js"></script>
+<script src="~/matrix-admin-master/dist/js/custom.min.js"></script>
+<script src="~/matrix-admin-master/assets/libs/magnific-popup/dist/jquery.magnific-popup.min.js"></script>
+<script src="~/matrix-admin-master/assets/libs/magnific-popup/meg.init.js"></script>
+
+@* Modal için özel script *@
+<script>
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var id = button.data('id');
+        var name = button.data('name');
+        var controller = button.data('controller');
+
+        var modal = $(this);
+        modal.find('#deleteItemName').text(name);
+        modal.find('#confirmDeleteBtn').attr('href', `/Admin/${controller}/Delete/${id}`);
+    });
+</script>
+
+
+

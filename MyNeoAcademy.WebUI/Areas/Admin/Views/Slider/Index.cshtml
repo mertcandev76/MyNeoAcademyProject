@@ -2,68 +2,50 @@
 
 @{
     ViewData["Title"] = "Slider Listesi";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="container-fluid px-3">
     <div class="card shadow-sm">
-        <!-- Başlık + Yeni Ekle butonu -->
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="mb-0">@ViewData["Title"]</h3>
             <a asp-action="Create" asp-area="Admin" class="btn btn-primary btn-sm">+ Yeni Slider Ekle</a>
         </div>
-
         <div class="card-body p-0">
-            <div style="overflow-x: auto;">
-            @if (Model?.Any() == true)
+            @if (Model != null && Model.Any())
             {
                 <table class="table table-bordered mb-0 text-center align-middle">
-                    <thead class="table">
+                    <thead class="table-light">
                         <tr>
-                            <th style="width: 4%;">#</th>
                             <th style="width: 20%;">Başlık</th>
-                            <th style="width: 20%;">Alt Başlık</th>
-                            <th style="width: 12%;">Buton Metni</th>
-                            <th style="width: 14%;">Buton URL</th>
-                            <th style="width: 14%;">Resim</th>
-                            <th style="width: 16%;">İşlemler</th>
+                            <th style="width: 55%;">Resim</th>
+                            <th style="width: 25%;">İşlemler</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@item.SliderID</td>
                                 <td>@item.Title</td>
-                                <td>@item.SubTitle</td>
-                                <td>@item.ButtonText</td>
-                                <td>
-                                    @if (!string.IsNullOrWhiteSpace(item.ButtonUrl))
-                                    {
-                                        <a href="@item.ButtonUrl" target="_blank" rel="noopener noreferrer">@item.ButtonUrl</a>
-                                    }
-                                </td>
-
                                 <td>
                                     @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
                                     {
-                                        <img src="@(Url.Content(item.ImageUrl))" alt="Slider Resmi" class="img-fluid rounded shadow-sm" style="max-height:60px;" />
-
+                                        <img src="https://localhost:7230/@item.ImageUrl" style="max-height:80px;" class="img-thumbnail" />
                                     }
                                 </td>
-
                                 <td>
                                     <a asp-action="Details" asp-area="Admin" asp-route-id="@item.SliderID" class="btn btn-primary btn-sm me-1">
                                         <i class="fas fa-eye"></i> Detay
                                     </a>
-
                                     <a asp-action="Edit" asp-area="Admin" asp-route-id="@item.SliderID" class="btn btn-warning btn-sm me-1">
                                         <i class="fas fa-edit"></i> Düzenle
                                     </a>
-
-                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                            data-id="@item.SliderID" data-name="@item.Title" data-controller="Slider">
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#deleteModal"
+                                            data-id="@item.SliderID"
+                                            data-name="@item.Title"
+                                            data-controller="Slider">
                                         <i class="fas fa-trash"></i> Sil
                                     </button>
                                 </td>
@@ -75,10 +57,9 @@
             else
             {
                 <div class="alert alert-warning m-3 text-center">
-                    Henüz bir slider kaydı eklenmemiş.
+                    Henüz bir slider eklenmemiş.
                 </div>
             }
-            </div>
         </div>
     </div>
 </div>
@@ -89,37 +70,21 @@
         <div class="modal-content shadow">
             <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-                <p><strong id="deleteItemName"></strong> adlı slider kaydını silmek istediğinizden emin misiniz?</p>
+                <p><strong id="deleteItemName"></strong> adlı slider'ı silmek istediğinizden emin misiniz?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
                 <a id="confirmDeleteBtn" class="btn btn-danger">Sil</a>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        var deleteModal = document.getElementById('deleteModal');
-        deleteModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var id = button.getAttribute('data-id');    
-            var name = button.getAttribute('data-name');
-            var controller = button.getAttribute('data-controller');
-
-            var modalTitle = deleteModal.querySelector('.modal-title');
-            var modalBodyName = deleteModal.querySelector('#deleteItemName');
-            var confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
-
-            modalBodyName.textContent = name;
-            confirmBtn.href = '/' + controller + '/Delete/' + id;
-        });
-    </script>
-}
 
 
 

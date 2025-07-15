@@ -42,22 +42,13 @@ namespace MyNeoAcademy.DataAccess.Repositories
             Table.Update(entity);
             await _myNeoAcademyContext.SaveChangesAsync();
         }
-
+        //Var olan nesneyi siler.
         public async Task DeleteAsync(T entity)
         {
             Table.Remove(entity);
             await _myNeoAcademyContext.SaveChangesAsync();
         }
-        ////ID ile eşleşen kaydı siler.
-        //public async Task DeleteAsync(int id)
-        //{
-        //    var entity = await GetByIdAsync(id);
-        //    if (entity != null)
-        //    {
-        //        Table.Remove(entity);
-        //        await _myNeoAcademyContext.SaveChangesAsync();
-        //    }
-        //}
+
         //Toplam kayıt sayısını döner.
         public async Task<int> CountAsync()
         {

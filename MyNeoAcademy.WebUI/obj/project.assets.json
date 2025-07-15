@@ -12978,6 +12978,8 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "FluentValidation >= 11.5.1",
+      "FluentValidation.AspNetCore >= 11.3.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 7.0.12",
       "MyNeoAcademy.API >= 1.0.0"
     ]
@@ -13031,6 +13033,14 @@
       "net7.0": {
         "targetAlias": "net7.0",
         "dependencies": {
+          "FluentValidation": {
+            "target": "Package",
+            "version": "[11.5.1, )"
+          },
+          "FluentValidation.AspNetCore": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[7.0.12, )"

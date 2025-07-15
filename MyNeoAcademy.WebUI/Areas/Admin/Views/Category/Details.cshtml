@@ -1,0 +1,46 @@
+﻿@model ResultCategoryDTO
+@{
+    ViewData["Title"] = "Kategori  Detayı";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+
+            <dl class="row">
+                <dt class="col-sm-3">Kategori ID</dt>
+                <dd class="col-sm-9">@Model.CategoryID</dd>
+
+                <dt class="col-sm-3">Kategori Adı</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
+
+                <dt class="col-sm-3">Açıklama</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">Icon Sınıfı</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrWhiteSpace(Model.IconClass))
+                    {
+                        <span class="me-2">@Model.IconClass</span>
+                        <i class="@Model.IconClass"></i>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Belirtilmemiş</span>
+                    }
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-action="Edit" asp-area="Admin" asp-route-id="@Model.CategoryID" class="btn btn-warning">Düzenle</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+

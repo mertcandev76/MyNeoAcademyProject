@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.DTO.DTOs.SliderDTOs;
 using MyNeoAcademy.Entity.Entities;
+using MyNeoAcademy.API.Utilities;
 using FluentValidation;
 
 namespace MyNeoAcademy.API.Controllers
@@ -15,109 +16,83 @@ namespace MyNeoAcademy.API.Controllers
         private readonly IGenericService<Slider> _sliderService;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _env;
-        private readonly IValidator<CreateSliderWithFileDTO> _createValidator;
-        private readonly IValidator<UpdateSliderWithFileDTO> _updateValidator;
 
-        public SlidersController(IGenericService<Slider> sliderService,
-                                 IMapper mapper,
-                                 IWebHostEnvironment env,
-                                 IValidator<CreateSliderWithFileDTO> createValidator,
-                                 IValidator<UpdateSliderWithFileDTO> updateValidator)
+        public SlidersController(IGenericService<Slider> sliderService, IMapper mapper, IWebHostEnvironment env)
         {
             _sliderService = sliderService;
             _mapper = mapper;
             _env = env;
-            _createValidator = createValidator;
-            _updateValidator = updateValidator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
-            var sliderList = await _sliderService.GetListAsync();
-            var dtos = _mapper.Map<List<ResultSliderDTO>>(sliderList);
-            return Ok(dtos);
+            var list = await _sliderService.GetListAsync();
+            var dtoList = _mapper.Map<List<ResultSliderDTO>>(list);
+            return Ok(dtoList);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var slider = await _sliderService.GetByIdAsync(id);
-            if (slider == null) return NotFound();
-            var dto = _mapper.Map<ResultSliderDTO>(slider);
+            var entity = await _sliderService.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound("Slider bulunamadı.");
+
+            var dto = _mapper.Map<ResultSliderDTO>(entity);
             return Ok(dto);
         }
 
         [HttpPost]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] CreateSliderWithFileDTO dto)
         {
-            var validationResult = await _createValidator.ValidateAsync(dto);
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
+            if (dto.ImageFile == null)
+                return BadRequest("Bir görsel dosyası seçilmelidir.");
 
-            var sliderEntity = _mapper.Map<Slider>(dto);
+            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/sliders");
+            var entity = _mapper.Map<Slider>(dto);
+            entity.ImageUrl = imagePath;
 
-            if (dto.ImageFile != null && dto.ImageFile.Length > 0)
-            {
-                var imageUrl = await SaveFileAsync(dto.ImageFile);
-                sliderEntity.ImageUrl = imageUrl;
-            }
-
-            await _sliderService.CreateAsync(sliderEntity);
-            return Ok("Yeni slider eklendi");
+            await _sliderService.CreateAsync(entity);
+            return CreatedAtAction(nameof(GetById), new { id = entity.SliderID }, "Yeni Slider eklendi.");
         }
 
         [HttpPut]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] UpdateSliderWithFileDTO dto)
         {
-            var validationResult = await _updateValidator.ValidateAsync(dto);
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
-
-            var existingSlider = await _sliderService.GetByIdAsync(dto.SliderID);
-            if (existingSlider == null)
+            var existing = await _sliderService.GetByIdAsync(dto.SliderID);
+            if (existing == null)
                 return NotFound("Slider bulunamadı.");
 
-            // Güncelle
-            existingSlider.Title = dto.Title;
-            existingSlider.SubTitle = dto.SubTitle;
-            existingSlider.ButtonText = dto.ButtonText;
-            existingSlider.ButtonUrl = dto.ButtonUrl;
+            // Mevcut entity üzerinde manuel alan atamaları yap
+            existing.Title = dto.Title;
+            existing.SubTitle = dto.SubTitle;
+            existing.ButtonText = dto.ButtonText;
+            existing.ButtonUrl = dto.ButtonUrl;
 
-            if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+            if (dto.ImageFile != null)
             {
-                var imageUrl = await SaveFileAsync(dto.ImageFile);
-                existingSlider.ImageUrl = imageUrl;
+                var imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/sliders");
+                existing.ImageUrl = imagePath;
             }
 
-            await _sliderService.UpdateAsync(existingSlider);
-            return Ok("Slider güncellendi");
+            // Update metodu mevcut entity ile çağrılıyor
+            await _sliderService.UpdateAsync(existing);
+
+            return Ok("Slider güncellendi.");
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var slider = await _sliderService.GetByIdAsync(id);
-            if (slider == null) return NotFound();
+            var entity = await _sliderService.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound("Slider bulunamadı.");
 
-            await _sliderService.DeleteAsync(slider);
-            return Ok("Slider silindi");
-        }
-
-        private async Task<string> SaveFileAsync(IFormFile file)
-        {
-            var webRoot = _env.WebRootPath ?? Path.Combine(_env.ContentRootPath, "wwwroot");
-            var uploadsFolder = Path.Combine(webRoot, "uploads", "sliders");
-
-            Directory.CreateDirectory(uploadsFolder); // klasör varsa bir şey yapmaz
-
-            var uniqueFileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            await using var stream = new FileStream(filePath, FileMode.Create);
-            await file.CopyToAsync(stream);
-
-            return $"/uploads/sliders/{uniqueFileName}";
+            await _sliderService.DeleteAsync(entity);
+            return Ok("Slider silindi.");
         }
     }
 }

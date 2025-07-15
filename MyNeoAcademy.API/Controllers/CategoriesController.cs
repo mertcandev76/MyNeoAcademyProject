@@ -8,7 +8,7 @@ using MyNeoAcademy.Entity.Entities;
 namespace MyNeoAcademy.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] // Otomatik model doğrulama sağlar
     public class CategoriesController : ControllerBase
     {
         private readonly IGenericService<Category> _categoryService;
@@ -20,45 +20,49 @@ namespace MyNeoAcademy.API.Controllers
             _mapper = mapper;
         }
 
-        // Listeleme
+        // GET: api/Categories
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var categoryList = await _categoryService.GetListAsync();
-            var dtos = _mapper.Map<List<ResultCategoryDTO>>(categoryList);
-            return Ok(dtos);
+            var dtoList = _mapper.Map<List<ResultCategoryDTO>>(categoryList);
+            return Ok(dtoList);
         }
 
-        // ID ile Getirme
-        [HttpGet("{id}")]
+        // GET: api/Categories/5
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var category = await _categoryService.GetByIdAsync(id);
-            if (category == null) return NotFound();
+            if (category == null)
+                return NotFound("Kategori bulunamadı.");
+
             var dto = _mapper.Map<ResultCategoryDTO>(category);
             return Ok(dto);
         }
 
-        // Ekleme
+        // POST: api/Categories
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCategoryDTO createCategoryDTO)
+        public async Task<IActionResult> Create([FromBody] CreateCategoryDTO createCategoryDTO)
         {
+            // FluentValidation kuralları buradan önce otomatik çalışır (400 döner)
             var entity = _mapper.Map<Category>(createCategoryDTO);
             await _categoryService.CreateAsync(entity);
-            return Ok("Yeni kategori eklendi");
+            return CreatedAtAction(nameof(GetById), new { id = entity.CategoryID }, "Yeni kategori eklendi.");
         }
 
-        // Güncelleme
+        // PUT: api/Categories
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateCategoryDTO updateCategoryDTO)
+        public async Task<IActionResult> Edit([FromBody] UpdateCategoryDTO updateCategoryDTO)
         {
+            // FluentValidation burayı da otomatik kontrol eder
             var entity = _mapper.Map<Category>(updateCategoryDTO);
             await _categoryService.UpdateAsync(entity);
-            return Ok("Kategori güncellendi");
+            return Ok("Kategori güncellendi.");
         }
 
-        // Silme
-        [HttpDelete("{id}")]
+        // DELETE: api/Categories/5
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             var category = await _categoryService.GetByIdAsync(id);
@@ -66,7 +70,7 @@ namespace MyNeoAcademy.API.Controllers
                 return NotFound();
 
             await _categoryService.DeleteAsync(category);
-            return Ok("Kategori silindi");
+            return Ok("Kategori silindi.");
         }
     }
 }

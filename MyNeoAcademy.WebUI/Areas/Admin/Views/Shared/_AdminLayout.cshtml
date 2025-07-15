@@ -1,0 +1,69 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+
+@await Component.InvokeAsync("AdminHead")
+
+<body>
+    <!-- Preloader - style you can find in spinners.css -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <!-- End Preloader - style you can find in spinners.css -->
+
+
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+
+        <!-- Topbar header - style you can find in pages.scss -->
+        @await Component.InvokeAsync("AdminHeader")
+        <!-- End Topbar header -->
+
+
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        @await Component.InvokeAsync("AdminSidebar")
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+
+        <!-- Page wrapper  -->
+        <div class="page-wrapper">
+
+            <!-- Bread crumb and right sidebar toggle -->
+            @await Component.InvokeAsync("AdminRightSidebar")
+            <!-- End Bread crumb and right sidebar toggle -->
+
+            <!-- Container fluid  -->
+            <div class="container-fluid">
+           @RenderBody()
+            </div>
+            <!-- End Container fluid  -->
+
+
+            <!-- footer -->
+            @await Component.InvokeAsync("AdminFooter")
+            <!-- End footer -->
+
+        </div>
+        <!-- End Page wrapper  -->
+    </div>
+    <!-- End Wrapper -->
+
+
+
+
+    <!-- All Jquery -->
+    @await Component.InvokeAsync("AdminScripts")
+    <!-- End Jquery -->
+
+</body>
+
+</html>
+

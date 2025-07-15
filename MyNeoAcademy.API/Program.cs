@@ -46,6 +46,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.UseStaticFiles();
 
 // 🔹 Geliştirme ortamında Swagger aç
 if (app.Environment.IsDevelopment())

@@ -1,13 +1,25 @@
 ﻿using FluentValidation;
+using FluentValidation.AspNetCore;
 using MyNeoAcademy.DTO.DTOs.BlogDTOs;
 using MyNeoAcademy.DTO.DTOs.ContactDTOs;
 
+using MyNeoAcademy.DTO.Validators.CategoryValidator;
+using MyNeoAcademy.DTO.Validators.SliderValidator;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// ------------------------------
-// SERVISLERI EKLEME
-// ------------------------------
+
+// Add FluentValidation servislerini IServiceCollection'a ekle
+builder.Services.AddFluentValidationAutoValidation();  // ModelState otomatik dolar
+builder.Services.AddFluentValidationClientsideAdapters();// Client-side validasyon için
+builder.Services.AddValidatorsFromAssemblyContaining<CreateSliderValidator>();// Validator sınıflarını tarat
+
+
+
+// MVC servislerini ekle (burada sadece AddControllersWithViews çağrılır)
 builder.Services.AddControllersWithViews();
+
+
 
 
 // 🔽 HttpClient servisi — API ile iletişim için

@@ -1,8 +1,8 @@
-﻿@model UpdateSliderDTO
+﻿@model UpdateSliderWithFileDTO
 
 @{
     ViewData["Title"] = "Slider Güncelle";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="container mt-5">
@@ -10,7 +10,6 @@
         <div class="card-header">
             <h5 class="mb-0">@ViewData["Title"]</h5>
         </div>
-
         <div class="card-body">
             <form asp-action="Edit" asp-area="Admin" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="SliderID" />
@@ -19,40 +18,45 @@
 
                 <div class="mb-3">
                     <label asp-for="Title" class="form-label">Başlık</label>
-                    <input asp-for="Title" class="form-control" placeholder="Slider başlığı..." />
+                    <input asp-for="Title" class="form-control" placeholder="Başlık girin..." />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <label asp-for="SubTitle" class="form-label">Alt Başlık</label>
-                    <input asp-for="SubTitle" class="form-control" placeholder="Slider alt başlık..." />
+                    <input asp-for="SubTitle" class="form-control" placeholder="Alt başlık girin..." />
                     <span asp-validation-for="SubTitle" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <label asp-for="ButtonText" class="form-label">Buton Metni</label>
-                    <input asp-for="ButtonText" class="form-control" placeholder="Buton metni..." />
+                    <input asp-for="ButtonText" class="form-control" placeholder="Buton metni girin..." />
                     <span asp-validation-for="ButtonText" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <label asp-for="ButtonUrl" class="form-label">Buton URL</label>
-                    <input asp-for="ButtonUrl" class="form-control" placeholder="Butonun yönlendireceği URL" />
+                    <input asp-for="ButtonUrl" class="form-control" placeholder="https://..." />
                     <span asp-validation-for="ButtonUrl" class="text-danger"></span>
                 </div>
 
-                <!-- Mevcut görsel gösterimi -->
-                @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
-                {
-                    <div class="mb-3">
-                        <label class="form-label d-block">Mevcut Slider Resmi:</label>
-                        <img src="@Model.ImageUrl" class="img-thumbnail" style="max-height:120px;" alt="Mevcut Slider Resmi" />
-                    </div>
-                }
+                <div class="mb-3">
+                    <label class="form-label">Mevcut Görsel</label><br />
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                    {
+                        <img src="https://localhost:7230/@Model.ImageUrl" style="max-height:80px;" class="img-thumbnail" />
+                    }
+                    else
+                    {
+                        <small class="text-muted">Görsel bulunamadı.</small>
+                    }
+                </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Yeni Slider Resmi (isteğe bağlı)</label>
-                    <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+                    <label asp-for="ImageFile" class="form-label">Yeni Görsel (isteğe bağlı)</label>
+                    <input asp-for="ImageFile" type="file" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
                 </div>
 
                 <div class="d-flex justify-content-between">

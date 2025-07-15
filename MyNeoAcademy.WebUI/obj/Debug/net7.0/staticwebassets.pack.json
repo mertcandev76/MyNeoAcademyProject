@@ -4989,22 +4989,6 @@
       "PackagePath": "staticwebassets\\onlineedu-master\\readme.txt"
     },
     {
-      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.WebUI\\wwwroot\\uploads\\about\\about1.png",
-      "PackagePath": "staticwebassets\\uploads\\about\\about1.png"
-    },
-    {
-      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.WebUI\\wwwroot\\uploads\\about\\about2.png",
-      "PackagePath": "staticwebassets\\uploads\\about\\about2.png"
-    },
-    {
-      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.WebUI\\wwwroot\\uploads\\about\\software-back1.jpg",
-      "PackagePath": "staticwebassets\\uploads\\about\\software-back1.jpg"
-    },
-    {
-      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.WebUI\\wwwroot\\uploads\\about\\software-front1.jpeg",
-      "PackagePath": "staticwebassets\\uploads\\about\\software-front1.jpeg"
-    },
-    {
       "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.MyNeoAcademy.WebUI.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
