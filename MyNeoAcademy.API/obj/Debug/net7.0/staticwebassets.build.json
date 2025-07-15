@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "K8fKCgIAHecr7G0n6hfmFYdq/lG7s2bnvEnikdNGV6A=",
+  "Hash": "twIbUsPn0TboE6jQF0VYy49x3keZBhods1OfQZhxIK0=",
   "Source": "MyNeoAcademy.API",
   "BasePath": "_content/MyNeoAcademy.API",
   "Mode": "Default",
@@ -16,6 +16,23 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\sliders\\0621eff6-7f7d-4b48-92f7-c6fcc84c42e7.png",
+      "SourceId": "MyNeoAcademy.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\",
+      "BasePath": "_content/MyNeoAcademy.API",
+      "RelativePath": "img/sliders/0621eff6-7f7d-4b48-92f7-c6fcc84c42e7.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\sliders\\0621eff6-7f7d-4b48-92f7-c6fcc84c42e7.png"
+    },
     {
       "Identity": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\sliders\\1f8d78f0-4e6a-4905-9f34-93a17e274f8c.png",
       "SourceId": "MyNeoAcademy.API",

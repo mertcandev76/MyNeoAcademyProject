@@ -18,8 +18,8 @@ namespace MyNeoAcademy.Business.Concrete
             _courseRepository = courseRepository;
         }
 
-        public async Task<List<Course>> GetAllWithCategoryAsync() => await _courseRepository.GetAllWithCategoryAsync();
+        public async Task<List<Course>> GetAllWithCategoryAndInstructorAsync() => await _courseRepository.GetAllWithCategoryAndInstructorAsync();
 
-        public async Task<Course?> GetByIdWithCategoryAsync(int id) => await _courseRepository.GetByIdWithCategoryAsync(id);
+        public async Task<Course?> GetByIdWithCategoryAndInstructorAsync(int id) => await _courseRepository.GetByIdWithCategoryAndInstructorAsync(id);
     }
 }

@@ -10,7 +10,7 @@ namespace MyNeoAcademy.Business.Abstract
     public interface ICourseService:IGenericService<Course>
     {
         //Özel Metotlar
-        Task<List<Course>> GetAllWithCategoryAsync();
-        Task<Course?> GetByIdWithCategoryAsync(int id);
+        Task<List<Course>> GetAllWithCategoryAndInstructorAsync();
+        Task<Course?> GetByIdWithCategoryAndInstructorAsync(int id);
     }
 }

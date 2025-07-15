@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
 using MyNeoAcademy.Entity.Entities;
@@ -13,60 +14,84 @@ namespace MyNeoAcademy.API.Controllers
     {
         private readonly IGenericService<Instructor> _instructorService;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
 
-        public InstructorsController(IGenericService<Instructor> instructorService, IMapper mapper)
+        public InstructorsController(IGenericService<Instructor> instructorService, IMapper mapper, IWebHostEnvironment env)
         {
             _instructorService = instructorService;
             _mapper = mapper;
+            _env = env;
         }
 
-        // Listeleme
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
-            var instructorList = await _instructorService.GetListAsync();
-            var dtos = _mapper.Map<List<ResultInstructorDTO>>(instructorList);
-            return Ok(dtos);
+            var list = await _instructorService.GetListAsync();
+            var dtoList = _mapper.Map<List<ResultInstructorDTO>>(list);
+            return Ok(dtoList);
         }
 
-        // ID ile Getirme
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var instructor = await _instructorService.GetByIdAsync(id);
-            if (instructor == null) return NotFound();
-            var dto = _mapper.Map<ResultInstructorDTO>(instructor);
+            var entity = await _instructorService.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound("Eğitmen bulunamadı.");
+
+            var dto = _mapper.Map<ResultInstructorDTO>(entity);
             return Ok(dto);
         }
 
-        // Ekleme
         [HttpPost]
-        public async Task<IActionResult> Create(CreateInstructorDTO createInstructorDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CreateInstructorWithFileDTO dto)
         {
-            var entity = _mapper.Map<Instructor>(createInstructorDTO);
+            if (dto.ImageFile == null)
+                return BadRequest("Bir profil fotoğrafı seçilmelidir.");
+
+            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/instructors");
+            var entity = _mapper.Map<Instructor>(dto);
+            entity.ImageUrl = imagePath;
+
             await _instructorService.CreateAsync(entity);
-            return Ok("Yeni eğitmen eklendi");
+            return CreatedAtAction(nameof(GetById), new { id = entity.InstructorID }, "Yeni eğitmen eklendi.");
         }
 
-        // Güncelleme
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateInstructorDTO updateInstructorDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromForm] UpdateInstructorWithFileDTO dto)
         {
-            var entity = _mapper.Map<Instructor>(updateInstructorDTO);
-            await _instructorService.UpdateAsync(entity);
-            return Ok("Eğitmen bilgileri güncellendi");
+            var existing = await _instructorService.GetByIdAsync(dto.InstructorID);
+            if (existing == null)
+                return NotFound("Eğitmen bulunamadı.");
+
+            // Alan güncellemeleri
+            existing.FullName = dto.FullName;
+            existing.Title = dto.Title;
+            existing.Bio = dto.Bio;
+            existing.FacebookUrl = dto.FacebookUrl;
+            existing.TwitterUrl = dto.TwitterUrl;
+            existing.WebsiteUrl = dto.WebsiteUrl;
+
+            if (dto.ImageFile != null)
+            {
+                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/instructors");
+                existing.ImageUrl = imagePath;
+            }
+
+            await _instructorService.UpdateAsync(existing);
+            return Ok("Eğitmen güncellendi.");
         }
 
-        // Silme
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var instructor = await _instructorService.GetByIdAsync(id);
-            if (instructor == null)
-                return NotFound();
+            var entity = await _instructorService.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound("Eğitmen bulunamadı.");
 
-            await _instructorService.DeleteAsync(instructor);
-            return Ok("Eğitmen silindi");
+            await _instructorService.DeleteAsync(entity);
+            return Ok("Eğitmen silindi.");
         }
     }
 }

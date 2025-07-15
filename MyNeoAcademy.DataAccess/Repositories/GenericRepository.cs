@@ -26,7 +26,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
             return await Table.ToListAsync();
         }
         //Verilen id'ye sahip olan nesneyi getirir.
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
             return await Table.FindAsync(id);
         }
@@ -65,7 +65,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
             return await Table.Where(predicate).ToListAsync();
         }
         //Belirli bir şarta uyan ilk nesneyi döner.
-        public async Task<T> GetByFilterAsync(Expression<Func<T, bool>> predicate)
+        public async Task<T?> GetByFilterAsync(Expression<Func<T, bool>> predicate)
         {
             return await Table.FirstOrDefaultAsync(predicate);
         }

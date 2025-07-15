@@ -106,6 +106,8 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             var jsonData = await response.Content.ReadAsStringAsync();
             var resultSlider = JsonSerializer.Deserialize<ResultSliderDTO>(jsonData, _jsonOptions);
 
+            if (resultSlider == null)
+                return RedirectToAction("Index");
             var dto = new UpdateSliderWithFileDTO
             {
                 SliderID = resultSlider.SliderID,

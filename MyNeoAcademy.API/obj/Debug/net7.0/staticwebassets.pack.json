@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\sliders\\0621eff6-7f7d-4b48-92f7-c6fcc84c42e7.png",
+      "PackagePath": "staticwebassets\\img\\sliders\\0621eff6-7f7d-4b48-92f7-c6fcc84c42e7.png"
+    },
+    {
       "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\sliders\\1f8d78f0-4e6a-4905-9f34-93a17e274f8c.png",
       "PackagePath": "staticwebassets\\img\\sliders\\1f8d78f0-4e6a-4905-9f34-93a17e274f8c.png"
     },
