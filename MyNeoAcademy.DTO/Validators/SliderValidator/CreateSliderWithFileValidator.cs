@@ -15,9 +15,9 @@ namespace MyNeoAcademy.DTO.Validators.SliderValidator
             Include(new CreateSliderValidator());
 
             RuleFor(x => x.ImageFile)
-          .NotNull().WithMessage("Bir görsel seçmelisiniz.")
-          .Must(file => file != null && file.ContentType.StartsWith("image/"))
-          .WithMessage("Yüklenen dosya bir görsel olmalıdır.");
+                .NotNull().WithMessage("You must select an image.")
+                .Must(file => file != null && file.ContentType.StartsWith("image/"))
+                .WithMessage("The uploaded file must be an image.");
         }
     }
 }

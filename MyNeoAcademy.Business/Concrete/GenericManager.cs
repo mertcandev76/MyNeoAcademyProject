@@ -22,7 +22,7 @@ namespace MyNeoAcademy.Business.Concrete
 
         public async Task<List<T>> GetListAsync() =>  await _repository.GetListAsync();
 
-        public async Task<T> GetByIdAsync(int id) =>   await _repository.GetByIdAsync(id);
+        public async Task<T?> GetByIdAsync(int id) =>   await _repository.GetByIdAsync(id);
 
         public async Task CreateAsync(T entity) => await _repository.CreateAsync(entity);
 
@@ -36,6 +36,6 @@ namespace MyNeoAcademy.Business.Concrete
 
         public async Task<List<T>> GetFilteredListAsync(Expression<Func<T, bool>> predicate) =>   await _repository.GetFilteredListAsync(predicate);
 
-        public async Task<T> GetByFilterAsync(Expression<Func<T, bool>> predicate) =>   await _repository.GetByFilterAsync(predicate);
+        public async Task<T?> GetByFilterAsync(Expression<Func<T, bool>> predicate) =>   await _repository.GetByFilterAsync(predicate);
     }
 }

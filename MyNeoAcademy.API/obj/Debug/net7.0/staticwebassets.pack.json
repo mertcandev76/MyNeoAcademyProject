@@ -1,6 +1,30 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\instructors\\1b8f33ed-2182-483c-a3c0-1520363b62d5.png",
+      "PackagePath": "staticwebassets\\img\\instructors\\1b8f33ed-2182-483c-a3c0-1520363b62d5.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\instructors\\ac9a2ea8-86af-41c7-8ebf-7e930cb71e2f.png",
+      "PackagePath": "staticwebassets\\img\\instructors\\ac9a2ea8-86af-41c7-8ebf-7e930cb71e2f.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\instructors\\afd76244-9f50-45d4-b2e8-4efcb2875895.jpg",
+      "PackagePath": "staticwebassets\\img\\instructors\\afd76244-9f50-45d4-b2e8-4efcb2875895.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\instructors\\d0a5e069-f1c5-4842-b775-c5c1ecd54390.jpg",
+      "PackagePath": "staticwebassets\\img\\instructors\\d0a5e069-f1c5-4842-b775-c5c1ecd54390.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\instructors\\f3708eb7-a0b7-46c4-b9fd-a957e956134d.png",
+      "PackagePath": "staticwebassets\\img\\instructors\\f3708eb7-a0b7-46c4-b9fd-a957e956134d.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\instructors\\fae60ed7-ce75-4f58-b4b9-f7dafef45270.png",
+      "PackagePath": "staticwebassets\\img\\instructors\\fae60ed7-ce75-4f58-b4b9-f7dafef45270.png"
+    },
+    {
       "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\sliders\\0621eff6-7f7d-4b48-92f7-c6fcc84c42e7.png",
       "PackagePath": "staticwebassets\\img\\sliders\\0621eff6-7f7d-4b48-92f7-c6fcc84c42e7.png"
     },

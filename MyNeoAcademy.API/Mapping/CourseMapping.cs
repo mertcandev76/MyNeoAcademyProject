@@ -12,6 +12,12 @@ namespace MyNeoAcademy.API.Mapping
             CreateMap<Course, UpdateCourseDTO>().ReverseMap();
             CreateMap<Course, ResultCourseDTO>().ReverseMap();
 
+            CreateMap<CreateCourseWithFileDTO, Course>()
+    .ForMember(dest => dest.ImageUrl, opt => opt.Ignore()); 
+
+            CreateMap<UpdateCourseWithFileDTO, Course>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+
         }
     }
 }

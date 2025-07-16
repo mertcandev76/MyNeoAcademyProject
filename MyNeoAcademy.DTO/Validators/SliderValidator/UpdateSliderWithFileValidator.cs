@@ -13,7 +13,7 @@ namespace MyNeoAcademy.DTO.Validators.SliderValidator
         public UpdateSliderWithFileValidator()
         {
             RuleFor(x => x.SliderID)
-                     .GreaterThan(0).WithMessage("Geçersiz Slider ID.");
+                     .GreaterThan(0).WithMessage("Invalid  Slider ID.");
 
             Include(new CreateSliderWithFileValidator());
         }

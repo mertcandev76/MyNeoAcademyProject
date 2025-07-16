@@ -10,29 +10,12 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.DTO.DTOs.CourseDTOs
 {
-    public class ResultCourseDTO
+    public class ResultCourseDTO:CreateCourseDTO
     {
         public int CourseID { get; set; }
 
-        public string? Title { get; set; }
-
-        public string? Description { get; set; }
-
-        public string? ImageUrl { get; set; }
-
-        public int Rating { get; set; } 
-        public int ReviewCount { get; set; }
-
-        public int StudentCount { get; set; }
-
-        public int LikeCount { get; set; }
-
-        public decimal? Price { get; set; } 
-
-        public int CategoryID { get; set; }
         public ResultCategoryDTO? Category { get; set; }
 
-        public int? InstructorID { get; set; }
         public ResultInstructorDTO? Instructor { get; set; } // Navigasyon property
     }
 }

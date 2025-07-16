@@ -11,8 +11,6 @@ namespace MyNeoAcademy.DTO.DTOs.CourseDTOs
     public class CreateCourseDTO
     {
 
-        public int CourseID { get; set; }
-
         public string? Title { get; set; }
 
         public string? Description { get; set; }
@@ -28,7 +26,7 @@ namespace MyNeoAcademy.DTO.DTOs.CourseDTOs
 
         public decimal? Price { get; set; } 
 
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
 
         public int? InstructorID { get; set; }      
 

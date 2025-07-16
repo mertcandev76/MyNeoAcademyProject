@@ -12,7 +12,7 @@ using MyNeoAcademy.DataAccess.Context;
 namespace MyNeoAcademy.DataAccess.Migrations
 {
     [DbContext(typeof(MyNeoAcademyContext))]
-    [Migration("20250711120730_InitialCreate")]
+    [Migration("20250715231231_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -312,7 +312,7 @@ namespace MyNeoAcademy.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseID"));
 
-                    b.Property<int>("CategoryID")
+                    b.Property<int?>("CategoryID")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -567,8 +567,7 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.HasOne("MyNeoAcademy.Entity.Entities.Category", "Category")
                         .WithMany("Courses")
                         .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyNeoAcademy.Entity.Entities.Instructor", "Instructor")
                         .WithMany("Courses")

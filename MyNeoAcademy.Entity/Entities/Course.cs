@@ -27,7 +27,7 @@ namespace MyNeoAcademy.Entity.Entities
         public decimal? Price { get; set; } // Null ise "Free" yazılır
 
         // İlişkiler
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
         public Category? Category { get; set; }
         public int? InstructorID { get; set; }       // Burada nullable yaptım, isteğe bağlı olabilir
         public Instructor? Instructor { get; set; } // Navigasyon property

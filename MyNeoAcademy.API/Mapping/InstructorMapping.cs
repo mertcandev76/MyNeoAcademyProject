@@ -15,7 +15,7 @@ namespace MyNeoAcademy.API.Mapping
             CreateMap<Instructor, ResultInstructorDTO>().ReverseMap();
 
             CreateMap<CreateInstructorWithFileDTO, Instructor>()
-          .ForMember(dest => dest.ImageUrl, opt => opt.Ignore()); // çünkü dosyayı SaveFileAsync ile yüklüyorsun
+          .ForMember(dest => dest.ImageUrl, opt => opt.Ignore()); 
 
             CreateMap<UpdateInstructorWithFileDTO, Instructor>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());

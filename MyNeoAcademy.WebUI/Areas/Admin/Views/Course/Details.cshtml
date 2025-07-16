@@ -1,0 +1,64 @@
+﻿@model MyNeoAcademy.DTO.DTOs.CourseDTOs.ResultCourseDTO
+@{
+    ViewData["Title"] = "Kurs Detayı";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.CourseID</dd>
+
+                <dt class="col-sm-3">Başlık</dt>
+                <dd class="col-sm-9">@Model.Title</dd>
+
+                <dt class="col-sm-3">Açıklama</dt>
+                <dd class="col-sm-9">@Html.Raw(Model.Description?.Replace("\n", "<br />") ?? "<span class='text-muted'>Yok</span>")</dd>
+
+                <dt class="col-sm-3">Kategori</dt>
+                <dd class="col-sm-9">@Model.Category?.Name ?? "<span class='text-muted'>Yok</span>"</dd>
+
+                <dt class="col-sm-3">Eğitmen</dt>
+                <dd class="col-sm-9">@Model.Instructor?.FullName ?? "<span class='text-muted'>Yok</span>"</dd>
+
+                <dt class="col-sm-3">Fiyat</dt>
+                <dd class="col-sm-9">@((Model.Price.HasValue && Model.Price.Value > 0) ? $"{Model.Price.Value:C2}" : "Ücretsiz")</dd>
+
+                <dt class="col-sm-3">Puan</dt>
+                <dd class="col-sm-9">@Model.Rating</dd>
+
+                <dt class="col-sm-3">Yorum Sayısı</dt>
+                <dd class="col-sm-9">@Model.ReviewCount</dd>
+
+                <dt class="col-sm-3">Öğrenci Sayısı</dt>
+                <dd class="col-sm-9">@Model.StudentCount</dd>
+
+                <dt class="col-sm-3">Beğeni Sayısı</dt>
+                <dd class="col-sm-9">@Model.LikeCount</dd>
+
+                <dt class="col-sm-3">Kurs Görseli</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                    {
+                        <a href="https://localhost:7230/@Model.ImageUrl" target="_blank">Resmi Görüntüle</a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Görsel bulunamadı.</span>
+                    }
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-action="Edit" asp-area="Admin" asp-route-id="@Model.CourseID" class="btn btn-warning">Güncelle</a>
+            </div>
+        </div>
+    </div>
+</div>
+

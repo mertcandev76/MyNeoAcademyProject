@@ -12,7 +12,7 @@ namespace MyNeoAcademy.Business.Abstract
         //Tüm verileri getirir
         Task<List<T>> GetListAsync();
         //Verilen id'ye sahip olan nesneyi getirir.
-        Task<T> GetByIdAsync(int id);
+        Task<T?> GetByIdAsync(int id);
         //Yeni bir nesneyi veritabanına ekler.
         Task CreateAsync(T entity);
         //Var olan nesneyi günceller.
@@ -30,7 +30,7 @@ namespace MyNeoAcademy.Business.Abstract
         Task<List<T>> GetFilteredListAsync(Expression<Func<T, bool>> predicate);
 
         //Belirli bir şarta uyan ilk nesneyi döner.
-        Task<T> GetByFilterAsync(Expression<Func<T, bool>> predicate);
+        Task<T?> GetByFilterAsync(Expression<Func<T, bool>> predicate);
 
     }
 }

@@ -20,6 +20,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             return await Table
                 .Include(c=>c.Category)
+                .Include(c=>c.Instructor)
                 .ToListAsync();
         }
 
@@ -27,6 +28,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             return await Table
               .Include(c => c.Category)
+              .Include (c=>c.Instructor)    
               .FirstOrDefaultAsync(c=>c.CourseID==id);
         }
     }

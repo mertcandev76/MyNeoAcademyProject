@@ -18,9 +18,9 @@ namespace MyNeoAcademy.DTO.DTOs.BlogDTOs
         public string? ImageUrl { get; set; }
         public DateTime PublishDate { get; set; }
 
-        public int AuthorID { get; set; }
+        public int? AuthorID { get; set; }
 
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
 
     }
 }

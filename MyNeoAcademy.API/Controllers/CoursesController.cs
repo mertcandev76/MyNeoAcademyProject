@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.DTO.DTOs.CourseDTOs;
+using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -13,10 +15,12 @@ namespace MyNeoAcademy.API.Controllers
     {
         private readonly ICourseService _courseService;
         private readonly IMapper _mapper;
-        public CoursesController(ICourseService courseService, IMapper mapper)
+        private readonly IWebHostEnvironment _env;
+        public CoursesController(ICourseService courseService, IMapper mapper, IWebHostEnvironment env)
         {
             _courseService = courseService;
             _mapper = mapper;
+            _env = env;
         }
 
     
@@ -24,42 +28,68 @@ namespace MyNeoAcademy.API.Controllers
         public async Task<IActionResult> Get()
         {
 
-            var courseList = await _courseService.GetAllWithCategoryAndInstructorAsync(); // Entity List<Blog>
-            var dtos = _mapper.Map<List<ResultCourseDTO>>(courseList); // DTO List<ResultBlogDTO>
-            return Ok(dtos); // DTO döndür
+            var list = await _courseService.GetAllWithCategoryAndInstructorAsync(); // Entity List<Blog>
+            var dtoList = _mapper.Map<List<ResultCourseDTO>>(list); // DTO List<ResultBlogDTO>
+            return Ok(dtoList); // DTO döndür
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> Detail(int id)
         {
-            var course = await _courseService.GetByIdWithCategoryAndInstructorAsync(id);
-            if (course == null) return NotFound();
-            var dtos = _mapper.Map<ResultCourseDTO>(course);
-            return Ok(dtos);
+            var entity = await _courseService.GetByIdWithCategoryAndInstructorAsync(id);
+            if (entity == null) return NotFound("Kurs bulunamadı.");
+            var dto = _mapper.Map<ResultCourseDTO>(entity);
+            return Ok(dto);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCourseDTO  createCourseDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CreateCourseWithFileDTO dto)
         {
-            var dtos = _mapper.Map<Course>(createCourseDTO);
-            await _courseService.CreateAsync(dtos);
-            return Ok("Yeni Kategori Alanı Oluşturuldu.");
+            if (dto.ImageFile == null)
+                return BadRequest("Bir profil fotoğrafı seçilmelidir.");
+            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/courses");
+            var entity = _mapper.Map<Course>(dto);
+            entity.ImageUrl = imagePath;
+            await _courseService.CreateAsync(entity);
+            return CreatedAtAction(nameof(Detail), new { id = entity.CourseID }, "Yeni kurs eklendi.");
         }
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateCourseDTO updateCourseDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromForm] UpdateCourseWithFileDTO dto)
         {
-            var dtos = _mapper.Map<Course>(updateCourseDTO);
-            await _courseService.UpdateAsync(dtos);
-            return Ok("Kategori Alanı Güncellendi.");
+            var existing = await _courseService.GetByIdAsync(dto.CourseID);
+            if (existing == null)
+                return NotFound("Kurs bulunamadı.");
+            // Alan güncellemeleri
+            existing.Title = dto.Title;
+            existing.Description = dto.Description;
+            existing.Rating = dto.Rating;
+            existing.ReviewCount = dto.ReviewCount;
+            existing.StudentCount = dto.StudentCount;
+            existing.LikeCount = dto.LikeCount;
+            existing.Price = dto.Price;
+            existing.LikeCount = dto.LikeCount;
+            existing.CategoryID = dto.CategoryID;
+            existing.InstructorID = dto.InstructorID;
+            if (dto.ImageFile != null)
+            {
+                // Dosyayı kaydet (FileHelper kendi helperın, dosya yolu ve klasör adını ihtiyacına göre ayarla)
+                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/courses");
+                existing.ImageUrl = imagePath;
+            }
+
+            await _courseService.UpdateAsync(existing);
+            return Ok("Kurs Güncellendi");
         }
         //Silme
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var courses = await _courseService.GetByIdAsync(id);
-            if (courses == null)
-                return NotFound();
+            var entity = await _courseService.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound("Kurs bulunamadı.");
 
-            await _courseService.DeleteAsync(courses);
-            return Ok();
+            await _courseService.DeleteAsync(entity);
+            return Ok("Kurs silindi.");
         }
     }
 }

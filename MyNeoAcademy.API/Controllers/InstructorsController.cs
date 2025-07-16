@@ -32,12 +32,10 @@ namespace MyNeoAcademy.API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> Detail(int id)
         {
             var entity = await _instructorService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound("Eğitmen bulunamadı.");
-
+            if (entity == null) return NotFound("Eğitmen bulunamadı.");
             var dto = _mapper.Map<ResultInstructorDTO>(entity);
             return Ok(dto);
         }
@@ -54,7 +52,7 @@ namespace MyNeoAcademy.API.Controllers
             entity.ImageUrl = imagePath;
 
             await _instructorService.CreateAsync(entity);
-            return CreatedAtAction(nameof(GetById), new { id = entity.InstructorID }, "Yeni eğitmen eklendi.");
+            return CreatedAtAction(nameof(Detail), new { id = entity.InstructorID }, "Yeni eğitmen eklendi.");
         }
 
         [HttpPut]

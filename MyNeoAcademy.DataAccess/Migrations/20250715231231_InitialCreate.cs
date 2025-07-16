@@ -243,7 +243,7 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     StudentCount = table.Column<int>(type: "int", nullable: false),
                     LikeCount = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    CategoryID = table.Column<int>(type: "int", nullable: false),
+                    CategoryID = table.Column<int>(type: "int", nullable: true),
                     InstructorID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

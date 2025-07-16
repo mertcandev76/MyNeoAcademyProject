@@ -15,7 +15,7 @@ namespace MyNeoAcademy.DTO.Validators.InstructorValidator
         public UpdateInstructorWithFileValidator()
         {
             RuleFor(x => x.InstructorID)
-                   .GreaterThan(0).WithMessage("Geçersiz Instructor ID.");
+                   .GreaterThan(0).WithMessage("Invalid Instructor ID.");
 
             Include(new CreateInstructorWithFileValidator());
         }

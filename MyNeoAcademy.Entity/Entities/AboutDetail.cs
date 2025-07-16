@@ -11,6 +11,6 @@ namespace MyNeoAcademy.Entity.Entities
         public int AboutDetailID { get; set; }
         public string? Title { get; set; }
         public string? Paragraph1 { get; set; }
-        public string? Paragraph2 { get; set; } 
+        public string? Paragraph2 { get; set; }
     }
 }

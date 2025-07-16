@@ -13,23 +13,23 @@ namespace MyNeoAcademy.DTO.Validators.SliderValidator
         public CreateSliderValidator()
         {
             RuleFor(x => x.Title)
-                  .NotEmpty().WithMessage("Başlık alanı boş bırakılamaz.")
-                  .MaximumLength(100).WithMessage("Başlık en fazla 100 karakter olabilir.");
+                .NotEmpty().WithMessage("Title field cannot be empty.")
+                .MaximumLength(100).WithMessage("Title can be at most 100 characters long.");
 
             RuleFor(x => x.SubTitle)
-                 .NotEmpty().WithMessage("Alt başlık alanı boş bırakılamaz.")
-                .MaximumLength(150).WithMessage("Alt başlık en fazla 150 karakter olabilir.");
+                .NotEmpty().WithMessage("Subtitle field cannot be empty.")
+                .MaximumLength(150).WithMessage("Subtitle can be at most 150 characters long.");
 
             RuleFor(x => x.ButtonText)
-                       .NotEmpty().WithMessage("Buton Metni alanı boş bırakılamaz.")
-                .MaximumLength(50).WithMessage("Buton metni en fazla 50 karakter olabilir.");
+                .NotEmpty().WithMessage("Button text field cannot be empty.")
+                .MaximumLength(50).WithMessage("Button text can be at most 50 characters long.");
 
             RuleFor(x => x.ButtonUrl)
-                       .NotEmpty().WithMessage("Buton URL alanı boş bırakılamaz.")
-                .MaximumLength(250).WithMessage("Buton URL'si en fazla 250 karakter olabilir.")
+                .NotEmpty().WithMessage("Button URL field cannot be empty.")
+                .MaximumLength(250).WithMessage("Button URL can be at most 250 characters long.")
                 .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute))
                 .When(x => !string.IsNullOrWhiteSpace(x.ButtonUrl))
-                .WithMessage("Geçersiz URL formatı.");
+                .WithMessage("Invalid URL format.");
         }
     }
 }

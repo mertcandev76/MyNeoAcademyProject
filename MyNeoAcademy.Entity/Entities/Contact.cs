@@ -18,6 +18,6 @@ namespace MyNeoAcademy.Entity.Entities
         public string? Subject { get; set; }
 
         public string? Message { get; set; }
-        public DateTime CreatedDate { get; set; } 
+        public DateTime CreatedDate { get; set; }
     }
 }

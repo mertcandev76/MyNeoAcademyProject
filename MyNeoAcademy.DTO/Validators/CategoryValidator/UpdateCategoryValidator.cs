@@ -13,7 +13,7 @@ namespace MyNeoAcademy.DTO.Validators.CategoryValidator
         public UpdateCategoryValidator()
         {
             RuleFor(x => x.CategoryID)
-         .GreaterThan(0).WithMessage("Geçersiz kategori ID.");
+        .GreaterThan(0).WithMessage("Invalid category ID.");
 
             Include(new CreateCategoryValidator()); // Create kuralları da geçerli
         }
