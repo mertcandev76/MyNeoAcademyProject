@@ -1,4 +1,5 @@
-﻿using MyNeoAcademy.Entity.Entities;
+﻿using MyNeoAcademy.DTO.DTOs.AboutFeatureDTOs;
+using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,8 @@ namespace MyNeoAcademy.DTO.DTOs.AboutDTOs
     {
         public int AboutID { get; set; }
 
+
+        // About'a ait feature'ları taşıyacak
+        public List<ResultAboutFeatureDTO>? Features { get; set; }
     }
 }

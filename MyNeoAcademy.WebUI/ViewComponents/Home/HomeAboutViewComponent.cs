@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.DTO.DTOs.AboutDTOs;
+using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.ViewComponents.Home
 {
@@ -15,10 +16,20 @@ namespace MyNeoAcademy.WebUI.ViewComponents.Home
         {
             var client = _httpClientFactory.CreateClient("MyApiClient");
 
-            var abouts = await client.GetFromJsonAsync<List<ResultAboutDTO>>("abouts")
-                         ?? new List<ResultAboutDTO>();
+            var response = await client.GetAsync("abouts/1"); // tek nesne döner
+            if (!response.IsSuccessStatusCode)
+                return View(new ResultAboutDTO());
 
-            return View(abouts);
+            var stream = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var about = await JsonSerializer.DeserializeAsync<ResultAboutDTO>(stream, options)
+                         ?? new ResultAboutDTO();
+
+            return View(about);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@*<div class="about-area section-padding2">
+﻿@model ResultAboutDTO
+<div class="about-area section-padding2">
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-md-12">
@@ -8,13 +9,20 @@
                         <span>@Model.Subtitle</span>
                         <h2>@Model.Title</h2>
                     </div>
-                    <p>@Model.Description</p>
-                    <ul>
-                        @foreach (var feature in Model.Features)
+                    <p>@Model.Description</p>        
+                        @if (Model.Features != null && Model.Features.Any())
                         {
-                            <li><span class="@feature.IconClass"></span> @feature.Text</li>
+                            <ul>
+                                @foreach (var feature in Model.Features)
+                                {
+                                    <li><span class="@feature.IconClass"></span> @feature.Text</li>
+                                }
+                            </ul>
                         }
-                    </ul>
+                        else
+                        {
+                            <p><em>Hiç özellik eklenmemiş.</em></p>
+                        }
                     <a href="@Model.ButtonLink" class="btn">@Model.ButtonText</a>
                 </div>
             </div>
@@ -22,13 +30,13 @@
                 <!-- about-img -->
                 <div class="about-img ">
                     <div class="about-font-img d-none d-lg-block">
-                        <img src="@Model.ImageFrontUrl" alt="About Front Image">
+                        <img src="https://localhost:7230/@Model.ImageFrontUrl" alt="About Front Image">
                     </div>
                     <div class="about-back-img ">
-                        <img src="@Model.ImageBackUrl" alt="About Back Image">
+                        <img src="https://localhost:7230/@Model.ImageBackUrl" alt="About Back Image">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>*@
+</div>

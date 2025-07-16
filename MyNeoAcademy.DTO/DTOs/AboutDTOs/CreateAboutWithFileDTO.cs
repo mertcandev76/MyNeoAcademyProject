@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.DTO.DTOs.AboutDTOs
 {
-    public class CreateAboutWithFileDTO
+    public class CreateAboutWithFileDTO : CreateAboutDTO
     {
-        public string? Subtitle { get; set; }
-        public string? Title { get; set; }
-        public string? Description { get; set; }
-        public string? ButtonText { get; set; }
-        public string? ButtonLink { get; set; }
+
         public IFormFile? ImageFrontFile { get; set; }
         public IFormFile? ImageBackFile { get; set; }
     }

@@ -11,7 +11,7 @@ namespace MyNeoAcademy.DTO.DTOs.AboutFeatureDTOs
     public class ResultAboutFeatureDTO:CreateAboutFeatureDTO
     {
         public int AboutFeatureID { get; set; }
-    
-        public ResultAboutDTO? About { get; set; }
+
+        // Navigation property kaldırıldı — döngü engellendi
     }
 }

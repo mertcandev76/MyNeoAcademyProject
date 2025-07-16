@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.DataAccess.Context;
+using MyNeoAcademy.DTO.DTOs.BlogDTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;

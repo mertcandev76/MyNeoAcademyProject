@@ -11,63 +11,65 @@ namespace MyNeoAcademy.API.Controllers
     [ApiController]
     public class AboutFeaturesController : ControllerBase
     {
-        private readonly IAboutFeatureService _aboutFeatureService;
-        private readonly IMapper _mapper;
+      
+            private readonly IGenericService<AboutFeature> _aboutFeatureService;
+            private readonly IMapper _mapper;
 
-        public AboutFeaturesController(IAboutFeatureService aboutFeatureService, IMapper mapper)
-        {
-            _aboutFeatureService = aboutFeatureService;
-            _mapper = mapper;
-        }
+            public AboutFeaturesController(IGenericService<AboutFeature> aboutFeatureService, IMapper mapper)
+            {
+                _aboutFeatureService = aboutFeatureService;
+                _mapper = mapper;
+            }
 
-        // GET: api/AboutFeatures
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var aboutFeatureList = await _aboutFeatureService.GetAllWithAboutAsync(); // Entity List<AboutFeature>
-            var dtos = _mapper.Map<List<ResultAboutFeatureDTO>>(aboutFeatureList);     // DTO List<ResultAboutFeatureDTO>
-            return Ok(dtos);
-        }
+            [HttpGet]
+            public async Task<IActionResult> Get()
+            {
+                var list = await _aboutFeatureService.GetListAsync(); // About ile birlikte getir
+                var dtoList = _mapper.Map<List<ResultAboutFeatureDTO>>(list);
+                return Ok(dtoList);
+            }
 
-        // GET: api/AboutFeatures/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            var aboutFeature = await _aboutFeatureService.GetByIdWithBlogAboutAsync(id);
-            if (aboutFeature == null)
-                return NotFound();
+            [HttpGet("{id:int}")]
+            public async Task<IActionResult> Detail(int id)
+            {
+                var entity = await _aboutFeatureService.GetByIdAsync(id);
+                if (entity == null) return NotFound("Özellik hakkı bulunamadı.");
+                var dto = _mapper.Map<ResultAboutFeatureDTO>(entity);
+                return Ok(dto);
+            }
 
-            var dto = _mapper.Map<ResultAboutFeatureDTO>(aboutFeature);
-            return Ok(dto);
-        }
-        // POST: api/AboutFeatures
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateAboutFeatureDTO createAboutFeatureDTO)
-        {
-            var entity = _mapper.Map<AboutFeature>(createAboutFeatureDTO);
-            await _aboutFeatureService.CreateAsync(entity);
-            return Ok("Yeni özellik başarıyla eklendi.");
-        }
+            [HttpPost]
+            public async Task<IActionResult> Create([FromBody] CreateAboutFeatureDTO dto)
+            {
+                var entity = _mapper.Map<AboutFeature>(dto);
+                await _aboutFeatureService.CreateAsync(entity);
+                return CreatedAtAction(nameof(Detail), new { id = entity.AboutFeatureID }, "Yeni özellik hakkı eklendi.");
+            }
 
-        // PUT: api/AboutFeatures
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateAboutFeatureDTO updateAboutFeatureDTO)
-        {
-            var entity = _mapper.Map<AboutFeature>(updateAboutFeatureDTO);
-            await _aboutFeatureService.UpdateAsync(entity);
-            return Ok("Özellik başarıyla güncellendi.");
-        }
+            [HttpPut]
+            public async Task<IActionResult> Update([FromBody] UpdateAboutFeatureDTO dto)
+            {
+                var existing = await _aboutFeatureService.GetByIdAsync(dto.AboutFeatureID);
+                if (existing == null) return NotFound("Özellik hakkı  bulunamadı.");
 
-        // DELETE: api/AboutFeatures/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var entity = await _aboutFeatureService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound();
+                // Güncelle
+                existing.IconClass = dto.IconClass;
+                existing.Text = dto.Text;
+                existing.AboutID = dto.AboutID;
 
-            await _aboutFeatureService.DeleteAsync(entity);
-            return Ok("Özellik başarıyla silindi.");
-        }
+                await _aboutFeatureService.UpdateAsync(existing);
+                return Ok("Özellik hakkı güncellendi.");
+            }
+
+            [HttpDelete("{id:int}")]
+            public async Task<IActionResult> Delete(int id)
+            {
+                var entity = await _aboutFeatureService.GetByIdAsync(id);
+                if (entity == null) return NotFound("Özellik hakkı bulunamadı.");
+
+                await _aboutFeatureService.DeleteAsync(entity);
+                return Ok("Özellik hakkı silindi.");
+            }
+        
     }
 }

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.DTO.DTOs.AboutDTOs;
 using MyNeoAcademy.Entity.Entities;
+
 
 namespace MyNeoAcademy.API.Controllers
 {
@@ -11,112 +13,89 @@ namespace MyNeoAcademy.API.Controllers
     [ApiController]
     public class AboutsController : ControllerBase
     {
-        private readonly IGenericService<About> _aboutService;
+        private readonly IAboutService _aboutService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env; // Dosya kaydetmek için
+        private readonly IWebHostEnvironment _env;
 
-        public AboutsController(IGenericService<About> aboutService, IMapper mapper, IWebHostEnvironment env)
+        public AboutsController(IAboutService aboutService, IMapper mapper, IWebHostEnvironment env)
         {
             _aboutService = aboutService;
             _mapper = mapper;
             _env = env;
         }
 
-        //Listeleme(GET: api/About)
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
-            var aboutList = await _aboutService.GetListAsync();
-            return Ok(_mapper.Map<List<ResultAboutDTO>>(aboutList));
-        }
-        //ID ile Getirme(GET: api/About/5)
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var abouts = await _aboutService.GetByIdAsync(id);
-            if (abouts == null) return NotFound();
-            return Ok(_mapper.Map<ResultAboutDTO>(abouts));
+            var list = await _aboutService.GetListAsync();
+            var dtoList = _mapper.Map<List<ResultAboutDTO>>(list);
+            return Ok(dtoList);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Detail(int id)
         {
-            var abouts = await _aboutService.GetByIdAsync(id);
-            if (abouts == null)
-                return NotFound();
+            var entity = await _aboutService.GetAllWithAboutFeatureAsync(id);
+            if (entity == null)
+                return NotFound("About kaydı bulunamadı.");
 
-            await _aboutService.DeleteAsync(abouts);
-            return Ok();
+            var dto = _mapper.Map<ResultAboutDTO>(entity);
+            return Ok(dto);
         }
 
         [HttpPost]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] CreateAboutWithFileDTO dto)
         {
-            var aboutEntity = _mapper.Map<About>(dto);
+            if (dto.ImageFrontFile == null || dto.ImageBackFile == null)
+                return BadRequest("Ön ve arka görseller zorunludur.");
 
-            // Dosyaları kaydet
-            if (dto.ImageFrontFile != null)
-            {
-                var frontUrl = await SaveFileAsync(dto.ImageFrontFile);
-                aboutEntity.ImageFrontUrl = frontUrl;
-            }
+            var entity = _mapper.Map<About>(dto);
 
-            if (dto.ImageBackFile != null)
-            {
-                var backUrl = await SaveFileAsync(dto.ImageBackFile);
-                aboutEntity.ImageBackUrl = backUrl;
-            }
+            entity.ImageFrontUrl = await FileHelper.SaveFileAsync(dto.ImageFrontFile, _env.WebRootPath, "img/about");
+            entity.ImageBackUrl = await FileHelper.SaveFileAsync(dto.ImageBackFile, _env.WebRootPath, "img/about");
 
-            await _aboutService.CreateAsync(aboutEntity);
-            return Ok("Yeni Hakkımzda Alanı Oluşturuldu");
+            await _aboutService.CreateAsync(entity);
+            return CreatedAtAction(nameof(Detail), new { id = entity.AboutID }, "Yeni hakkında bilgisi oluşturuldu.");
         }
-        //Güncelleme(PUT: api/About/5)
+
         [HttpPut]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] UpdateAboutWithFileDTO dto)
         {
-            var aboutEntity = await _aboutService.GetByIdAsync(dto.AboutID);
-            if (aboutEntity == null)
-                return NotFound();
+            var entity = await _aboutService.GetByIdAsync(dto.AboutID);
+            if (entity == null)
+                return NotFound("About kaydı bulunamadı.");
 
-            // Mevcut entity'yi güncelle (manuel yapabiliriz veya otomapper yeniden harcayabiliriz)
-            aboutEntity.Subtitle = dto.Subtitle;
-            aboutEntity.Title = dto.Title;
-            aboutEntity.Description = dto.Description;
-            aboutEntity.ButtonText = dto.ButtonText;
-            aboutEntity.ButtonLink = dto.ButtonLink;
+            entity.Subtitle = dto.Subtitle;
+            entity.Title = dto.Title;
+            entity.Description = dto.Description;
+            entity.ButtonText = dto.ButtonText;
+            entity.ButtonLink = dto.ButtonLink;
 
             if (dto.ImageFrontFile != null)
             {
-                var frontUrl = await SaveFileAsync(dto.ImageFrontFile);
-                aboutEntity.ImageFrontUrl = frontUrl;
+                entity.ImageFrontUrl = await FileHelper.SaveFileAsync(dto.ImageFrontFile, _env.WebRootPath, "img/about");
             }
-            // else varsa mevcut URL aynen kalsın
 
             if (dto.ImageBackFile != null)
             {
-                var backUrl = await SaveFileAsync(dto.ImageBackFile);
-                aboutEntity.ImageBackUrl = backUrl;
+                entity.ImageBackUrl = await FileHelper.SaveFileAsync(dto.ImageBackFile, _env.WebRootPath, "img/about");
             }
 
-            await _aboutService.UpdateAsync(aboutEntity);
-            return Ok("Hakkımızda Alanı Güncellendi");
+            await _aboutService.UpdateAsync(entity);
+            return Ok("About kaydı güncellendi.");
         }
-        private async Task<string> SaveFileAsync(IFormFile file)
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "abouts");
-            if (!Directory.Exists(uploadsFolder))
-                Directory.CreateDirectory(uploadsFolder);
+            var entity = await _aboutService.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound("About kaydı bulunamadı.");
 
-            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(fileStream);
-            }
-
-            // Kaydedilen dosyanın URL’si (örnek: /uploads/abouts/xyz.jpg)
-            return $"/uploads/abouts/{uniqueFileName}";
+            await _aboutService.DeleteAsync(entity);
+            return Ok("About kaydı silindi.");
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.DataAccess.Abstract;
+using MyNeoAcademy.DTO.DTOs.BlogDTOs;
+using MyNeoAcademy.DTO.DTOs.BlogTagDTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;

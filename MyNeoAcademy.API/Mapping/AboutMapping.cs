@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyNeoAcademy.DTO.DTOs.AboutDTOs;
+using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Mapping
@@ -8,12 +9,20 @@ namespace MyNeoAcademy.API.Mapping
     {
         public AboutMapping()
         {
-
+            // Basic DTO Mappings
             CreateMap<About, CreateAboutDTO>().ReverseMap();
             CreateMap<About, UpdateAboutDTO>().ReverseMap();
             CreateMap<About, ResultAboutDTO>().ReverseMap();
-            CreateMap<About, CreateAboutWithFileDTO>().ReverseMap();
-            CreateMap<About, UpdateAboutWithFileDTO>().ReverseMap();
+               //.ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features));
+
+            // File DTOs (ignore image paths)
+            CreateMap<CreateAboutWithFileDTO, About>()
+                .ForMember(dest => dest.ImageFrontUrl, opt => opt.Ignore())
+                .ForMember(dest => dest.ImageBackUrl, opt => opt.Ignore());
+
+            CreateMap<UpdateAboutWithFileDTO, About>()
+                .ForMember(dest => dest.ImageFrontUrl, opt => opt.Ignore())
+                .ForMember(dest => dest.ImageBackUrl, opt => opt.Ignore());
         }
     }
 }

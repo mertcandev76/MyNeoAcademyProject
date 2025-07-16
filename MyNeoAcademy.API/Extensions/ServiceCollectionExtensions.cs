@@ -20,8 +20,8 @@ namespace MyNeoAcademy.API.Extensions
             services.AddScoped<IBlogTagService, BlogTagManager>();
 
 
-            services.AddScoped<IAboutFeatureRepository, AboutFeatureRepository>();
-            services.AddScoped<IAboutFeatureService, AboutFeatureManager>();
+            services.AddScoped<IAboutRepository, AboutRepository>();
+            services.AddScoped<IAboutService, AboutManager>();
 
 
             services.AddScoped<ICourseRepository, CourseRepository>();
