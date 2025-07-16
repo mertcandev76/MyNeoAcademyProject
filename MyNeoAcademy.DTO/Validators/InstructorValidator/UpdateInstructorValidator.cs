@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
 using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
-using MyNeoAcademy.DTO.DTOs.SliderDTOs;
-using MyNeoAcademy.DTO.Validators.SliderValidator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
