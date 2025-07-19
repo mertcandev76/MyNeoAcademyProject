@@ -11,6 +11,7 @@ namespace MyNeoAcademy.Entity.Entities
         public int TagID { get; set; }
         public string Name { get; set; } = null!;
 
-        public ICollection<BlogTag>? BlogTags { get; set; }
+        public ICollection<BlogTag> BlogTags { get; set; } = new List<BlogTag>();
+
     }
 }

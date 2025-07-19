@@ -12981,7 +12981,8 @@
       "FluentValidation >= 11.5.1",
       "FluentValidation.AspNetCore >= 11.3.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 7.0.12",
-      "MyNeoAcademy.API >= 1.0.0"
+      "MyNeoAcademy.API >= 1.0.0",
+      "MyNeoAcademy.Business >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -13019,6 +13020,9 @@
           "projectReferences": {
             "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\MyNeoAcademy.API.csproj": {
               "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\MyNeoAcademy.API.csproj"
+            },
+            "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Business\\MyNeoAcademy.Business.csproj": {
+              "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Business\\MyNeoAcademy.Business.csproj"
             }
           }
         }

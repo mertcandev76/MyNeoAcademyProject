@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.AuthorDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -11,63 +12,81 @@ namespace MyNeoAcademy.API.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-
-        private readonly IGenericService<Author> _authorService;
+        private readonly IAuthorService _authorService;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
 
-        public AuthorsController(IGenericService<Author> authorService, IMapper mapper)
+        public AuthorsController(IAuthorService authorService, IMapper mapper, IWebHostEnvironment env)
         {
             _authorService = authorService;
             _mapper = mapper;
+            _env = env;
         }
 
-        // Listeleme
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
-            var authorList = await _authorService.GetListAsync();
-            var dtos = _mapper.Map<List<ResultAuthorDTO>>(authorList);
-            return Ok(dtos);
+            var list = await _authorService.GetListAsync();
+            var dtoList = _mapper.Map<List<ResultAuthorDTO>>(list);
+            return Ok(dtoList);
         }
 
-        // ID ile Getirme
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Detail(int id)
         {
-            var author = await _authorService.GetByIdAsync(id);
-            if (author == null) return NotFound();
-            var dto = _mapper.Map<ResultAuthorDTO>(author);
+            var entity = await _authorService.GetAllWithBlogAsync(id);
+            if (entity == null)
+                return NotFound("Yazar bulunamadı.");
+
+            var dto = _mapper.Map<ResultAuthorDTO>(entity);
             return Ok(dto);
         }
 
-        // Ekleme
         [HttpPost]
-        public async Task<IActionResult> Create(CreateAuthorDTO createAuthorDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CreateAuthorWithFileDTO dto)
         {
-            var entity = _mapper.Map<Author>(createAuthorDTO);
+            if (dto.ImageFile == null)
+                return BadRequest("Profil resmi zorunludur.");
+
+            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/authors");
+            var entity = _mapper.Map<Author>(dto);
+            entity.ImageUrl = imagePath;
+
             await _authorService.CreateAsync(entity);
-            return Ok("Yeni yazar eklendi");
+            return CreatedAtAction(nameof(Detail), new { id = entity.AuthorID }, "Yeni yazar eklendi.");
         }
 
-        // Güncelleme
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateAuthorDTO updateAuthorDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromForm] UpdateAuthorWithFileDTO dto)
         {
-            var entity = _mapper.Map<Author>(updateAuthorDTO);
+            var entity = await _authorService.GetByIdAsync(dto.AuthorID);
+            if (entity == null)
+                return NotFound("Yazar bulunamadı.");
+
+
+            _mapper.Map(dto, entity);
+
+            if (dto.ImageFile != null)
+            {
+                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/authors");
+                entity.ImageUrl = imagePath;
+            }
+
             await _authorService.UpdateAsync(entity);
-            return Ok("Yazar güncellendi");
+            return Ok("Yazar güncellendi.");
         }
 
-        // Silme
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var author = await _authorService.GetByIdAsync(id);
-            if (author == null)
-                return NotFound();
+            var entity = await _authorService.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound("Yazar bulunamadı.");
 
-            await _authorService.DeleteAsync(author);
-            return Ok("Yazar silindi");
+            await _authorService.DeleteAsync(entity);
+            return Ok("Yazar silindi.");
         }
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.SliderDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 using MyNeoAcademy.API.Utilities;
 using FluentValidation;
@@ -62,24 +62,20 @@ namespace MyNeoAcademy.API.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] UpdateSliderWithFileDTO dto)
         {
-            var existing = await _sliderService.GetByIdAsync(dto.SliderID);
-            if (existing == null)
+            var entity = await _sliderService.GetByIdAsync(dto.SliderID);
+            if (entity == null)
                 return NotFound("Slider bulunamadı.");
 
-            // Mevcut entity üzerinde manuel alan atamaları yap
-            existing.Title = dto.Title;
-            existing.SubTitle = dto.SubTitle;
-            existing.ButtonText = dto.ButtonText;
-            existing.ButtonUrl = dto.ButtonUrl;
+            _mapper.Map(dto, entity);
 
             if (dto.ImageFile != null)
             {
                 var imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/sliders");
-                existing.ImageUrl = imagePath;
+                entity.ImageUrl = imagePath;
             }
 
             // Update metodu mevcut entity ile çağrılıyor
-            await _sliderService.UpdateAsync(existing);
+            await _sliderService.UpdateAsync(entity);
 
             return Ok("Slider güncellendi.");
         }

@@ -1,0 +1,28 @@
+﻿@model ResultTagDTO
+
+@{
+    ViewData["Title"] = "Etiket Detayı";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Etiket ID</dt>
+                <dd class="col-sm-9">@Model.TagID</dd>
+
+                <dt class="col-sm-3">Etiket Adı</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-action="Edit" asp-area="Admin" asp-route-id="@Model.TagID" class="btn btn-warning">Düzenle</a>
+            </div>
+        </div>
+    </div>
+</div>

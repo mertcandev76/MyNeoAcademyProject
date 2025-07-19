@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using MyNeoAcademy.DTO.DTOs.TagDTOs;
+using MyNeoAcademy.API.Mapping.Resolvers;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Mapping
@@ -11,7 +12,12 @@ namespace MyNeoAcademy.API.Mapping
 
             CreateMap<Tag, CreateTagDTO>().ReverseMap();
             CreateMap<Tag, UpdateTagDTO>().ReverseMap();
-            CreateMap<Tag, ResultTagDTO>().ReverseMap();
+
+            CreateMap<Blog, BlogReferenceDTO>();
+
+            // Result DTO - Detay için
+            CreateMap<Tag, ResultTagDTO>()
+                .ForMember(dest => dest.Blogs, opt => opt.MapFrom<BlogTagsToBlogReferenceDTOResolver>());
         }
     }
 }

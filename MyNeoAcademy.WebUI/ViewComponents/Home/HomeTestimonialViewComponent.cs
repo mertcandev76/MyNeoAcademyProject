@@ -1,25 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs.StatisticDTOs;
-using MyNeoAcademy.DTO.DTOs.TestimonialDTOs;
+using MyNeoAcademy.DTO.DTOs;
+using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.ViewComponents.Home
 {
     public class HomeTestimonialViewComponent:ViewComponent
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
 
         public HomeTestimonialViewComponent(IHttpClientFactory httpClientFactory)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _httpClientFactory.CreateClient("MyApiClient");
+            var response = await _httpClient.GetAsync("testimonials");
 
-            var testimonials = await client.GetFromJsonAsync<List<ResultTestimonialDTO>>("testimonials")
-                         ?? new List<ResultTestimonialDTO>();
+            if (!response.IsSuccessStatusCode)
+                return View(new List<ResultTestimonialDTO>());
+
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var testimonials = await JsonSerializer.DeserializeAsync<List<ResultTestimonialDTO>>(stream, options)
+                                 ?? new List<ResultTestimonialDTO>();
 
             return View(testimonials);
         }
+
     }
 }

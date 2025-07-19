@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.TestimonialDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -59,23 +59,19 @@ namespace MyNeoAcademy.API.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] UpdateTestimonialWithFileDTO dto)
         {
-            var existing = await _testimonialService.GetByIdAsync(dto.TestimonialID);
-            if (existing == null)
+            var entity = await _testimonialService.GetByIdAsync(dto.TestimonialID);
+            if (entity == null)
                 return NotFound("Referans bulunamadı.");
 
-            // Alan güncellemeleri
-            existing.FullName = dto.FullName;
-            existing.Title = dto.Title;
-            existing.Content = dto.Content;
-            existing.Rating = dto.Rating;
+            _mapper.Map(dto, entity);
 
             if (dto.ImageFile != null)
             {
                 string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/testimonials");
-                existing.ImageUrl = imagePath;
+                entity.ImageUrl = imagePath;
             }
 
-            await _testimonialService.UpdateAsync(existing);
+            await _testimonialService.UpdateAsync(entity);
             return Ok("Referans güncellendi.");
         }
 

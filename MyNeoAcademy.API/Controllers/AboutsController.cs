@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.AboutDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 
@@ -67,11 +67,8 @@ namespace MyNeoAcademy.API.Controllers
             if (entity == null)
                 return NotFound("About kaydı bulunamadı.");
 
-            entity.Subtitle = dto.Subtitle;
-            entity.Title = dto.Title;
-            entity.Description = dto.Description;
-            entity.ButtonText = dto.ButtonText;
-            entity.ButtonLink = dto.ButtonLink;
+
+            _mapper.Map(dto, entity);
 
             if (dto.ImageFrontFile != null)
             {

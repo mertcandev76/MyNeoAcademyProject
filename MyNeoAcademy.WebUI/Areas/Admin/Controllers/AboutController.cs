@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-using MyNeoAcademy.DTO.DTOs.AboutDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using System.Text.Json;
-using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {

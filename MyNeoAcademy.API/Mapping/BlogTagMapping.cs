@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MyNeoAcademy.DTO.DTOs.BlogTagDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Mapping
@@ -8,10 +8,20 @@ namespace MyNeoAcademy.API.Mapping
     {
         public BlogTagMapping()
         {
-
+            // Create ve Update DTO'lar (ID ile ilişki kuruluyor)
             CreateMap<BlogTag, CreateBlogTagDTO>().ReverseMap();
             CreateMap<BlogTag, UpdateBlogTagDTO>().ReverseMap();
-            CreateMap<BlogTag, ResultBlogTagDTO>().ReverseMap();
+
+            // Reference DTO - detay için
+            CreateMap<BlogTag, BlogTagReferenceDTO>()
+                .ForMember(dest => dest.Blog, opt => opt.MapFrom(src => src.Blog))
+                .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => src.Tag));
+
+            // Result DTO - detaylı gösterim için
+            CreateMap<BlogTag, ResultBlogTagDTO>()
+                .ForMember(dest => dest.Blog, opt => opt.MapFrom(src => src.Blog))
+                .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => src.Tag));
+
         }
     }
 }

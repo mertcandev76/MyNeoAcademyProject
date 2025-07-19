@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.CommentDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -13,62 +14,80 @@ namespace MyNeoAcademy.API.Controllers
     {
         private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
 
-        public CommentsController(ICommentService commentService, IMapper mapper)
+        public CommentsController(ICommentService commentService, IMapper mapper, IWebHostEnvironment env)
         {
             _commentService = commentService;
             _mapper = mapper;
+            _env = env;
         }
 
-        // GET: api/Comments
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
-            var commentList = await _commentService.GetAllWithBlogAsync();
-            var dtos = _mapper.Map<List<ResultCommentDTO>>(commentList);
-            return Ok(dtos);
+            var list = await _commentService.GetAllWithBlogAsync();
+            var dtoList = _mapper.Map<List<ResultCommentDTO>>(list);
+            return Ok(dtoList);
         }
 
-        // GET: api/Comments/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Detail(int id)
         {
-            var comment = await _commentService.GetByIdWithBlogAsync(id);
-            if (comment == null)
-                return NotFound();
+            var entity = await _commentService.GetByIdWithBlogAsync(id);
+            if (entity == null)
+                return NotFound("Yorum bulunamadı.");
 
-            var dto = _mapper.Map<ResultCommentDTO>(comment);
+            var dto = _mapper.Map<ResultCommentDTO>(entity);
             return Ok(dto);
         }
 
-        // POST: api/Comments
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCommentDTO createCommentDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CreateCommentWithFileDTO dto)
         {
-            var entity = _mapper.Map<Comment>(createCommentDTO);
+            if (dto.ImageFile == null)
+                return BadRequest("Yorum görseli zorunludur.");
+
+            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/comments");
+
+            var entity = _mapper.Map<Comment>(dto);
+            entity.ImageUrl = imagePath;
+            entity.CreatedDate = DateTime.Now;
+
             await _commentService.CreateAsync(entity);
-            return Ok("Yorum başarıyla eklendi.");
+            return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yeni yorum eklendi.");
         }
 
-        // PUT: api/Comments
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateCommentDTO updateCommentDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromForm] UpdateCommentWithFileDTO dto)
         {
-            var entity = _mapper.Map<Comment>(updateCommentDTO);
+            var entity = await _commentService.GetByIdAsync(dto.CommentID);
+            if (entity == null)
+                return NotFound("Yorum bulunamadı.");
+
+            _mapper.Map(dto, entity);
+
+            if (dto.ImageFile != null)
+            {
+                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/comments");
+                entity.ImageUrl = imagePath;
+            }
+
             await _commentService.UpdateAsync(entity);
-            return Ok("Yorum başarıyla güncellendi.");
+            return Ok("Yorum güncellendi.");
         }
 
-        // DELETE: api/Comments/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             var entity = await _commentService.GetByIdAsync(id);
             if (entity == null)
-                return NotFound();
+                return NotFound("Yorum bulunamadı.");
 
             await _commentService.DeleteAsync(entity);
-            return Ok("Yorum başarıyla silindi.");
+            return Ok("Yorum silindi.");
         }
     }
 }

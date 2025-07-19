@@ -18,8 +18,7 @@ namespace MyNeoAcademy.Entity.Entities
         public string? ButtonLink { get; set; }
         public string? ImageFrontUrl { get; set; }
         public string? ImageBackUrl { get; set; }
-
-        public ICollection<AboutFeature>? Features { get; set; }
+        public ICollection<AboutFeature> Features { get; set; } = new List<AboutFeature>();
 
 
     }

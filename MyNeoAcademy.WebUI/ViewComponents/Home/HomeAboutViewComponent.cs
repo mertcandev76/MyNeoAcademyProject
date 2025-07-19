@@ -1,22 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs.AboutDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.ViewComponents.Home
 {
     public class HomeAboutViewComponent: ViewComponent
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
 
         public HomeAboutViewComponent(IHttpClientFactory httpClientFactory)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _httpClientFactory.CreateClient("MyApiClient");
 
-            var response = await client.GetAsync("abouts/1"); // tek nesne döner
+            var response = await _httpClient.GetAsync("abouts/1"); // tek nesne döner
+            //var response = await _httpClient.GetAsync("abouts/{aboutId}"); //tek nesne döner
             if (!response.IsSuccessStatusCode)
                 return View(new ResultAboutDTO());
 

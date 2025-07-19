@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿    using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-using MyNeoAcademy.DTO.DTOs.CategoryDTOs;
-using MyNeoAcademy.DTO.DTOs.CourseDTOs;
-using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.WebUI.Helpers;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -59,42 +57,27 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var categories = await DropdownHelper.GetDropdownItemsAsync<ResultCategoryDTO>(
-           _client,
-           "categories",
-           c => c.Name!,
-           c => c.CategoryID.ToString());
-
-            ViewBag.Categories = categories ?? new List<SelectListItem>();
-
-            var instructors = await DropdownHelper.GetDropdownItemsAsync<ResultInstructorDTO>(
-                _client,
-                "instructors",
-                i => i.FullName,
-                i => i.InstructorID.ToString());
-
-            ViewBag.Instructors = instructors ?? new List<SelectListItem>();
-
+            await LoadDropdownsAsync();
             return View();
         }
+
 
         // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateCourseWithFileDTO dto)
         {
             var formData = new MultipartFormDataContent
-            {
-                { new StringContent(dto.Title ?? ""), "Title" },
-                { new StringContent(dto.Description ?? ""), "Description" },
-                { new StringContent(dto.Rating.ToString()), "Rating" },
-                { new StringContent(dto.ReviewCount.ToString()), "ReviewCount" },
-                { new StringContent(dto.StudentCount.ToString()), "StudentCount" },
-                { new StringContent(dto.LikeCount.ToString()), "LikeCount" },
-                { new StringContent(dto.Price?.ToString() ?? "0"), "Price" },
-             { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" },
-             { new StringContent(dto.InstructorID?.ToString() ?? ""), "InstructorID" },
-            };
-
+    {
+        { new StringContent(dto.Title ?? ""), "Title" },
+        { new StringContent(dto.Description ?? ""), "Description" },
+        { new StringContent(dto.Rating.ToString()), "Rating" },
+        { new StringContent(dto.ReviewCount.ToString()), "ReviewCount" },
+        { new StringContent(dto.StudentCount.ToString()), "StudentCount" },
+        { new StringContent(dto.LikeCount.ToString()), "LikeCount" },
+        { new StringContent(dto.Price?.ToString() ?? "0"), "Price" },
+        { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" },
+        { new StringContent(dto.InstructorID?.ToString() ?? ""), "InstructorID" },
+    };
 
             if (dto.ImageFile != null)
             {
@@ -109,16 +92,10 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Course could not be created.");
-
-            // Dropdownları tekrar yükle
-            ViewBag.Categories = await DropdownHelper.GetDropdownItemsAsync<ResultCategoryDTO>(
-                _client, "categories", c => c.Name!, c => c.CategoryID.ToString());
-
-            ViewBag.Instructors = await DropdownHelper.GetDropdownItemsAsync<ResultInstructorDTO>(
-                _client, "instructors", i => i.FullName, i => i.InstructorID.ToString());
-
+            await LoadDropdownsAsync();
             return View(dto);
         }
+
 
         // 🔹 Güncelleme (GET)
         [HttpGet]
@@ -150,33 +127,28 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 ImageUrl = course.ImageUrl
             };
 
-            ViewBag.Categories = await DropdownHelper.GetDropdownItemsAsync<ResultCategoryDTO>(
-                _client, "categories", c => c.Name!, c => c.CategoryID.ToString());
-
-            ViewBag.Instructors = await DropdownHelper.GetDropdownItemsAsync<ResultInstructorDTO>(
-                _client, "instructors", i => i.FullName, i => i.InstructorID.ToString());
-
+            await LoadDropdownsAsync();
             return View(dto);
         }
+
 
         // 🔹 Güncelleme (POST)
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateCourseWithFileDTO dto)
         {
             var formData = new MultipartFormDataContent
-            {
-                { new StringContent(dto.CourseID.ToString()), "CourseID" },
-                { new StringContent(dto.Title ?? ""), "Title" },
-                { new StringContent(dto.Description ?? ""), "Description" },
-                { new StringContent(dto.Rating.ToString()), "Rating" },
-                { new StringContent(dto.ReviewCount.ToString()), "ReviewCount" },
-                { new StringContent(dto.StudentCount.ToString()), "StudentCount" },
-                { new StringContent(dto.LikeCount.ToString()), "LikeCount" },
-                { new StringContent(dto.Price?.ToString() ?? "0"), "Price" },
-                { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" },
-                { new StringContent(dto.InstructorID?.ToString() ?? ""), "InstructorID" },
-            };
-
+    {
+        { new StringContent(dto.CourseID.ToString()), "CourseID" },
+        { new StringContent(dto.Title ?? ""), "Title" },
+        { new StringContent(dto.Description ?? ""), "Description" },
+        { new StringContent(dto.Rating.ToString()), "Rating" },
+        { new StringContent(dto.ReviewCount.ToString()), "ReviewCount" },
+        { new StringContent(dto.StudentCount.ToString()), "StudentCount" },
+        { new StringContent(dto.LikeCount.ToString()), "LikeCount" },
+        { new StringContent(dto.Price?.ToString() ?? "0"), "Price" },
+        { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" },
+        { new StringContent(dto.InstructorID?.ToString() ?? ""), "InstructorID" },
+    };
 
             if (dto.ImageFile != null)
             {
@@ -191,16 +163,10 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Course could not be updated.");
-
-            // Dropdownları tekrar yükle
-            ViewBag.Categories = await DropdownHelper.GetDropdownItemsAsync<ResultCategoryDTO>(
-                _client, "categories", c => c.Name!, c => c.CategoryID.ToString());
-
-            ViewBag.Instructors = await DropdownHelper.GetDropdownItemsAsync<ResultInstructorDTO>(
-                _client, "instructors", i => i.FullName, i => i.InstructorID.ToString());
-
+            await LoadDropdownsAsync();
             return View(dto);
         }
+
 
         // 🔹 Silme
         [HttpGet]
@@ -214,6 +180,26 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             TempData["Error"] = "Course could not be deleted.";
             return RedirectToAction("Index");
         }
+        // 🔹 Dropdownları yükleyen yardımcı metot
+        private async Task LoadDropdownsAsync()
+        {
+            var categories = await DropdownHelper.GetDropdownItemsAsync<ResultCategoryDTO>(
+                _client,
+                "categories",
+                c => c.Name!,
+                c => c.CategoryID.ToString());
+
+            ViewBag.Categories = categories ?? new List<SelectListItem>();
+
+            var instructors = await DropdownHelper.GetDropdownItemsAsync<ResultInstructorDTO>(
+                _client,
+                "instructors",
+                i => i.FullName,
+                i => i.InstructorID.ToString());
+
+            ViewBag.Instructors = instructors ?? new List<SelectListItem>();
+        }
+
     }
 }
 

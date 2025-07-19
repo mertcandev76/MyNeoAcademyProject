@@ -1,25 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs.CourseDTOs;
-using MyNeoAcademy.DTO.DTOs.StatisticDTOs;
+using MyNeoAcademy.DTO.DTOs;
+using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.ViewComponents.Home
 {
     public class HomeStatisticViewComponent:ViewComponent
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
 
         public HomeStatisticViewComponent(IHttpClientFactory httpClientFactory)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _httpClientFactory.CreateClient("MyApiClient");
+            var response = await _httpClient.GetAsync("statistics");
 
-            var statistics = await client.GetFromJsonAsync<List<ResultStatisticDTO>>("statistics")
-                         ?? new List<ResultStatisticDTO>();
+            if (!response.IsSuccessStatusCode)
+                return View(new List<ResultStatisticDTO>());
+
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var statistics = await JsonSerializer.DeserializeAsync<List<ResultStatisticDTO>>(stream, options)
+                             ?? new List<ResultStatisticDTO>();
 
             return View(statistics);
         }
+
     }
 }

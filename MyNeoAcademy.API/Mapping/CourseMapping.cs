@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MyNeoAcademy.DTO.DTOs.CourseDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Mapping
@@ -10,10 +10,19 @@ namespace MyNeoAcademy.API.Mapping
         {
             CreateMap<Course, CreateCourseDTO>().ReverseMap();
             CreateMap<Course, UpdateCourseDTO>().ReverseMap();
-            CreateMap<Course, ResultCourseDTO>().ReverseMap();
+
+
+            CreateMap<Category, CategoryReferenceDTO>();
+            CreateMap<Instructor, InstructorReferenceDTO>();
+
+
+            CreateMap<Course, Course>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category))
+                .ForMember(dest => dest.Instructor, opt => opt.MapFrom(src => src.Instructor));
+
 
             CreateMap<CreateCourseWithFileDTO, Course>()
-    .ForMember(dest => dest.ImageUrl, opt => opt.Ignore()); 
+           .ForMember(dest => dest.ImageUrl, opt => opt.Ignore()); 
 
             CreateMap<UpdateCourseWithFileDTO, Course>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());

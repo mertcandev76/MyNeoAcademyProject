@@ -1,10 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using MyNeoAcademy.DTO.DTOs.BlogDTOs;
-using MyNeoAcademy.DTO.DTOs.ContactDTOs;
-
-using MyNeoAcademy.DTO.Validators.CategoryValidator;
-using MyNeoAcademy.DTO.Validators.SliderValidator;
+using MyNeoAcademy.DTO.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 

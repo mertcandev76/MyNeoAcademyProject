@@ -1,71 +1,90 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.BlogDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class BlogsController : ControllerBase
     {
         private readonly IBlogService _blogService;
-        private readonly IMapper _mapper;   
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
 
-        public BlogsController(IBlogService blogService, IMapper mapper)
+        public BlogsController(IBlogService blogService, IMapper mapper, IWebHostEnvironment env)
         {
             _blogService = blogService;
             _mapper = mapper;
+            _env = env;
         }
 
         [HttpGet]
-         public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get()
         {
-            var blogList = await _blogService.GetAllWithCategoryAndAuthorAsync(); // Entity List<Blog>
-            var dtos = _mapper.Map<List<ResultBlogDTO>>(blogList); // DTO List<ResultBlogDTO>
-            return Ok(dtos); // DTO döndür
-
+            var list = await _blogService.GetAllWithIncludesAsync();
+            var dtoList = _mapper.Map<List<ResultBlogDTO>>(list);
+            return Ok(dtoList);
         }
-        [HttpGet("{id}")]
+
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> Detail(int id)
         {
-
-            var blogs = await _blogService.GetByIdWithCategoryAndAuthorAsync(id);
-            if (blogs == null)
-                return NotFound();
-
-            var dto = _mapper.Map<ResultBlogDTO>(blogs);
+            var entity = await _blogService.GetByIdWithIncludesAsync(id);
+            if (entity == null) return NotFound("Blog bulunamadı.");
+            var dto = _mapper.Map<ResultBlogDTO>(entity);
             return Ok(dto);
         }
+
         [HttpPost]
-        public async Task<IActionResult> Create(CreateBlogDTO createBlogDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CreateBlogWithFileDTO dto)
         {
-            var dtos= _mapper.Map<Blog>(createBlogDTO);
-            await _blogService.CreateAsync(dtos);
-            return Ok("Yeni Blog Alanı Oluşturuldu.");
+            if (dto.ImageFile == null)
+                return BadRequest("Bir görsel dosyası seçilmelidir.");
+
+            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/blogs");
+            var entity = _mapper.Map<Blog>(dto);
+            entity.ImageUrl = imagePath;
+
+            await _blogService.CreateAsync(entity);
+            return CreatedAtAction(nameof(Detail), new { id = entity.BlogID }, "Yeni blog eklendi.");
         }
+
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateBlogDTO updateBlogDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromForm] UpdateBlogWithFileDTO dto)
         {
+            var entity = await _blogService.GetByIdAsync(dto.BlogID);
+            if (entity == null)
+                return NotFound("Blog bulunamadı.");
 
-            var dtos = _mapper.Map<Blog>(updateBlogDTO);
-            await _blogService.UpdateAsync(dtos);
+            _mapper.Map(dto, entity);
 
-            return Ok("Blog başarıyla güncellendi.");
+            if (dto.ImageFile != null)
+            {
+                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/blogs");
+                entity.ImageUrl = imagePath;
+            }
+
+            await _blogService.UpdateAsync(entity);
+            return Ok("Blog güncellendi.");
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var blogs = await _blogService.GetByIdAsync(id);
-            if (blogs == null)
-                return NotFound();
+            var entity = await _blogService.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound("Blog bulunamadı.");
 
-            await _blogService.DeleteAsync(blogs);
-            return Ok();
+            await _blogService.DeleteAsync(entity);
+            return Ok("Blog silindi.");
         }
-
     }
 }

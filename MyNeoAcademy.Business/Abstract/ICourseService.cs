@@ -1,5 +1,4 @@
-﻿using MyNeoAcademy.DTO.DTOs.CourseDTOs;
-using MyNeoAcademy.Entity.Entities;
+﻿using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

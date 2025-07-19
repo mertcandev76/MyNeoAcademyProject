@@ -1,0 +1,55 @@
+﻿    
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<section class="blog_area single-post-area section-padding">
+    <div class="container">
+        <div class="row">
+            <!-- BLOG İÇERİĞİ -->
+            <div class="col-lg-8 posts-list">
+
+                <!-- İçerik -->
+                @await Component.InvokeAsync("BlogContent")
+
+                <!-- YAZAR -->
+                @await Component.InvokeAsync("BlogAuthor")
+
+
+                <!-- YORUMLAR -->
+                @await Component.InvokeAsync("BlogComment")
+
+                <!-- YORUM FORMU -->
+          @*      @await Component.InvokeAsync("BlogCommentForm", new { blogId = Model.BlogId })*@
+          
+               
+            </div>
+
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    <!-- Arama -->
+@*                    @await Component.InvokeAsync("BlogSearch", new { query = Model.SearchTerm })*@
+                  @*  @await Component.InvokeAsync("BlogSearch", new { query = "asp.net" })*@
+                @*    @await Component.InvokeAsync("BlogSearch", new { query = "" })*@
+                    <!-- Kategoriler -->
+                    @await Component.InvokeAsync("BlogCategory")
+                    <!-- Son Postlar -->
+                 @*   @await Component.InvokeAsync("BlogRecentPost")*@
+                    <!-- Etiketler -->
+                    @await Component.InvokeAsync("BlogTag")
+                    <!-- Newsletter -->
+            @*     @await Component.InvokeAsync("BlogNewsletter")*@
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+

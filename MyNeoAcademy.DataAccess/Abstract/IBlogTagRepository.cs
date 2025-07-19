@@ -1,5 +1,4 @@
-﻿using MyNeoAcademy.DTO.DTOs.BlogTagDTOs;
-using MyNeoAcademy.Entity.Entities;
+﻿using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.DataAccess.Abstract
 {
-    public interface IBlogTagRepository:IRepository<BlogTag>
+    public interface IBlogTagRepository : IRepository<BlogTag>
     {
-        //Özel Metotlar
-        Task<List<BlogTag>> GetAllWithBlogAndTagAsync();
-        Task<BlogTag?> GetByIdWithBlogAndTagAsync(int id);
+        Task<List<BlogTag>> GetAllWithIncludesAsync();
+        Task<BlogTag?> GetByIdWithIncludesAsync(int id);
+
+        //Veritabanında belirttiğim BlogID ve TagID ilişkisi var mı?
+        Task<bool> ExistsAsync(int blogId, int tagId);
     }
 }

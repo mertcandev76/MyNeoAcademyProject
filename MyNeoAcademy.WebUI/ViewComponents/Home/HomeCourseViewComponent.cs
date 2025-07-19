@@ -1,25 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs.CategoryDTOs;
-using MyNeoAcademy.DTO.DTOs.CourseDTOs;
+using MyNeoAcademy.DTO.DTOs;
+using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.ViewComponents.Home
 {
     public class HomeCourseViewComponent:ViewComponent
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
 
         public HomeCourseViewComponent(IHttpClientFactory httpClientFactory)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _httpClientFactory.CreateClient("MyApiClient");
+            var response = await _httpClient.GetAsync("courses");
 
-            var courses = await client.GetFromJsonAsync<List<ResultCourseDTO>>("courses")
-                         ?? new List<ResultCourseDTO>();
+            if (!response.IsSuccessStatusCode)
+                return View(new List<ResultCourseDTO>());
+
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var courses = await JsonSerializer.DeserializeAsync<List<ResultCourseDTO>>(stream, options)
+                          ?? new List<ResultCourseDTO>();
 
             return View(courses);
         }
+
     }
 }

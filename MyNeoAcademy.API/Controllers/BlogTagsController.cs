@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.BlogTagDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -20,55 +20,59 @@ namespace MyNeoAcademy.API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/BlogTags
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var blogTagList = await _blogTagService.GetAllWithBlogAndTagAsync();
-            var dtos = _mapper.Map<List<ResultBlogTagDTO>>(blogTagList);
-            return Ok(dtos);
+            var list = await _blogTagService.GetAllWithIncludesAsync();
+            var dtoList = _mapper.Map<List<ResultBlogTagDTO>>(list);
+            return Ok(dtoList);
         }
 
-        // GET: api/BlogTags/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Detail(int id)
         {
-            var blogTag = await _blogTagService.GetByIdWithBlogAndTagAsync(id);
-            if (blogTag == null)
-                return NotFound();
+            var entity = await _blogTagService.GetByIdWithIncludesAsync(id);
+            if (entity == null)
+                return NotFound("Blog-Tag ilişkisi bulunamadı.");
 
-            var dto = _mapper.Map<ResultBlogTagDTO>(blogTag);
+            var dto = _mapper.Map<ResultBlogTagDTO>(entity);
             return Ok(dto);
         }
 
-        // POST: api/BlogTags
         [HttpPost]
-        public async Task<IActionResult> Create(CreateBlogTagDTO createBlogTagDTO)
+        public async Task<IActionResult> Create([FromBody] CreateBlogTagDTO dto)
         {
-            var entity = _mapper.Map<BlogTag>(createBlogTagDTO);
+            // Çift kayıt kontrolü için servis metodu kullanılabilir
+            var exists = await _blogTagService.ExistsAsync(dto.BlogID, dto.TagID);
+            if (exists)
+                return BadRequest("Bu blog ve etiket ilişkisi zaten mevcut.");
+
+            var entity = _mapper.Map<BlogTag>(dto);
             await _blogTagService.CreateAsync(entity);
-            return Ok("Yeni blog-tag ilişkisi başarıyla eklendi.");
+            return CreatedAtAction(nameof(Detail), new { id = entity.BlogTagID }, "Blog-Tag ilişkisi oluşturuldu.");
         }
 
-        // PUT: api/BlogTags
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateBlogTagDTO updateBlogTagDTO)
+        public async Task<IActionResult> Update([FromBody] UpdateBlogTagDTO dto)
         {
-            var entity = _mapper.Map<BlogTag>(updateBlogTagDTO);
+            var entity = await _blogTagService.GetByIdAsync(dto.BlogTagID);
+            if (entity == null)
+                return NotFound("Blog-Tag ilişkisi bulunamadı.");
+
+            _mapper.Map(dto, entity);
             await _blogTagService.UpdateAsync(entity);
-            return Ok("Blog-tag ilişkisi başarıyla güncellendi.");
+            return Ok("Blog-Tag ilişkisi güncellendi.");
         }
 
-        // DELETE: api/BlogTags/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             var entity = await _blogTagService.GetByIdAsync(id);
             if (entity == null)
-                return NotFound();
+                return NotFound("Blog-Tag ilişkisi bulunamadı.");
 
             await _blogTagService.DeleteAsync(entity);
-            return Ok("Blog-tag ilişkisi başarıyla silindi.");
+            return Ok("Blog-Tag ilişkisi silindi.");
         }
     }
 }

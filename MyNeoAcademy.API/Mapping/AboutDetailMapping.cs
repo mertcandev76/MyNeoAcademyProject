@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using MyNeoAcademy.DTO.DTOs.AboutDetailDTOs;
-using MyNeoAcademy.DTO.DTOs.AboutFeatureDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Mapping

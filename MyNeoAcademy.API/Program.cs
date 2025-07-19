@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // 🔹 FluentValidation – Tüm validator sınıflarını tara
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly()); // API katmanı içindeki validator'lar
-builder.Services.AddValidatorsFromAssemblyContaining<MyNeoAcademy.DTO.Validators.SliderValidator.CreateSliderValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<MyNeoAcademy.DTO.Validators.CreateSliderValidator>();
 // DTO tarafındaki validator'lar
 
 // 🔹 FluentValidation AutoValidation (ModelState otomatik dolar)

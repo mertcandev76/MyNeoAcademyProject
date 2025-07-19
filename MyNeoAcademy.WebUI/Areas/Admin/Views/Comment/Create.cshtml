@@ -1,0 +1,71 @@
+﻿@model CreateCommentWithFileDTO
+
+@{
+    ViewData["Title"] = "Yeni Yorum Ekle";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" asp-area="Admin" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="UserName" class="form-label">Kullanıcı Adı</label>
+                    <input asp-for="UserName" class="form-control" placeholder="Kullanıcı adı girin..." />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">E-posta (Opsiyonel)</label>
+                    <input asp-for="Email" class="form-control" placeholder="E-posta adresi girin..." />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label">Yorum İçeriği</label>
+                    <textarea asp-for="Content" class="form-control" rows="4" placeholder="Yorum içeriği girin..."></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CreatedDate" class="form-label">Oluşturulma Tarihi</label>
+                    <input asp-for="CreatedDate" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="BlogID" class="form-label">Bağlı Olduğu Blog</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-light text-secondary">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                        </div>
+                        <select asp-for="BlogID" asp-items="(IEnumerable<SelectListItem>)ViewBag.Blogs" class="form-control">
+                            <option disabled selected hidden>-- Blog seçin --</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="BlogID" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Blog Resmi</label>
+                    <input asp-for="ImageFile" type="file" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

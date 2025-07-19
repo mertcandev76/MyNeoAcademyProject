@@ -11,7 +11,8 @@
           "FluentValidation": "11.5.1",
           "FluentValidation.AspNetCore": "11.3.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.12",
-          "MyNeoAcademy.API": "1.0.0"
+          "MyNeoAcademy.API": "1.0.0",
+          "MyNeoAcademy.Business": "1.0.0"
         },
         "runtime": {
           "MyNeoAcademy.WebUI.dll": {}

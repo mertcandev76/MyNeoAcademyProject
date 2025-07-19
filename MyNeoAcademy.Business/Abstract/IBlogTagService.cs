@@ -1,6 +1,4 @@
-﻿using MyNeoAcademy.DTO.DTOs.BlogDTOs;
-using MyNeoAcademy.DTO.DTOs.BlogTagDTOs;
-using MyNeoAcademy.Entity.Entities;
+﻿using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Business.Abstract
 {
-    public interface IBlogTagService : IGenericService<BlogTag>
+    public interface IBlogTagService:IGenericService<BlogTag>
     {
-        //Özel Metotlar
-        Task<List<BlogTag>> GetAllWithBlogAndTagAsync();
-        Task<BlogTag?> GetByIdWithBlogAndTagAsync(int id);
+        Task<List<BlogTag>> GetAllWithIncludesAsync();
+        Task<BlogTag?> GetByIdWithIncludesAsync(int id);
+        Task<bool> ExistsAsync(int blogId, int tagId);
     }
 }

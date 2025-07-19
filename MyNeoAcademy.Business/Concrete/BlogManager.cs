@@ -1,6 +1,6 @@
 ﻿using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.DataAccess.Abstract;
-using MyNeoAcademy.DTO.DTOs.BlogDTOs;
+using MyNeoAcademy.DataAccess.Repositories;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Business.Concrete
 {
-    public class BlogManager:GenericManager<Blog>,IBlogService
+    public class BlogManager : GenericManager<Blog>, IBlogService
     {
-        private readonly IBlogRepository _repository;
+        private readonly IBlogRepository _blogRepository;
 
-        public BlogManager(IBlogRepository repository):base(repository) 
+        public BlogManager(IBlogRepository blogRepository):base(blogRepository) 
         {
-            _repository = repository;
+            _blogRepository = blogRepository;
         }
 
-        public Task<List<Blog>> GetAllWithCategoryAndAuthorAsync() => _repository.GetAllWithCategoryAndAuthorAsync();
+        public async Task<List<Blog>> GetAllWithIncludesAsync()=> await _blogRepository.GetAllWithIncludesAsync();
 
-        public Task<Blog?> GetByIdWithCategoryAndAuthorAsync(int id) => _repository.GetByIdWithCategoryAndAuthorAsync(id);
+        public async Task<Blog?> GetByIdWithIncludesAsync(int id) => await _blogRepository.GetByIdWithIncludesAsync(id);
     }
 }

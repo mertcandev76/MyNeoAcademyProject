@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -59,25 +59,20 @@ namespace MyNeoAcademy.API.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] UpdateInstructorWithFileDTO dto)
         {
-            var existing = await _instructorService.GetByIdAsync(dto.InstructorID);
-            if (existing == null)
+            var entity = await _instructorService.GetByIdAsync(dto.InstructorID);
+            if (entity == null)
                 return NotFound("Eğitmen bulunamadı.");
 
-            // Alan güncellemeleri
-            existing.FullName = dto.FullName;
-            existing.Title = dto.Title;
-            existing.Bio = dto.Bio;
-            existing.FacebookUrl = dto.FacebookUrl;
-            existing.TwitterUrl = dto.TwitterUrl;
-            existing.WebsiteUrl = dto.WebsiteUrl;
+            
 
+            _mapper.Map(dto, entity);
             if (dto.ImageFile != null)
             {
                 string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/instructors");
-                existing.ImageUrl = imagePath;
+                entity.ImageUrl = imagePath;
             }
 
-            await _instructorService.UpdateAsync(existing);
+            await _instructorService.UpdateAsync(entity);
             return Ok("Eğitmen güncellendi.");
         }
 

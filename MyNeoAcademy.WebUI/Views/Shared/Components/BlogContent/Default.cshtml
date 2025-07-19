@@ -1,0 +1,23 @@
+﻿  <!-- İçerik -->
+@model ResultBlogDTO
+<div class="single-post">
+    <div class="feature-img">
+        <img class="img-fluid" src="https://localhost:7230/@Model.ImageUrl" alt="@Model.Title">
+    </div>
+    <div class="blog_details">
+        <h2 style="color: #2d2d2d;">@Model.Title</h2>
+        <ul class="blog-info-link mt-3 mb-4">
+            <li><a href="#"><i class="fa fa-user"></i> @Model.Category?.Name</a></li>
+@*            <li><a href="#"><i class="fa fa-comments"></i> @(Model.Comments?.Count ?? 0) Comments</a></li>*@
+        </ul>
+        <p class="excert">@Model.ShortDescription</p>
+        <p>@Html.Raw(Model.Content)</p>
+        <div class="quote-wrapper">
+            <div class="quotes">
+                <!-- Örnek alıntı içeriği -->
+                Başarı, her zaman en yetenekli olanların değil, vazgeçmeyenlerin ve her seferinde bir adım daha atmayı seçenlerin yanındadır.
+            </div>
+        </div>
+        <p>@Html.Raw(Model.Content)</p>
+    </div>
+</div>

@@ -17,7 +17,7 @@ namespace MyNeoAcademy.Entity.Entities
         public string? IconClass { get; set; }
 
         // İlişkiler
-        public ICollection<Course>? Courses { get; set; }
-        public ICollection<Blog>? Blogs { get; set; }
+        public ICollection<Course> Courses { get; set; } = new List<Course>();
+        public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
     }
 }

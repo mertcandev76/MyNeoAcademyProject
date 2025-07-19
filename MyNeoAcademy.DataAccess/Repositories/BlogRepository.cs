@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.DataAccess.Context;
-using MyNeoAcademy.DTO.DTOs.BlogDTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,20 +16,26 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
         }
 
-        public async Task<List<Blog>> GetAllWithCategoryAndAuthorAsync()
+        public async Task<List<Blog>> GetAllWithIncludesAsync()
         {
             return await Table
-                .Include(b=>b.Category)
                 .Include(b => b.Author)
+                .Include(b => b.Category)
+                .Include(b => b.Comments)
+                .Include(b => b.BlogTags)
+                    .ThenInclude(bt => bt.Tag)
                 .ToListAsync();
         }
 
-        public async Task<Blog?> GetByIdWithCategoryAndAuthorAsync(int id)
+        public async Task<Blog?> GetByIdWithIncludesAsync(int id)
         {
             return await Table
-                .Include(b => b.Category)
-                .Include(b => b.Author)
-                .FirstOrDefaultAsync(b=>b.BlogID==id);
+                 .Include(b => b.Author)
+                 .Include(b => b.Category)
+                 .Include(b => b.Comments)
+                 .Include(b => b.BlogTags)
+                     .ThenInclude(bt => bt.Tag)
+                 .FirstOrDefaultAsync(b => b.BlogID == id);
         }
     }
 }

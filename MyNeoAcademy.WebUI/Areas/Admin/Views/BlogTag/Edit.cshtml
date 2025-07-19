@@ -1,0 +1,44 @@
+﻿@model UpdateBlogTagDTO
+
+@{
+    ViewData["Title"] = "Blog Etiketi Güncelle";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Edit" asp-area="Admin" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="BlogTagID" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="BlogID" class="form-label">Blog</label>
+                    <select asp-for="BlogID" asp-items="(IEnumerable<SelectListItem>)ViewBag.Blogs" class="form-control">
+                        <option value="">-- Blog Seçin --</option>
+                    </select>
+                    <span asp-validation-for="BlogID" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TagID" class="form-label">Etiket</label>
+                    <select asp-for="TagID" asp-items="(IEnumerable<SelectListItem>)ViewBag.Tags" class="form-control">
+                        <option value="">-- Etiket Seçin --</option>
+                    </select>
+                    <span asp-validation-for="TagID" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

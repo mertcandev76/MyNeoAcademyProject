@@ -1,0 +1,26 @@
+﻿@model List<ResultCommentDTO>
+
+<div class="comments-area">
+    <h4>@Model.Count Comments</h4>
+    @foreach (var comment in Model)
+    {
+        <div class="comment-list">
+            <div class="single-comment justify-content-between d-flex">
+                <div class="user d-flex">
+                    <div class="thumb">
+                        <img src="https://localhost:7230/@comment.ImageUrl" alt="user">
+                    </div>
+                    <div class="desc">
+                        <p class="comment">@comment.Content</p>
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <h5><a href="#">@comment.UserName</a></h5>
+                                <p class="date">@comment.CreatedDate.ToString("MMMM dd, yyyy HH:mm")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

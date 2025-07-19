@@ -1,6 +1,5 @@
 ﻿using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.DataAccess.Abstract;
-using MyNeoAcademy.DTO.DTOs.CommentDTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
@@ -21,6 +20,6 @@ namespace MyNeoAcademy.Business.Concrete
 
         public async Task<List<Comment>> GetAllWithBlogAsync()=>await _commentRepository.GetAllWithBlogAsync();
 
-        public async Task<Comment?> GetByIdWithBlogAsync(int id) =>await _commentRepository.GetByIdWithBlogAsync(id);
+        public async Task<Comment?> GetByIdWithBlogAsync(int id) => await _commentRepository.GetByIdWithBlogAsync(id);
     }
 }

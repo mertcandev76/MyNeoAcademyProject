@@ -1,10 +1,11 @@
-﻿@*<div class="home-blog-area section-padding30">
+﻿@model List<ResultBlogDTO>
+<div class="home-blog-area section-padding30">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-tittle text-center mb-50">
-                    <span>Our Latest News From Our Blog</span>
-                    <h2>Latest News From Blog</h2>
+                    <span>Blogumuzdan Son Haberlerimiz</span>
+                    <h2>Blogdan Son Haberler</h2>
                 </div>
             </div>
         </div>
@@ -15,16 +16,16 @@
                     <div class="home-blog-single mb-30">
                         <div class="blog-img-cap">
                             <div class="blog-img">
-                                <img src="@blog.ImageUrl" alt="">
+                                <img src="https://localhost:7230/@blog.ImageUrl" alt="">
                                 <div class="blog-date text-center">
                                     <span>@blog.PublishDate.Day</span>
                                     <p>@blog.PublishDate.ToString("MMM")</p>
                                 </div>
                             </div>
                             <div class="blog-cap">
-                                <p>| @blog.Category</p>
-                                <h3><a href="/Blog/Detail/@blog.Id">@blog.Title</a></h3>
-                                <a href="/Blog/Detail/@blog.Id" class="more-btn">Read more »</a>
+                                <p>| @blog.Category?.Name</p>
+                                <h3><a href="/Blog/Detail/@blog.BlogID">@blog.Title</a></h3>
+                                <a href="/Blog/Detail/@blog.BlogID" class="more-btn">Devamını oku »</a>
                             </div>
                         </div>
                     </div>
@@ -32,4 +33,4 @@
             }
         </div>
     </div>
-</div>*@
+</div>

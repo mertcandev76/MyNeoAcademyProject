@@ -12,6 +12,7 @@ namespace MyNeoAcademy.Entity.Entities
         public string UserName { get; set; } = null!;
         public string? Email { get; set; }
         public string? Content { get; set; }
+        public string? ImageUrl { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public int BlogID { get; set; }

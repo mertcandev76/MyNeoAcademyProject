@@ -1,0 +1,17 @@
+﻿@*
+ResultBlogDTO
+<aside class="single_sidebar_widget popular_post_widget">
+    <h3 class="widget_title" style="color: #2d2d2d;">Recent Post</h3>
+    @foreach (var recent in recentPosts)
+    {
+        <div class="media post_item">
+            <img src="@recent.ImageUrl" alt="post">
+            <div class="media-body">
+                <a href="@Url.Action("Details", "Blog", new { id = recent.BlogID })">
+                    <h3 style="color: #2d2d2d;">@recent.Title</h3>
+                </a>
+                <p>@recent.PublishDate.ToString("MMMM dd, yyyy")</p>
+            </div>
+        </div>
+    }
+</aside>*@

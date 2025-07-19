@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.CourseDTOs;
-using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -56,28 +55,20 @@ namespace MyNeoAcademy.API.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] UpdateCourseWithFileDTO dto)
         {
-            var existing = await _courseService.GetByIdAsync(dto.CourseID);
-            if (existing == null)
+            var entity = await _courseService.GetByIdAsync(dto.CourseID);
+            if (entity == null)
                 return NotFound("Kurs bulunamadı.");
-            // Alan güncellemeleri
-            existing.Title = dto.Title;
-            existing.Description = dto.Description;
-            existing.Rating = dto.Rating;
-            existing.ReviewCount = dto.ReviewCount;
-            existing.StudentCount = dto.StudentCount;
-            existing.LikeCount = dto.LikeCount;
-            existing.Price = dto.Price;
-            existing.LikeCount = dto.LikeCount;
-            existing.CategoryID = dto.CategoryID;
-            existing.InstructorID = dto.InstructorID;
+            
+           
+            _mapper.Map(dto, entity);
             if (dto.ImageFile != null)
             {
                 // Dosyayı kaydet (FileHelper kendi helperın, dosya yolu ve klasör adını ihtiyacına göre ayarla)
                 string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/courses");
-                existing.ImageUrl = imagePath;
+                entity.ImageUrl = imagePath;
             }
 
-            await _courseService.UpdateAsync(existing);
+            await _courseService.UpdateAsync(entity);
             return Ok("Kurs Güncellendi");
         }
         //Silme

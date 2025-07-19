@@ -1,8 +1,7 @@
 ﻿    using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs.CategoryDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using System.Text.Json;
 using System.Text;
-using MyNeoAcademy.DTO.DTOs.SliderDTOs;
 using System.Net.Http;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
@@ -12,14 +11,19 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly HttpClient _client;
+        private readonly JsonSerializerOptions _jsonOptions;
 
         public CategoryController(IHttpClientFactory httpClientFactory)
         {
             _client = httpClientFactory.CreateClient("MyApiClient");
+
+            _jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
         }
 
-
-        // Listeleme
+        // 🔹 Listeleme
         public async Task<IActionResult> Index()
         {
             var response = await _client.GetAsync("categories");
@@ -28,15 +32,12 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 return View(new List<ResultCategoryDTO>());
 
             var jsonData = await response.Content.ReadAsStringAsync();
+            var data = JsonSerializer.Deserialize<List<ResultCategoryDTO>>(jsonData, _jsonOptions);
 
-            var categories = JsonSerializer.Deserialize<List<ResultCategoryDTO>>(jsonData, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
-
-            return View(categories);
+            return View(data);
         }
-        // Detay
+
+        // 🔹 Detay
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
@@ -46,32 +47,25 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 return RedirectToAction("Index");
 
             var jsonData = await response.Content.ReadAsStringAsync();
-            var dto = JsonSerializer.Deserialize<ResultCategoryDTO>(jsonData, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            var category = JsonSerializer.Deserialize<ResultCategoryDTO>(jsonData, _jsonOptions);
 
-            if (dto == null)
-                return RedirectToAction("Index");
-
-            return View(dto);
+            return View(category);
         }
 
-        // Ekleme (GET)
+        // 🔹 Ekleme (GET)
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // Ekleme (POST)
+        // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateCategoryDTO dto)
         {
-            if (!ModelState.IsValid)
-                return View(dto);
+            var json = JsonSerializer.Serialize(dto);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var content = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync("categories", content);
 
             if (response.IsSuccessStatusCode)
@@ -81,7 +75,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             return View(dto);
         }
 
-        // Güncelleme (GET)
+        // 🔹 Güncelleme (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -91,22 +85,29 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 return RedirectToAction("Index");
 
             var jsonData = await response.Content.ReadAsStringAsync();
-            var dto = JsonSerializer.Deserialize<UpdateCategoryDTO>(jsonData, new JsonSerializerOptions
+            var category = JsonSerializer.Deserialize<ResultCategoryDTO>(jsonData, _jsonOptions);
+
+            if (category == null)
+                return RedirectToAction("Index");
+
+            var dto = new UpdateCategoryDTO
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+                CategoryID = category.CategoryID,
+                Name = category.Name,
+                Description = category.Description,
+                IconClass = category.IconClass
+            };
 
             return View(dto);
         }
 
-        // Güncelleme (POST)
+        // 🔹 Güncelleme (POST)
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateCategoryDTO dto)
         {
-            if (!ModelState.IsValid)
-                return View(dto);
+            var json = JsonSerializer.Serialize(dto);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var content = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
             var response = await _client.PutAsync("categories", content);
 
             if (response.IsSuccessStatusCode)
@@ -116,18 +117,19 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             return View(dto);
         }
 
-        // Silme
+        // 🔹 Silme
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _client.DeleteAsync($"categories/{id}");
+
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
-            TempData["Error"] = "Slider silinemedi.";
+
+            TempData["Error"] = "Kategori silinemedi.";
             return RedirectToAction("Index");
         }
 
-       
     }
 
 }

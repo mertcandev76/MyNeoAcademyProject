@@ -1,7 +1,6 @@
 ﻿using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.DataAccess.Repositories;
-using MyNeoAcademy.DTO.DTOs.AboutDTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;

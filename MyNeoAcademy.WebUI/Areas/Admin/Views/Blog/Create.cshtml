@@ -1,0 +1,71 @@
+﻿@model CreateBlogWithFileDTO
+
+@{
+    ViewData["Title"] = "Yeni Blog Ekle";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" asp-area="Admin" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Başlık</label>
+                    <input asp-for="Title" class="form-control" placeholder="Blog başlığını girin..." />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ShortDescription" class="form-label">Kısa Açıklama</label>
+                    <input asp-for="ShortDescription" class="form-control" placeholder="Kısa açıklama girin..." />
+                    <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label">İçerik</label>
+                    <textarea asp-for="Content" class="form-control" rows="6" placeholder="Blog içeriğini girin..."></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PublishDate" class="form-label">Yayın Tarihi</label>
+                    <input asp-for="PublishDate" type="date" class="form-control" />
+                    <span asp-validation-for="PublishDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CategoryID" class="form-label">Kategori</label>
+                    <select asp-for="CategoryID" asp-items="(IEnumerable<SelectListItem>)ViewBag.Categories" class="form-control">
+                        <option disabled selected hidden>-- Kategori Seçin --</option>
+                    </select>
+                    <span asp-validation-for="CategoryID" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="AuthorID" class="form-label">Yazar</label>
+                    <select asp-for="AuthorID" asp-items="(IEnumerable<SelectListItem>)ViewBag.Authors" class="form-control">
+                        <option disabled selected hidden>-- Yazar Seçin --</option>
+                    </select>
+                    <span asp-validation-for="AuthorID" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ImageFile" class="form-label">Blog Resmi</label>
+                    <input asp-for="ImageFile" type="file" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

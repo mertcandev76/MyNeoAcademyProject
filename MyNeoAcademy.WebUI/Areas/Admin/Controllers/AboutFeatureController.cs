@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs.AboutDTOs;
-using MyNeoAcademy.DTO.DTOs.AboutFeatureDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.WebUI.Helpers;
 using System.Text.Json;
 using System.Text;
@@ -58,12 +57,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Abouts = await DropdownHelper.GetDropdownItemsAsync<ResultAboutDTO>(
-                _client,
-                "abouts",
-                a => a.Title!,
-                a => a.AboutID.ToString());
-
+            await LoadDropdownsAsync();
             return View();
         }
 
@@ -73,12 +67,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Abouts = await DropdownHelper.GetDropdownItemsAsync<ResultAboutDTO>(
-                    _client,
-                    "abouts",
-                    a => a.Title!,
-                    a => a.AboutID.ToString());
-
+                await LoadDropdownsAsync();
                 return View(dto);
             }
 
@@ -91,12 +80,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 
             ModelState.AddModelError("", "AboutFeature could not be created.");
 
-            ViewBag.Abouts = await DropdownHelper.GetDropdownItemsAsync<ResultAboutDTO>(
-                _client,
-                "abouts",
-                a => a.Title!,
-                a => a.AboutID.ToString());
-
+            await LoadDropdownsAsync();
             return View(dto);
         }
 
@@ -115,12 +99,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             if (aboutFeature == null)
                 return RedirectToAction("Index");
 
-            ViewBag.Abouts = await DropdownHelper.GetDropdownItemsAsync<ResultAboutDTO>(
-                _client,
-                "abouts",
-                a => a.Title!,
-                a => a.AboutID.ToString());
-
+            await LoadDropdownsAsync();
             return View(aboutFeature);
         }
 
@@ -130,12 +109,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Abouts = await DropdownHelper.GetDropdownItemsAsync<ResultAboutDTO>(
-                    _client,
-                    "abouts",
-                    a => a.Title!,
-                    a => a.AboutID.ToString());
-
+                await LoadDropdownsAsync();
                 return View(dto);
             }
 
@@ -148,12 +122,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 
             ModelState.AddModelError("", "AboutFeature could not be updated.");
 
-            ViewBag.Abouts = await DropdownHelper.GetDropdownItemsAsync<ResultAboutDTO>(
-                _client,
-                "abouts",
-                a => a.Title!,
-                a => a.AboutID.ToString());
-
+            await LoadDropdownsAsync();
             return View(dto);
         }
 
@@ -169,5 +138,16 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             TempData["Error"] = "AboutFeature could not be deleted.";
             return RedirectToAction("Index");
         }
+
+        // 🔹 Dropdownları yükleyen yardımcı metot
+        private async Task LoadDropdownsAsync()
+        {
+            ViewBag.Abouts = await DropdownHelper.GetDropdownItemsAsync<ResultAboutDTO>(
+                _client,
+                "abouts",
+                a => a.Title!,
+                a => a.AboutID.ToString());
+        }
     }
 }
+

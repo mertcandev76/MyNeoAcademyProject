@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.AboutFeatureDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -49,15 +49,13 @@ namespace MyNeoAcademy.API.Controllers
             [HttpPut]
             public async Task<IActionResult> Update([FromBody] UpdateAboutFeatureDTO dto)
             {
-                var existing = await _aboutFeatureService.GetByIdAsync(dto.AboutFeatureID);
-                if (existing == null) return NotFound("Özellik hakkı  bulunamadı.");
+                var entity = await _aboutFeatureService.GetByIdAsync(dto.AboutFeatureID);
+                if (entity == null) return NotFound("Özellik hakkı  bulunamadı.");
 
-                // Güncelle
-                existing.IconClass = dto.IconClass;
-                existing.Text = dto.Text;
-                existing.AboutID = dto.AboutID;
+            // Güncelleme burada otomatik
+            _mapper.Map(dto, entity);
 
-                await _aboutFeatureService.UpdateAsync(existing);
+            await _aboutFeatureService.UpdateAsync(entity);
                 return Ok("Özellik hakkı güncellendi.");
             }
 

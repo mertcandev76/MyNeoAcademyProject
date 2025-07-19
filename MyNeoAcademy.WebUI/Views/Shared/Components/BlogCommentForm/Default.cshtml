@@ -1,0 +1,33 @@
+﻿@*@model CreateCommentDTO
+
+<div class="comment-form">
+    <h4>Leave a Reply</h4>
+    <form class="form-contact comment_form" method="post" asp-action="AddComment" asp-controller="Blog">
+Anti-forgery token eklemek iyi olur
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="BlogID" value="@Model.BlogID" />
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <textarea class="form-control w-100" name="Content" rows="9" placeholder="Write Comment" required></textarea>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <input class="form-control" name="UserName" type="text" placeholder="Name" required />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <input class="form-control" name="Email" type="email" placeholder="Email" required />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="button button-contactForm btn_1 boxed-btn">Post Comment</button>
+        </div>
+    </form>
+</div>*@

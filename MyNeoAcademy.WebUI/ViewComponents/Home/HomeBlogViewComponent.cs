@@ -1,23 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs.AboutDTOs;
-using MyNeoAcademy.DTO.DTOs.BlogDTOs;
+using MyNeoAcademy.DTO.DTOs;
+using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.ViewComponents.Home
 {
     public class HomeBlogViewComponent:ViewComponent
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
 
         public HomeBlogViewComponent(IHttpClientFactory httpClientFactory)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _httpClientFactory.CreateClient("MyApiClient");
+            var response = await _httpClient.GetAsync("blogs");
 
-            var blogs = await client.GetFromJsonAsync<List<ResultBlogDTO>>("blogs")
-                         ?? new List<ResultBlogDTO>();
+            if (!response.IsSuccessStatusCode)
+                return View(new List<ResultBlogDTO>());
+
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var blogs = await JsonSerializer.DeserializeAsync<List<ResultBlogDTO>>(stream, options)
+                        ?? new List<ResultBlogDTO>();
 
             return View(blogs);
         }

@@ -1,4 +1,4 @@
-﻿using MyNeoAcademy.DTO.DTOs.AboutDTOs;
+﻿using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;

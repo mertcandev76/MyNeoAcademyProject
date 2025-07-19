@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MyNeoAcademy.DTO.DTOs.ContactDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Mapping

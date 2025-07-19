@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs.TagDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -11,62 +11,70 @@ namespace MyNeoAcademy.API.Controllers
     [ApiController]
     public class TagsController : ControllerBase
     {
-        private readonly IGenericService<Tag> _tagService;
+        private readonly ITagService _tagService;
         private readonly IMapper _mapper;
 
-        public TagsController(IGenericService<Tag> tagService, IMapper mapper)
+        public TagsController(ITagService tagService, IMapper mapper)
         {
             _tagService = tagService;
             _mapper = mapper;
         }
 
-        // Listeleme
+        // GET: api/tags
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var tagList = await _tagService.GetListAsync();
-            var dtos = _mapper.Map<List<ResultTagDTO>>(tagList);
-            return Ok(dtos);
+            var list = await _tagService.GetAllWithIncludesAsync();
+            var dtoList = _mapper.Map<List<ResultTagDTO>>(list);
+            return Ok(dtoList);
         }
 
-        // ID ile Getirme
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        // GET: api/tags/5
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Detail(int id)
         {
-            var tag = await _tagService.GetByIdAsync(id);
-            if (tag == null) return NotFound();
-            var dto = _mapper.Map<ResultTagDTO>(tag);
+            var entity = await _tagService.GetByIdWithIncludesAsync(id);
+            if (entity == null)
+                return NotFound("Etiket bulunamadı.");
+
+            var dto = _mapper.Map<ResultTagDTO>(entity);
             return Ok(dto);
         }
 
-        // Ekleme
+        // POST: api/tags
         [HttpPost]
-        public async Task<IActionResult> Create(CreateTagDTO createTagDTO)
+        public async Task<IActionResult> Create([FromBody] CreateTagDTO dto)
         {
-            var entity = _mapper.Map<Tag>(createTagDTO);
+            var entity = _mapper.Map<Tag>(dto);
             await _tagService.CreateAsync(entity);
-            return Ok("Yeni tag eklendi");
+
+            return CreatedAtAction(nameof(Detail), new { id = entity.TagID }, "Yeni etiket eklendi.");
         }
 
-        // Güncelleme
+        // PUT: api/tags
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateTagDTO updateTagDTO)
+        public async Task<IActionResult> Update([FromBody] UpdateTagDTO dto)
         {
-            var entity = _mapper.Map<Tag>(updateTagDTO);
+            var entity = await _tagService.GetByIdAsync(dto.TagID);
+            if (entity == null)
+                return NotFound("Etiket bulunamadı.");
+
+            _mapper.Map(dto, entity);
+
             await _tagService.UpdateAsync(entity);
-            return Ok("Tag güncellendi");
+            return Ok("Etiket güncellendi.");
         }
 
-        // Silme
-        [HttpDelete("{id}")]
+        // DELETE: api/tags/5
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var tag = await _tagService.GetByIdAsync(id);
-            if (tag == null)
-                return NotFound();
+            var entity = await _tagService.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound("Etiket bulunamadı.");
 
-            await _tagService.DeleteAsync(tag);
-            return Ok("Tag silindi");
+            await _tagService.DeleteAsync(entity);
+            return Ok("Etiket silindi.");
         }
     }
 }

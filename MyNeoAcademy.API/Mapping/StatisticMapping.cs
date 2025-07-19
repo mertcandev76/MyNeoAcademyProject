@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MyNeoAcademy.DTO.DTOs.StatisticDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 

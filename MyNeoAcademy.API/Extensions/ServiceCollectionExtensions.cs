@@ -13,11 +13,25 @@ namespace MyNeoAcademy.API.Extensions
         {
             // Scoped servis kayıtları
 
+            services.AddScoped<IBlogTagRepository, BlogTagRepository>();
+            services.AddScoped<IBlogTagService, BlogTagManager>();
+
+            services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<ITagService, TagManager>();
+
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICommentService, CommentManager>();
 
-            services.AddScoped<IBlogTagRepository, BlogTagRepository>();
-            services.AddScoped<IBlogTagService, BlogTagManager>();
+            services.AddScoped<IBlogRepository, BlogRepository>();
+            services.AddScoped<IBlogService, BlogManager>();
+
+
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryManager>();
+
+
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IAuthorService, AuthorManager>();
 
 
             services.AddScoped<IAboutRepository, AboutRepository>();
@@ -26,9 +40,6 @@ namespace MyNeoAcademy.API.Extensions
 
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<ICourseService, CourseManager>();
-
-            services.AddScoped<IBlogRepository, BlogRepository>();
-            services.AddScoped<IBlogService, BlogManager>();
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
             services.AddScoped(typeof(IGenericService<>), typeof(GenericManager<>));

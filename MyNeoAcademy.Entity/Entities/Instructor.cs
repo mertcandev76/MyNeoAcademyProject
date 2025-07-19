@@ -23,6 +23,7 @@ namespace MyNeoAcademy.Entity.Entities
         public string? TwitterUrl { get; set; }
 
         public string? WebsiteUrl { get; set; }
-        public ICollection<Course>? Courses { get; set; }
+
+        public ICollection<Course> Courses { get; set; } = new List<Course>();
     }
 }

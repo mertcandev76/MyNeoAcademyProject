@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.DataAccess.Context;
-using MyNeoAcademy.DTO.DTOs.BlogTagDTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,20 +16,26 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
         }
 
-        public async Task<List<BlogTag>> GetAllWithBlogAndTagAsync()
+      
+        public async Task<List<BlogTag>> GetAllWithIncludesAsync()
         {
             return await Table
-                .Include(bT => bT.Blog)
-                .Include(bT=>bT.Tag)
+                .Include(bT=>bT.Blog)
+                .Include(bT => bT.Tag)
                 .ToListAsync();
         }
 
-        public async Task<BlogTag?> GetByIdWithBlogAndTagAsync(int id)
+        public async Task<BlogTag?> GetByIdWithIncludesAsync(int id)
         {
             return await Table
-            .Include(bT => bT.Blog)
-            .Include(bT => bT.Tag)
-           .FirstOrDefaultAsync(bT=>bT.BlogTagID==id);
+               .Include(bT => bT.Blog)
+               .Include(bT => bT.Tag)
+               .FirstOrDefaultAsync(bT=>bT.BlogTagID==id);
+        }
+
+        public async Task<bool> ExistsAsync(int blogId, int tagId)
+        {
+            return await Table.AnyAsync(bt => bt.BlogID == blogId && bt.TagID == tagId);
         }
     }
 }

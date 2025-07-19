@@ -24,7 +24,14 @@ namespace MyNeoAcademy.Entity.Entities
         public int? CategoryID { get; set; }
         public Category? Category { get; set; }
 
-        public ICollection<Comment>? Comments { get; set; }
-        public ICollection<BlogTag>? BlogTags { get; set; }
+
+
+        // Koleksiyonlar nullable değil, boş listeyle başlatıldı
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<BlogTag> BlogTags { get; set; } = new List<BlogTag>();
+
+        //public ICollection<Comment>? Comments { get; set; }
+        //public ICollection<BlogTag>? BlogTags { get; set; }
+
     }
 }

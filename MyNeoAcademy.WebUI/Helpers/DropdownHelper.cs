@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using MyNeoAcademy.DTO.DTOs.CategoryDTOs;
-using MyNeoAcademy.DTO.DTOs.InstructorDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.Helpers

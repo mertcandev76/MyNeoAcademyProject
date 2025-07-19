@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs.TestimonialDTOs;
+using MyNeoAcademy.DTO.DTOs;
 using System.Net.Http.Headers;
 using System.Text.Json;
 

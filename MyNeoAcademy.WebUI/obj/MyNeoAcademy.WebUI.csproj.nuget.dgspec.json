@@ -504,6 +504,9 @@
             "projectReferences": {
               "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\MyNeoAcademy.API.csproj": {
                 "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\MyNeoAcademy.API.csproj"
+              },
+              "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Business\\MyNeoAcademy.Business.csproj": {
+                "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Business\\MyNeoAcademy.Business.csproj"
               }
             }
           }
