@@ -51,7 +51,12 @@
                                 <li><a asp-controller="About" asp-action="Index">Hakkımızda</a></li>
                                 <li><a asp-controller="Course" asp-action="Index">Kurslar</a></li>
                                 <li><a asp-controller="Instructor" asp-action="Index">Eğitmenler</a></li>
-                                <li><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+                                <li>
+                                    <a asp-controller="Blog" asp-action="Index">Blog</a>
+                                    <ul class="submenu">
+                                        <li><a asp-controller="Blog" asp-action="Detail" asp-route-id="1">Blog Detail</a></li>
+                                    </ul>
+                                </li>
                                 <li><a asp-controller="Home" asp-action="Contact">İletişim</a></li>
                             </ul>
                         </nav>

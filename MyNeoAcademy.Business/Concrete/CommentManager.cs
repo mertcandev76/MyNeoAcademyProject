@@ -18,6 +18,8 @@ namespace MyNeoAcademy.Business.Concrete
             _commentRepository = commentRepository;
         }
 
+        public async Task<List<Comment>> GetAllByBlogIdAsync(int blogId)=>await _commentRepository.GetAllByBlogIdAsync(blogId);
+
         public async Task<List<Comment>> GetAllWithBlogAsync()=>await _commentRepository.GetAllWithBlogAsync();
 
         public async Task<Comment?> GetByIdWithBlogAsync(int id) => await _commentRepository.GetByIdWithBlogAsync(id);

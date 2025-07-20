@@ -12,5 +12,6 @@ namespace MyNeoAcademy.Business.Abstract
         //Özel Metotlar
         Task<List<Comment>> GetAllWithBlogAsync();
         Task<Comment?> GetByIdWithBlogAsync(int id);
+        Task<List<Comment>> GetAllByBlogIdAsync(int blogId);
     }
 }

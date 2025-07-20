@@ -244,8 +244,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWJvdXRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Views/Blog/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xJbmRleC5jc2h0bWw=
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Views/BlogDetail/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ0RldGFpbFxEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Views/Course/Index.cshtml]

@@ -8,7 +8,9 @@
             <div class="single-comment justify-content-between d-flex">
                 <div class="user d-flex">
                     <div class="thumb">
-                        <img src="https://localhost:7230/@comment.ImageUrl" alt="user">
+                    @*    <img src="https://localhost:7230/@comment.ImageUrl" alt="user">*@
+                        <img src="https://localhost:7230/@(string.IsNullOrEmpty(comment.ImageUrl) ? "img/comments/default.png" : comment.ImageUrl)" alt="user">
+
                     </div>
                     <div class="desc">
                         <p class="comment">@comment.Content</p>

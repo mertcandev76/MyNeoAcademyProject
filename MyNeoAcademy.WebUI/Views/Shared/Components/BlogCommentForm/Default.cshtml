@@ -1,11 +1,10 @@
-﻿@*@model CreateCommentDTO
+﻿@model CreateCommentDTO
 
 <div class="comment-form">
     <h4>Leave a Reply</h4>
-    <form class="form-contact comment_form" method="post" asp-action="AddComment" asp-controller="Blog">
-Anti-forgery token eklemek iyi olur
-        @Html.AntiForgeryToken()
+    <form class="form-contact comment_form" method="post" asp-action="AddComment" asp-controller="BlogDetail" enctype="multipart/form-data">
 
+        @Html.AntiForgeryToken()
         <input type="hidden" name="BlogID" value="@Model.BlogID" />
 
         <div class="row">
@@ -30,4 +29,4 @@ Anti-forgery token eklemek iyi olur
             <button type="submit" class="button button-contactForm btn_1 boxed-btn">Post Comment</button>
         </div>
     </form>
-</div>*@
+</div>

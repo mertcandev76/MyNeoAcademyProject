@@ -49,6 +49,7 @@
                     <textarea asp-for="Content" class="form-control" rows="4"></textarea>
                     <span asp-validation-for="Content" class="text-danger"></span>
                 </div>
+
                 <div class="mb-3">
                 <label asp-for="BlogID" class="form-label">Bağlı Olduğu Blog</label>
                 <div class="input-group">
@@ -57,6 +58,7 @@
                 <i class="fas fa-info-circle"></i>
                 </span>
                 </div>
+
                 <select asp-for="BlogID" asp-items="(IEnumerable<SelectListItem>)ViewBag.Blogs" class="form-control">
                 <option disabled selected hidden>-- Blog seçin --</option>
                 </select>
@@ -74,6 +76,11 @@
                     {
                         <small class="text-muted">Görsel bulunamadı.</small>
                     }
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CreatedDate" class="form-label">Oluşturulma Tarihi</label>
+                    <input asp-for="CreatedDate" class="form-control" type="datetime-local" readonly />
+                    <span asp-validation-for="CreatedDate" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">

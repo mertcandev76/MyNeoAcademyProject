@@ -16,6 +16,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
         }
 
+
         public async Task<List<Comment>> GetAllWithBlogAsync()
         {
             return await Table.Include(c => c.Blog).ToListAsync();
@@ -25,5 +26,13 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             return await Table.Include(c => c.Blog).FirstOrDefaultAsync(c=>c.CommentID==id);
         }
+
+        public async Task<List<Comment>> GetAllByBlogIdAsync(int blogId)
+        {
+            return await Table
+              .Where(c => c.BlogID == blogId)
+              .ToListAsync();
+        }
+
     }
 }

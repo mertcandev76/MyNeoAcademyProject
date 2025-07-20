@@ -81,7 +81,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 formData.Add(streamContent, "ImageFile", dto.ImageFile.FileName);
             }
 
-            var response = await _client.PostAsync("comments", formData);
+            var response = await _client.PostAsync("comments/create-admin-comment", formData);
 
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");

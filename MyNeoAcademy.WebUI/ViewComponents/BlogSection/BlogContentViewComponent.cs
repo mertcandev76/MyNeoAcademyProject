@@ -17,8 +17,9 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
         public async Task<IViewComponentResult> InvokeAsync(int id)
         {
 
-            //var response = await _httpClient.GetAsync($"blogs/{id}"); // API'de bu endpoint olmalı
-            var response = await _httpClient.GetAsync("blogs/1"); // API'de bu endpoint olmalı
+
+            //var response = await _httpClient.GetAsync("blogs/1"); // API'de bu endpoint olmalı
+            var response = await _httpClient.GetAsync($"blogs/{id}"); // API'de bu endpoint olmalı
 
             if (!response.IsSuccessStatusCode)
                 return View(new ResultBlogDTO()); // Boş model döner

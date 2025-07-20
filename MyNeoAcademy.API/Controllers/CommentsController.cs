@@ -42,22 +42,66 @@ namespace MyNeoAcademy.API.Controllers
             return Ok(dto);
         }
 
+        // ** Yeni endpoint: blogId ile filtreli yorumlar **
+        [HttpGet("byblog/{blogId:int}")]
+        public async Task<IActionResult> GetByBlog(int blogId)
+        {
+            var list = await _commentService.GetAllByBlogIdAsync(blogId);
+            var dtoList = _mapper.Map<List<ResultCommentDTO>>(list);
+            return Ok(dtoList);
+        }
+
+        // Kullanıcı yorumları (resim yok)
         [HttpPost]
+        [Route("create-user-comment")]
+        public async Task<IActionResult> CreateUserComment([FromForm] CreateCommentDTO dto)
+        {
+            var entity = _mapper.Map<Comment>(dto);
+            entity.CreatedDate = DateTime.Now;
+
+            await _commentService.CreateAsync(entity);
+
+            return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yorum başarıyla eklendi.");
+        }
+
+        // Admin yorumları (resim zorunlu)
+        [HttpPost]
+        [Route("create-admin-comment")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] CreateCommentWithFileDTO dto)
+        public async Task<IActionResult> CreateAdminComment([FromForm] CreateCommentWithFileDTO dto)
         {
             if (dto.ImageFile == null)
                 return BadRequest("Yorum görseli zorunludur.");
 
-            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/comments");
-
             var entity = _mapper.Map<Comment>(dto);
+            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/comments");
             entity.ImageUrl = imagePath;
             entity.CreatedDate = DateTime.Now;
 
             await _commentService.CreateAsync(entity);
-            return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yeni yorum eklendi.");
+
+            return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yorum başarıyla eklendi.");
         }
+
+
+
+
+        //[HttpPost]
+        //[Consumes("multipart/form-data")]
+        //public async Task<IActionResult> Create([FromForm] CreateCommentWithFileDTO dto)
+        //{
+        //    if (dto.ImageFile == null)
+        //        return BadRequest("Yorum görseli zorunludur.");
+
+        //    string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/comments");
+
+        //    var entity = _mapper.Map<Comment>(dto);
+        //    entity.ImageUrl = imagePath;
+        //    entity.CreatedDate = DateTime.Now;
+
+        //    await _commentService.CreateAsync(entity);
+        //    return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yeni yorum eklendi.");
+        //}
 
         [HttpPut]
         [Consumes("multipart/form-data")]
