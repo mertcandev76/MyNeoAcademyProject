@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs;
+using MyNeoAcademy.Application.DTOs;
 using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.ViewComponents.Home

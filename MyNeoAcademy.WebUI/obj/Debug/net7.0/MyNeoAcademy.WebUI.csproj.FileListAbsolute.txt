@@ -39,9 +39,6 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\n
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\Microsoft.Extensions.ObjectPool.dll
-C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\Microsoft.Identity.Client.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\Microsoft.Identity.Client.Extensions.Msal.dll
@@ -245,12 +242,10 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\n
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.API.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Business.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.DataAccess.dll
-C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.DTO.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Entity.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.API.pdb
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Business.pdb
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.DataAccess.pdb
-C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.DTO.pdb
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Entity.pdb
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.csproj.AssemblyReference.cache
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.GeneratedMSBuildEditorConfig.editorconfig
@@ -277,3 +272,5 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\n
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.pdb
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.genruntimeconfig.cache
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\ref\MyNeoAcademy.WebUI.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Application.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Application.pdb

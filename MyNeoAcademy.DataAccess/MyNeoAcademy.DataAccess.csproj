@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyNeoAcademy.DTO\MyNeoAcademy.DTO.csproj" />
     <ProjectReference Include="..\MyNeoAcademy.Entity\MyNeoAcademy.Entity.csproj" />
   </ItemGroup>
 

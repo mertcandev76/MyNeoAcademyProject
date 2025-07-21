@@ -9,7 +9,8 @@ namespace MyNeoAcademy.DataAccess.Abstract
 {
     public interface IBlogRepository : IRepository<Blog>
     {
-        Task<List<Blog>> GetAllWithIncludesAsync();
-        Task<Blog?> GetByIdWithIncludesAsync(int id);
+            Task<List<Blog>> GetAllWithIncludesAsync();
+            Task<Blog?> GetByIdWithIncludesAsync(int id);
+           
     }
 }

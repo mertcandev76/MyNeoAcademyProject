@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyNeoAcademy.API\MyNeoAcademy.API.csproj" />
+    <ProjectReference Include="..\MyNeoAcademy.Application\MyNeoAcademy.Application.csproj" />
     <ProjectReference Include="..\MyNeoAcademy.Business\MyNeoAcademy.Business.csproj" />
   </ItemGroup>
 

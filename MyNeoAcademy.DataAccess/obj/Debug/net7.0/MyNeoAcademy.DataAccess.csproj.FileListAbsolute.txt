@@ -2,9 +2,7 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\bin\De
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\bin\Debug\net7.0\MyNeoAcademy.DataAccess.runtimeconfig.json
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\bin\Debug\net7.0\MyNeoAcademy.DataAccess.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\bin\Debug\net7.0\MyNeoAcademy.DataAccess.pdb
-C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\bin\Debug\net7.0\MyNeoAcademy.DTO.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\bin\Debug\net7.0\MyNeoAcademy.Entity.dll
-C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\bin\Debug\net7.0\MyNeoAcademy.DTO.pdb
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\bin\Debug\net7.0\MyNeoAcademy.Entity.pdb
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\obj\Debug\net7.0\MyNeoAcademy.DataAccess.csproj.AssemblyReference.cache
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DataAccess\obj\Debug\net7.0\MyNeoAcademy.DataAccess.GeneratedMSBuildEditorConfig.editorconfig

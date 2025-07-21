@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNeoAcademy.API", "MyNeoAcademy.API\MyNeoAcademy.API.csproj", "{9372EC56-A48F-4CED-9C74-DE0BE9C9D81C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeoAcademy.API", "MyNeoAcademy.API\MyNeoAcademy.API.csproj", "{9372EC56-A48F-4CED-9C74-DE0BE9C9D81C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNeoAcademy.Entity", "MyNeoAcademy.Entity\MyNeoAcademy.Entity.csproj", "{6F2A78E1-7EC7-4D24-903E-5A100B5A0C5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeoAcademy.Entity", "MyNeoAcademy.Entity\MyNeoAcademy.Entity.csproj", "{6F2A78E1-7EC7-4D24-903E-5A100B5A0C5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNeoAcademy.DataAccess", "MyNeoAcademy.DataAccess\MyNeoAcademy.DataAccess.csproj", "{22EC929F-1936-4907-B3EF-28F125737826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeoAcademy.DataAccess", "MyNeoAcademy.DataAccess\MyNeoAcademy.DataAccess.csproj", "{22EC929F-1936-4907-B3EF-28F125737826}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNeoAcademy.Business", "MyNeoAcademy.Business\MyNeoAcademy.Business.csproj", "{79C914FC-25F7-45E7-B8DB-0E6A0FA687FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeoAcademy.Business", "MyNeoAcademy.Business\MyNeoAcademy.Business.csproj", "{79C914FC-25F7-45E7-B8DB-0E6A0FA687FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNeoAcademy.DTO", "MyNeoAcademy.DTO\MyNeoAcademy.DTO.csproj", "{42FE47AC-7E85-4BFF-8257-2956E571262D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeoAcademy.WebUI", "MyNeoAcademy.WebUI\MyNeoAcademy.WebUI.csproj", "{4FDBC244-8B74-4490-AF48-AC9BAC4BC399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNeoAcademy.WebUI", "MyNeoAcademy.WebUI\MyNeoAcademy.WebUI.csproj", "{4FDBC244-8B74-4490-AF48-AC9BAC4BC399}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNeoAcademy.Application", "MyNeoAcademy.Application\MyNeoAcademy.Application.csproj", "{F47E77B1-8DCB-4D33-A976-8ACCD9840240}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +37,14 @@ Global
 		{79C914FC-25F7-45E7-B8DB-0E6A0FA687FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79C914FC-25F7-45E7-B8DB-0E6A0FA687FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79C914FC-25F7-45E7-B8DB-0E6A0FA687FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42FE47AC-7E85-4BFF-8257-2956E571262D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42FE47AC-7E85-4BFF-8257-2956E571262D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42FE47AC-7E85-4BFF-8257-2956E571262D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42FE47AC-7E85-4BFF-8257-2956E571262D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4FDBC244-8B74-4490-AF48-AC9BAC4BC399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4FDBC244-8B74-4490-AF48-AC9BAC4BC399}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FDBC244-8B74-4490-AF48-AC9BAC4BC399}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FDBC244-8B74-4490-AF48-AC9BAC4BC399}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F47E77B1-8DCB-4D33-A976-8ACCD9840240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F47E77B1-8DCB-4D33-A976-8ACCD9840240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F47E77B1-8DCB-4D33-A976-8ACCD9840240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F47E77B1-8DCB-4D33-A976-8ACCD9840240}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

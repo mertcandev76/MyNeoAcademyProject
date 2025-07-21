@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-using MyNeoAcademy.DTO.DTOs;
+using MyNeoAcademy.Application.DTOs;
 using AutoMapper;
-using MyNeoAcademy.Business.Abstract;
 using MyNeoAcademy.Entity.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net.Http;

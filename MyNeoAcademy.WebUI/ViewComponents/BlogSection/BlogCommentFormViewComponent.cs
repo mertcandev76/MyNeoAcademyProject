@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.DTO.DTOs;
+using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
 using System.Text.Json;
 

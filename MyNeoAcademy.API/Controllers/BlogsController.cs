@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.API.Utilities;
-using MyNeoAcademy.Business.Abstract;
-using MyNeoAcademy.DTO.DTOs;
+using MyNeoAcademy.Application.Abstract;
+using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.API.Controllers
@@ -86,5 +86,6 @@ namespace MyNeoAcademy.API.Controllers
             await _blogService.DeleteAsync(entity);
             return Ok("Blog silindi.");
         }
+
     }
 }

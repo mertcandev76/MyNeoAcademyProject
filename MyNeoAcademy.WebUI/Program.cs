@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using MyNeoAcademy.DTO.Validators;
+using MyNeoAcademy.Application.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 

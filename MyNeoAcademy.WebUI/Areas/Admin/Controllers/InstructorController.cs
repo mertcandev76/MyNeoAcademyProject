@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-using MyNeoAcademy.DTO.DTOs;
+using MyNeoAcademy.Application.DTOs;
 using System.Text.Json;
 
     namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers

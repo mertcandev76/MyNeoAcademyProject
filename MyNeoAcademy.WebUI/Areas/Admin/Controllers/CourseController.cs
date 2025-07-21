@@ -1,6 +1,6 @@
 ﻿    using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-using MyNeoAcademy.DTO.DTOs;
+using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.WebUI.Helpers;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;

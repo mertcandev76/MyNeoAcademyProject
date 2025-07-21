@@ -1,0 +1,17 @@
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\bin\Debug\net7.0\MyNeoAcademy.Application.deps.json
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\bin\Debug\net7.0\MyNeoAcademy.Application.runtimeconfig.json
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\bin\Debug\net7.0\MyNeoAcademy.Application.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\bin\Debug\net7.0\MyNeoAcademy.Application.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\bin\Debug\net7.0\MyNeoAcademy.Entity.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\bin\Debug\net7.0\MyNeoAcademy.Entity.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\MyNeoAcademy.Application.csproj.AssemblyReference.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\MyNeoAcademy.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\MyNeoAcademy.Application.AssemblyInfoInputs.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\MyNeoAcademy.Application.AssemblyInfo.cs
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\MyNeoAcademy.Application.csproj.CoreCompileInputs.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\MyNeoAcademy.Application.csproj.CopyComplete
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\MyNeoAcademy.Application.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\refint\MyNeoAcademy.Application.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\MyNeoAcademy.Application.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\MyNeoAcademy.Application.genruntimeconfig.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Application\obj\Debug\net7.0\ref\MyNeoAcademy.Application.dll

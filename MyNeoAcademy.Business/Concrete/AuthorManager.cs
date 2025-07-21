@@ -1,4 +1,4 @@
-﻿using MyNeoAcademy.Business.Abstract;
+﻿using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.Entity.Entities;
 using System;
