@@ -114,7 +114,7 @@ namespace MyNeoAcademy.DataAccess.Context
 
             // Newsletter: standalone
             modelBuilder.Entity<Newsletter>()
-                .HasKey(n => n.Id);
+                .HasKey(n => n.NewsletterID);
 
             modelBuilder.Entity<Newsletter>()
                 .Property(n => n.Email)

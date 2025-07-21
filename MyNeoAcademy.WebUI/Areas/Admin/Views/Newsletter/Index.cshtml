@@ -1,0 +1,81 @@
+﻿@model List<ResultNewsletterDTO>
+
+@{
+    ViewData["Title"] = "Abone Listesi";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-3">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">@ViewData["Title"]</h3>
+            <a asp-action="Create" asp-area="Admin" class="btn btn-primary btn-sm">+ Yeni Abone Ekle</a>
+        </div>
+        <div class="card-body p-0">
+            @if (Model != null && Model.Any())
+            {
+                <table class="table table-bordered mb-0 text-center align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 40%;">Email</th>
+                            <th style="width: 30%;">Kayıt Tarihi</th>
+                            <th style="width: 30%;">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Email</td>
+                                <td>@item.SubscribedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>
+                                    <a asp-action="Details" asp-area="Admin" asp-route-id="@item.NewsletterID" class="btn btn-primary btn-sm me-1">
+                                        <i class="fas fa-eye"></i> Detay
+                                    </a>
+                                    <a asp-action="Edit" asp-area="Admin" asp-route-id="@item.NewsletterID" class="btn btn-warning btn-sm me-1">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </a>
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#deleteModal"
+                                            data-id="@item.NewsletterID"
+                                            data-name="@item.Email"
+                                            data-controller="Newsletter">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-warning m-3 text-center">
+                    Henüz bir abone eklenmemiş.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Silme onay modalı -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong id="deleteItemName"></strong> email adresli aboneyi silmek istediğinizden emin misiniz?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <a id="confirmDeleteBtn" class="btn btn-danger">Sil</a>
+            </div>
+        </div>
+    </div>
+</div>

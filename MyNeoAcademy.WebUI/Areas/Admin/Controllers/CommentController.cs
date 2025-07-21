@@ -71,7 +71,6 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         { new StringContent(dto.Email ?? ""), "Email" },
         { new StringContent(dto.Content ?? ""), "Content" },
         { new StringContent(dto.BlogID.ToString()), "BlogID" },
-        { new StringContent(dto.CreatedDate.ToString("o")), "CreatedDate" }
     };
 
             if (dto.ImageFile != null)
@@ -115,7 +114,6 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 Email = comment.Email,
                 Content = comment.Content,
                 BlogID = comment.BlogID,
-                CreatedDate = comment.CreatedDate,
                 ImageUrl = comment.ImageUrl
             };
 
@@ -135,7 +133,6 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         { new StringContent(dto.Email ?? ""), "Email" },
         { new StringContent(dto.Content ?? ""), "Content" },
         { new StringContent(dto.BlogID.ToString()), "BlogID" },
-        { new StringContent(dto.CreatedDate.ToString("o")), "CreatedDate" }
     };
 
             if (dto.ImageFile != null)

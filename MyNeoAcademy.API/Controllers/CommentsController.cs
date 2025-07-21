@@ -54,7 +54,7 @@ namespace MyNeoAcademy.API.Controllers
         // Kullanıcı yorumları (resim yok)
         [HttpPost]
         [Route("create-user-comment")]
-        public async Task<IActionResult> CreateUserComment([FromForm] CreateCommentDTO dto)
+        public async Task<IActionResult> CreateUserComment([FromBody] CreateCommentDTO dto)
         {
             var entity = _mapper.Map<Comment>(dto);
             entity.CreatedDate = DateTime.Now;
@@ -63,7 +63,7 @@ namespace MyNeoAcademy.API.Controllers
 
             return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yorum başarıyla eklendi.");
         }
-
+        
         // Admin yorumları (resim zorunlu)
         [HttpPost]
         [Route("create-admin-comment")]
@@ -83,25 +83,6 @@ namespace MyNeoAcademy.API.Controllers
             return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yorum başarıyla eklendi.");
         }
 
-
-
-
-        //[HttpPost]
-        //[Consumes("multipart/form-data")]
-        //public async Task<IActionResult> Create([FromForm] CreateCommentWithFileDTO dto)
-        //{
-        //    if (dto.ImageFile == null)
-        //        return BadRequest("Yorum görseli zorunludur.");
-
-        //    string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/comments");
-
-        //    var entity = _mapper.Map<Comment>(dto);
-        //    entity.ImageUrl = imagePath;
-        //    entity.CreatedDate = DateTime.Now;
-
-        //    await _commentService.CreateAsync(entity);
-        //    return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yeni yorum eklendi.");
-        //}
 
         [HttpPut]
         [Consumes("multipart/form-data")]

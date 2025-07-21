@@ -15,11 +15,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
         }
         public async Task<IViewComponentResult> InvokeAsync(int blogId)
         {
-            // //-->Kullanıcıdan ve Admin Panelinden girilen kayıtları  listeler.
             var response = await _httpClient.GetAsync("comments");
-
-            //-->Kullanıcıdan girilen kayıtları sadece listeler.
-            //var response = await _httpClient.GetAsync($"comments/byblog/{blogId}");
 
             if (!response.IsSuccessStatusCode)
                 return View(new List<ResultCommentDTO>());

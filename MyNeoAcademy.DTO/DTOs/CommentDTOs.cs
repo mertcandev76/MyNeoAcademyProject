@@ -19,20 +19,19 @@ namespace MyNeoAcademy.DTO.DTOs
         public string? Email { get; set; }
         public string? Content { get; set; }
         public string? ImageUrl { get; set; }
-        public DateTime CreatedDate { get; set; }
+
         public int BlogID { get; set; }
     }
     public class ResultCommentDTO : CreateCommentDTO
     {
         public int CommentID { get; set; }
         public BlogReferenceDTO? Blog { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
     public class UpdateCommentDTO : CreateCommentDTO
     {
         public int CommentID { get; set; }
 
-        // Eğer güncellemede UserName, Email veya BlogID değişmeyecekse:
-        // override edebilirsin ya da constructor ile koruyabilirsin.
     }
     public class CreateCommentWithFileDTO : CreateCommentDTO
     {

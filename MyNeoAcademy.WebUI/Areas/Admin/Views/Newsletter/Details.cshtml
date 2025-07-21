@@ -1,0 +1,33 @@
+﻿@model ResultNewsletterDTO
+
+@{
+    ViewData["Title"] = "Abone Detayı";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.NewsletterID</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+
+                <dt class="col-sm-3">Kayıt Tarihi</dt>
+                <dd class="col-sm-9">@Model.SubscribedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-action="Edit" asp-area="Admin" asp-route-id="@Model.NewsletterID" class="btn btn-warning">Güncelle</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

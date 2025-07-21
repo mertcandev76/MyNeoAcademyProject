@@ -364,11 +364,11 @@ namespace MyNeoAcademy.DataAccess.Migrations
 
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Newsletter", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("NewsletterID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NewsletterID"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -377,7 +377,7 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.Property<DateTime>("SubscribedDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("NewsletterID");
 
                     b.ToTable("Newsletters");
                 });

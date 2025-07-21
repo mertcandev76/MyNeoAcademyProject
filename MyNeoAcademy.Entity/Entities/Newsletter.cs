@@ -8,7 +8,7 @@ namespace MyNeoAcademy.Entity.Entities
 {
     public class Newsletter
     {
-        public int Id { get; set; }                // Primary Key
+        public int NewsletterID { get; set; }                // Primary Key
         public string Email { get; set; } = null!; // Kullanıcının girdiği email
         public DateTime SubscribedDate { get; set; }
     }

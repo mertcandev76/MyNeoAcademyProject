@@ -37,7 +37,7 @@ namespace MyNeoAcademy.DTO.Validators
             RuleFor(x => x.CommentID)
            .GreaterThan(0).WithMessage("Invalid comment ID.");
 
-            Include(new CreateCommentValidator()); // Create kuralları da geçerli
+            Include(new CreateCommentValidator()); 
         }
     }
 

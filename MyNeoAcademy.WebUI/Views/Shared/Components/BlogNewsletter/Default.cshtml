@@ -1,9 +1,19 @@
-﻿@*<aside class="single_sidebar_widget newsletter_widget">
+﻿@model  CreateNewsletterDTO
+<aside class="single_sidebar_widget newsletter_widget">
     <h4 class="widget_title" style="color: #2d2d2d;">Newsletter</h4>
-    <form asp-action="Subscribe" asp-controller="Newsletter" method="post">
+    @if (TempData["NewsletterMessage"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["NewsletterMessage"]
+        </div>
+    }
+
+    <form asp-action="AddNewsletter" asp-controller="BlogDetail" method="post">
+        @Html.AntiForgeryToken()
         <div class="form-group">
-            <input type="email" name="email" class="form-control" placeholder="Enter email" required>
+            <input asp-for="Email" class="form-control" placeholder="E-posta adresinizi girin" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" type="submit">Subscribe</button>
     </form>
-</aside>*@
+</aside>

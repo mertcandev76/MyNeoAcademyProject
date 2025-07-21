@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.DTO.DTOs;
+using System.Text;
 using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.Controllers
@@ -23,7 +24,7 @@ namespace MyNeoAcademy.WebUI.Controllers
             var response = await _client.GetAsync($"blogs/{id}");
             if (!response.IsSuccessStatusCode)
             {
-                return NotFound(); // Blog bulunamadı
+                return NotFound(); 
             }
 
             var jsonData = await response.Content.ReadAsStringAsync();
@@ -31,27 +32,21 @@ namespace MyNeoAcademy.WebUI.Controllers
 
             if (blog == null)
             {
-                return View(null); // View'da model null kontrolü varsa hata vermez
+                return View(null); 
             }
 
             return View(blog);
         }
 
+  
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddComment(CreateCommentDTO dto)
         {
-            dto.CreatedDate = DateTime.Now;
-
-            var formData = new MultipartFormDataContent
-{
-    { new StringContent(dto.UserName ?? ""), "UserName" },
-    { new StringContent(dto.Email ?? ""), "Email" },
-    { new StringContent(dto.Content ?? ""), "Content" },
-    { new StringContent(dto.BlogID.ToString()), "BlogID" }
-};
-
-            var response = await _client.PostAsync("comments/create-user-comment", formData);
+            var jsonContent = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync("comments/create-user-comment", jsonContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -63,6 +58,31 @@ namespace MyNeoAcademy.WebUI.Controllers
             return RedirectToAction("Detail", new { id = dto.BlogID });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddNewsletter(CreateNewsletterDTO dto)
+        {
 
+            if (!ModelState.IsValid)
+            {
+                TempData["NewsletterMessage"] = "Lütfen geçerli bir e-posta adresi giriniz.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
+
+            var jsonContent = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync("newsletters", jsonContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["NewsletterMessage"] = "Abonelik başarılı bir şekilde gerçekleştirildi.";
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                TempData["NewsletterMessage"] = "Abonelik başarısız oldu: " + error;
+            }
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 }
