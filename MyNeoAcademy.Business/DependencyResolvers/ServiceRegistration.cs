@@ -29,7 +29,8 @@ namespace MyNeoAcademy.Business.DependencyResolvers
             services.AddScoped<IBlogTagRepository, BlogTagRepository>();
 
             // Services
-
+            
+            services.AddScoped<IRecentBlogPostService, RecentBlogPostManager>();
             services.AddScoped<INewsletterService, NewsletterManager>();
             services.AddScoped<ITestimonialService, TestimonialManager>();
             services.AddScoped<ISliderService, SliderManager>();

@@ -28,7 +28,8 @@ namespace MyNeoAcademy.DataAccess.Context
             public DbSet<Course> Courses { get; set; }
             public DbSet<Instructor> Instructors { get; set; }
             public DbSet<Newsletter> Newsletters { get; set; }
-            public DbSet<Slider> Sliders { get; set; }
+        public DbSet<RecentBlogPost> RecentBlogPosts { get; set; }
+        public DbSet<Slider> Sliders { get; set; }
             public DbSet<Statistic> Statistics { get; set; }
             public DbSet<Tag> Tags { get; set; }
             public DbSet<Testimonial> Testimonials { get; set; }
@@ -77,6 +78,15 @@ namespace MyNeoAcademy.DataAccess.Context
                 .WithMany(t => t.BlogTags)
                 .HasForeignKey(bt => bt.TagID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // RecentBlogPost: standalone
+            modelBuilder.Entity<RecentBlogPost>()
+                .HasKey(r => r.RecentBlogPostID);
+
+            modelBuilder.Entity<RecentBlogPost>()
+                .Property(r => r.CompactTitle)
+                .IsRequired()
+                .HasMaxLength(200); 
 
             // Category - Course: One-to-Many (nullable CategoryID)
             modelBuilder.Entity<Course>()

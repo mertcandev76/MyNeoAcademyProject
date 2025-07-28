@@ -1,17 +1,18 @@
-﻿@model List<ResultBlogDTO>
+﻿@model List<ResultRecentBlogPostDTO>
 
 <aside class="single_sidebar_widget popular_post_widget">
-    <h3 class="widget_title" style="color: #2d2d2d;">Recent Post</h3>
+    <h3 class="widget_title" style="color: #2d2d2d;">Son Gönderi</h3>
     @foreach (var recent in Model)
     {
         <div class="media post_item">
-            <img src="@recent.ImageUrl" alt="post">
+            <img src="@recent.ThumbnailUrl" alt="post">
             <div class="media-body">
-                <a href="@Url.Action("Details", "Blog", new { id = recent.BlogID })">
-                    <h3 style="color: #2d2d2d;">@recent.Title</h3>
+                <a href="@Url.Action("Details", "Blog", new { id = recent.RecentBlogPostID })">
+                    <h3 style="color: #2d2d2d;">@recent.CompactTitle</h3>
                 </a>
                 <p>@recent.PublishDate.ToString("MMMM dd, yyyy")</p>
             </div>
         </div>
     }
 </aside>
+

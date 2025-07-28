@@ -5,7 +5,7 @@ using MyNeoAcademy.Entity.Entities;
 
 namespace MyNeoAcademy.Application.Mapping
 {
-    public class BlogMapping:Profile
+    public class BlogMapping : Profile
     {
         public BlogMapping()
         {

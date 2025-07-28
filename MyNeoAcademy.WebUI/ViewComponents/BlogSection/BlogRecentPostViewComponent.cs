@@ -15,10 +15,10 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var response = await _httpClient.GetAsync("blogs");
+            var response = await _httpClient.GetAsync("RecentBlogPosts");
 
             if (!response.IsSuccessStatusCode)
-                return View(new List<ResultBlogDTO>()); // boş liste dön
+                return View(new List<ResultRecentBlogPostDTO>());
 
             var stream = await response.Content.ReadAsStreamAsync();
 
@@ -27,10 +27,10 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
                 PropertyNameCaseInsensitive = true
             };
 
-            var blogList = await JsonSerializer.DeserializeAsync<List<ResultBlogDTO>>(stream, options)
-                            ?? new List<ResultBlogDTO>();
+            var recentPosts = await JsonSerializer.DeserializeAsync<List<ResultRecentBlogPostDTO>>(stream, options)
+                              ?? new List<ResultRecentBlogPostDTO>();
 
-            return View(blogList);
+            return View(recentPosts);
         }
     }
 

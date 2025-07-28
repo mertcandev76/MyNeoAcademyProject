@@ -78,9 +78,9 @@ namespace MyNeoAcademy.Business.Concrete
         public override async Task CreateAsync(CreateBlogDTO dto)
         {
             var entity = _mapper.Map<Blog>(dto);
-            entity.PublishDate = DateTime.UtcNow; 
+            entity.PublishDate = DateTime.UtcNow;
 
-            await _blogRepository.CreateAsync(entity); 
+            await _blogRepository.CreateAsync(entity);
         }
 
         public async Task CreateWithFileAsync(CreateBlogWithFileDTO dto, string webRootPath)
@@ -90,7 +90,7 @@ namespace MyNeoAcademy.Business.Concrete
 
             dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/blogs");
 
-            await CreateAsync(dto); 
+            await CreateAsync(dto);
         }
 
 

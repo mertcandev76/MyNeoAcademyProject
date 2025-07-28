@@ -1,0 +1,49 @@
+﻿@model UpdateRecentBlogPostWithFileDTO
+@{
+    ViewData["Title"] = "Blog Gönderisini Güncelle";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" asp-area="Admin" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="RecentBlogPostID" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="CompactTitle" class="form-label">Başlık</label>
+                    <input asp-for="CompactTitle" class="form-control" placeholder="Blog başlığı girin..." />
+                    <span asp-validation-for="CompactTitle" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Mevcut Kapak Görseli</label><br />
+                    @if (!string.IsNullOrWhiteSpace(Model.ThumbnailUrl))
+                    {
+                        <img src="@Model.ThumbnailUrl" style="max-height:80px;" class="img-thumbnail" />
+                    }
+                    else
+                    {
+                        <small class="text-muted">Görsel bulunamadı.</small>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ImageFile" class="form-label">Yeni Kapak Görseli (isteğe bağlı)</label>
+                    <input asp-for="ImageFile" type="file" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

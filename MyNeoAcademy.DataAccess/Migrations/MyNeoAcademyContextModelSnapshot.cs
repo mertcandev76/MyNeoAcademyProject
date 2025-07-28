@@ -382,6 +382,30 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.ToTable("Newsletters");
                 });
 
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.RecentBlogPost", b =>
+                {
+                    b.Property<int>("RecentBlogPostID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecentBlogPostID"));
+
+                    b.Property<string>("CompactTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("PublishDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RecentBlogPostID");
+
+                    b.ToTable("RecentBlogPosts");
+                });
+
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Slider", b =>
                 {
                     b.Property<int>("SliderID")

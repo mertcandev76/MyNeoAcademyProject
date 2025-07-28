@@ -1,0 +1,42 @@
+﻿@model ResultRecentBlogPostDTO
+@{
+    ViewData["Title"] = "Blog Gönderi Detayı";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.RecentBlogPostID</dd>
+
+                <dt class="col-sm-3">Başlık</dt>
+                <dd class="col-sm-9">@Model.CompactTitle</dd>
+
+                <dt class="col-sm-3">Yayın Tarihi</dt>
+                <dd class="col-sm-9">@Model.PublishDate.ToString("dd.MM.yyyy")</dd>
+
+                <dt class="col-sm-3">Kapak Görseli</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrWhiteSpace(Model.ThumbnailUrl))
+                    {
+                        <a href="@Model.ThumbnailUrl" target="_blank">Görseli Görüntüle</a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Görsel bulunamadı.</span>
+                    }
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-action="Edit" asp-area="Admin" asp-route-id="@Model.RecentBlogPostID" class="btn btn-warning">Güncelle</a>
+            </div>
+        </div>
+    </div>
+</div>
