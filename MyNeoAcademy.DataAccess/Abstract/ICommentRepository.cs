@@ -9,9 +9,8 @@ namespace MyNeoAcademy.DataAccess.Abstract
 {
     public interface ICommentRepository : IRepository<Comment>
     {
-        //Özel Metotlar
-        Task<List<Comment>> GetAllWithBlogAsync();
-        Task<Comment?> GetByIdWithBlogAsync(int id);
-        Task<List<Comment>> GetAllByBlogIdAsync(int blogId);
+        Task<List<Comment>> GetAllWithIncludesAsync();
+        Task<Comment?> GetByIdWithIncludesAsync(int id);
+        Task<List<Comment>> GetByIdWithIncludesBlogAsync(int blogId);
     }
 }

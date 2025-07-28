@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MyNeoAcademy.Application.Common;
+using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.DTOs
@@ -25,12 +28,23 @@ namespace MyNeoAcademy.Application.DTOs
     {
         public int SliderID { get; set; }
     }
-    public class UpdateSliderDTO : CreateSliderDTO
+    public class UpdateSliderDTO : CreateSliderDTO,IHasId
     {
         public int SliderID { get; set; }
+        [JsonIgnore]
+        public int Id
+        {
+            get => SliderID;
+            set => SliderID = value;
+        }
     }
-    public class UpdateSliderWithFileDTO : CreateSliderWithFileDTO
+    public class UpdateSliderWithFileDTO : CreateSliderWithFileDTO, IHasId
     {
         public int SliderID { get; set; }
+        public int Id
+        {
+            get => SliderID;
+            set => SliderID = value;
+        }
     }
 }

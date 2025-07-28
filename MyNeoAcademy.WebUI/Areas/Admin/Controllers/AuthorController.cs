@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using MyNeoAcademy.Application.DTOs;
 using System.Text.Json;
+using MyNeoAcademy.WebUI.ApiServices.Abstract;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
@@ -9,96 +10,49 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]/{id?}")]
     public class AuthorController : Controller
     {
-        private readonly HttpClient _client;
-        private readonly JsonSerializerOptions _jsonOptions;
+        private readonly IAuthorApiService _authorApiService;
 
-        public AuthorController(IHttpClientFactory httpClientFactory)
+        public AuthorController(IAuthorApiService authorApiService)
         {
-            _client = httpClientFactory.CreateClient("MyApiClient");
-
-            _jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _authorApiService = authorApiService;
         }
 
-        // 🔹 Listeleme
         public async Task<IActionResult> Index()
         {
-            var response = await _client.GetAsync("authors");
-
-            if (!response.IsSuccessStatusCode)
-                return View(new List<ResultAuthorDTO>());
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var data = JsonSerializer.Deserialize<List<ResultAuthorDTO>>(jsonData, _jsonOptions);
-
+            var data = await _authorApiService.GetAllAsync();
             return View(data);
         }
 
-        // 🔹 Detay
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var response = await _client.GetAsync($"authors/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var result = await _authorApiService.GetByIdAsync(id);
+            if (result == null)
                 return RedirectToAction("Index");
 
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var author = JsonSerializer.Deserialize<ResultAuthorDTO>(jsonData, _jsonOptions);
-
-            return View(author);
+            return View(result);
         }
 
-        // 🔹 Ekleme (GET)
         [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
-        // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateAuthorWithFileDTO dto)
         {
-            var formData = new MultipartFormDataContent
-            {
-                { new StringContent(dto.Name ?? ""), "Name" },
-                { new StringContent(dto.Bio ?? ""), "Bio" },
-                { new StringContent(dto.FacebookUrl ?? ""), "FacebookUrl" },
-                { new StringContent(dto.TwitterUrl ?? ""), "TwitterUrl" },
-                { new StringContent(dto.WebsiteUrl ?? ""), "WebsiteUrl" }
-            };
+            if (!ModelState.IsValid)
+                return View(dto);
 
-            if (dto.ImageFile != null)
-            {
-                var streamContent = new StreamContent(dto.ImageFile.OpenReadStream());
-                streamContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageFile.ContentType);
-                formData.Add(streamContent, "ImageFile", dto.ImageFile.FileName);
-            }
-
-            var response = await _client.PostAsync("authors", formData);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _authorApiService.CreateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yazar eklenemedi.");
             return View(dto);
         }
 
-        // 🔹 Güncelleme (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _client.GetAsync($"authors/{id}");
-
-            if (!response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<ResultAuthorDTO>(jsonData, _jsonOptions);
-
+            var result = await _authorApiService.GetByIdAsync(id);
             if (result == null)
                 return RedirectToAction("Index");
 
@@ -107,55 +61,35 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 AuthorID = result.AuthorID,
                 Name = result.Name,
                 Bio = result.Bio,
+                ImageUrl = result.ImageUrl,
                 FacebookUrl = result.FacebookUrl,
                 TwitterUrl = result.TwitterUrl,
-                WebsiteUrl = result.WebsiteUrl,
-                ImageUrl = result.ImageUrl
+                WebsiteUrl = result.WebsiteUrl
             };
 
             return View(dto);
         }
 
-        // 🔹 Güncelleme (POST)
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateAuthorWithFileDTO dto)
         {
-            var formData = new MultipartFormDataContent
-            {
-                { new StringContent(dto.AuthorID.ToString()), "AuthorID" },
-                { new StringContent(dto.Name ?? ""), "Name" },
-                { new StringContent(dto.Bio ?? ""), "Bio" },
-                { new StringContent(dto.FacebookUrl ?? ""), "FacebookUrl" },
-                { new StringContent(dto.TwitterUrl ?? ""), "TwitterUrl" },
-                { new StringContent(dto.WebsiteUrl ?? ""), "WebsiteUrl" }
-            };
+            if (!ModelState.IsValid)
+                return View(dto);
 
-            if (dto.ImageFile != null)
-            {
-                var streamContent = new StreamContent(dto.ImageFile.OpenReadStream());
-                streamContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageFile.ContentType);
-                formData.Add(streamContent, "ImageFile", dto.ImageFile.FileName);
-            }
-
-            var response = await _client.PutAsync("authors", formData);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _authorApiService.UpdateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yazar güncellenemedi.");
             return View(dto);
         }
 
-        // 🔹 Silme
-        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _client.DeleteAsync($"authors/{id}");
+            var result = await _authorApiService.DeleteAsync(id);
+            if (!result)
+                TempData["Error"] = "Yazar silinemedi.";
 
-            if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            TempData["Error"] = "Yazar silinemedi.";
             return RedirectToAction("Index");
         }
     }

@@ -13,18 +13,15 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
             _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
 
-        // query parametresini dışarıdan alıyoruz
-        public async Task<IViewComponentResult> InvokeAsync(string query)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
+            string? query = HttpContext.Request.Query["query"].ToString();
+
             if (string.IsNullOrWhiteSpace(query))
-            {
-                // Boş arama sorgusunda boş liste dönebiliriz
                 return View(new List<ResultBlogDTO>());
-            }
 
             var searchResults = new List<ResultBlogDTO>();
 
-            // API endpoint'e query parametresiyle GET isteği yapıyoruz
             var response = await _httpClient.GetAsync($"api/blog/search?query={System.Net.WebUtility.UrlEncode(query)}");
 
             if (response.IsSuccessStatusCode)

@@ -28,9 +28,7 @@ namespace MyNeoAcademy.Application.Validators
                 .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
                 .WithMessage("Please enter a valid URL.");
 
-            RuleFor(x => x.PublishDate)
-                .NotEmpty().WithMessage("Publish date cannot be empty.")
-                .LessThanOrEqualTo(DateTime.Now).WithMessage("Publish date cannot be in the future.");
+
 
             RuleFor(x => x.AuthorID)
                 .NotNull().WithMessage("Author selection is required.")

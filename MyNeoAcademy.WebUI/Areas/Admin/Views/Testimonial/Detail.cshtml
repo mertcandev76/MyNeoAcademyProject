@@ -1,0 +1,48 @@
+﻿@model ResultTestimonialDTO
+@{
+    ViewData["Title"] = "Referans Detayı";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.TestimonialID</dd>
+
+                <dt class="col-sm-3">Ad Soyad</dt>
+                <dd class="col-sm-9">@Model.FullName</dd>
+
+                <dt class="col-sm-3">Ünvan</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Title) ? Model.Title : Html.Raw("<span class='text-muted'>Yok</span>"))</dd>
+
+                <dt class="col-sm-3">İçerik</dt>
+                <dd class="col-sm-9">@Html.Raw(Model.Content?.Replace("\n", "<br />") ?? "<span class='text-muted'>Yok</span>")</dd>
+
+                <dt class="col-sm-3">Puan</dt>
+                <dd class="col-sm-9">@Model.Rating</dd>
+
+                <dt class="col-sm-3">Profil Resmi</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                    {
+                        <a href="@Model.ImageUrl" target="_blank">Resmi Görüntüle</a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Resim bulunamadı.</span>
+                    }
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-action="Edit" asp-area="Admin" asp-route-id="@Model.TestimonialID" class="btn btn-warning">Güncelle</a>
+            </div>
+        </div>
+    </div>
+</div>

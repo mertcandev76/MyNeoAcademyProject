@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.DataAccess.Repositories
 {
-    public class GenericRepository<T> : IRepository<T> where T : class
+    public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly MyNeoAcademyContext _myNeoAcademyContext;
 
@@ -18,54 +18,54 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             _myNeoAcademyContext = myNeoAcademyContext;
         }
-        public DbSet<T> Table { get => _myNeoAcademyContext.Set<T>(); }
+        public DbSet<TEntity> Table { get => _myNeoAcademyContext.Set<TEntity>(); }
 
-        //Tüm verileri getirir
-        public async Task<List<T>> GetListAsync()
+
+        public async Task<List<TEntity>> GetListAsync()
         {
             return await Table.ToListAsync();
         }
-        //Verilen id'ye sahip olan nesneyi getirir.
-        public async Task<T?> GetByIdAsync(int id)
+
+        public async Task<TEntity?> GetByIdAsync(int id)
         {
             return await Table.FindAsync(id);
         }
-        //Yeni bir nesneyi veritabanına ekler.
-        public async Task CreateAsync(T entity)
+
+        public async Task CreateAsync(TEntity entity)
         {
             await Table.AddAsync(entity);
             await _myNeoAcademyContext.SaveChangesAsync();
         }
-        //Var olan nesneyi günceller.
-        public async Task UpdateAsync(T entity)
+
+        public async Task UpdateAsync(TEntity entity)
         {
             Table.Update(entity);
             await _myNeoAcademyContext.SaveChangesAsync();
         }
-        //Var olan nesneyi siler.
-        public async Task DeleteAsync(T entity)
+
+        public async Task DeleteAsync(TEntity entity)
         {
             Table.Remove(entity);
             await _myNeoAcademyContext.SaveChangesAsync();
         }
 
-        //Toplam kayıt sayısını döner.
+
         public async Task<int> CountAsync()
         {
             return await Table.CountAsync();
         }
-        //Belirli bir filtreye göre kayıt sayısını döner.
-        public async Task<int> FilteredCountAsync(Expression<Func<T, bool>> predicate)
+
+        public async Task<int> FilteredCountAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await Table.CountAsync(predicate);
         }
-        //Belirli bir filtreye göre liste döner.
-        public async Task<List<T>> GetFilteredListAsync(Expression<Func<T, bool>> predicate)
+
+        public async Task<List<TEntity>> GetFilteredListAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await Table.Where(predicate).ToListAsync();
         }
-        //Belirli bir şarta uyan ilk nesneyi döner.
-        public async Task<T?> GetByFilterAsync(Expression<Func<T, bool>> predicate)
+
+        public async Task<TEntity?> GetByFilterAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await Table.FirstOrDefaultAsync(predicate);
         }

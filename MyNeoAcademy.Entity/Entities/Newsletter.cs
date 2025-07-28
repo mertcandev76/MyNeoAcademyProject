@@ -8,8 +8,8 @@ namespace MyNeoAcademy.Entity.Entities
 {
     public class Newsletter
     {
-        public int NewsletterID { get; set; }                // Primary Key
-        public string Email { get; set; } = null!; // Kullanıcının girdiği email
+        public int NewsletterID { get; set; }            
+        public string Email { get; set; } = null!; 
         public DateTime SubscribedDate { get; set; }
     }
 }

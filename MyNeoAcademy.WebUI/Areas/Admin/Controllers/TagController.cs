@@ -2,6 +2,7 @@
 using MyNeoAcademy.Application.DTOs;
 using System.Text.Json;
 using System.Text;
+using MyNeoAcademy.WebUI.ApiServices.Abstract;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
@@ -9,115 +10,75 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]/{id?}")]
     public class TagController : Controller
     {
-        private readonly HttpClient _client;
-        private readonly JsonSerializerOptions _jsonOptions;
+        private readonly ITagApiService _tagApiService;
 
-        public TagController(IHttpClientFactory httpClientFactory)
+        public TagController(ITagApiService tagApiService)
         {
-            _client = httpClientFactory.CreateClient("MyApiClient");
-            _jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _tagApiService = tagApiService;
         }
 
-        // 🔹 Listeleme
         public async Task<IActionResult> Index()
         {
-            var response = await _client.GetAsync("tags");
-
-            if (!response.IsSuccessStatusCode)
-                return View(new List<ResultTagDTO>());
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var data = JsonSerializer.Deserialize<List<ResultTagDTO>>(jsonData, _jsonOptions);
-
+            var data = await _tagApiService.GetAllAsync();
             return View(data);
         }
 
-        // 🔹 Detay
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var response = await _client.GetAsync($"tags/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var result = await _tagApiService.GetByIdAsync(id);
+            if (result == null)
                 return RedirectToAction("Index");
 
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var tag = JsonSerializer.Deserialize<ResultTagDTO>(jsonData, _jsonOptions);
-
-            return View(tag);
+            return View(result);
         }
 
-        // 🔹 Ekleme (GET)
         [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
-        // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateTagDTO dto)
         {
-            if (!ModelState.IsValid)
-                return View(dto);
-
-            var jsonContent = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
-
-            var response = await _client.PostAsync("tags", jsonContent);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _tagApiService.CreateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
-            ModelState.AddModelError("", "Etiket eklenemedi.");
+            ModelState.AddModelError("", "Tag eklenemedi.");
             return View(dto);
         }
 
-        // 🔹 Güncelleme (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _client.GetAsync($"tags/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var result = await _tagApiService.GetByIdAsync(id);
+            if (result == null)
                 return RedirectToAction("Index");
 
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var tag = JsonSerializer.Deserialize<UpdateTagDTO>(jsonData, _jsonOptions);
+            var dto = new UpdateTagDTO
+            {
+                TagID = result.TagID,
+                Name = result.Name
+            };
 
-            return View(tag);
-        }
-
-        // 🔹 Güncelleme (POST)
-        [HttpPost]
-        public async Task<IActionResult> Edit(UpdateTagDTO dto)
-        {
-            if (!ModelState.IsValid)
-                return View(dto);
-
-            var jsonContent = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
-
-            var response = await _client.PutAsync("tags", jsonContent);
-
-            if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            ModelState.AddModelError("", "Etiket güncellenemedi.");
             return View(dto);
         }
 
-        // 🔹 Silme
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        public async Task<IActionResult> Edit(UpdateTagDTO dto)
         {
-            var response = await _client.DeleteAsync($"tags/{id}");
-
-            if (response.IsSuccessStatusCode)
+            var result = await _tagApiService.UpdateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
-            TempData["Error"] = "Etiket silinemedi.";
+            ModelState.AddModelError("", "Tag güncellenemedi.");
+            return View(dto);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _tagApiService.DeleteAsync(id);
+            if (!result)
+                TempData["Error"] = "Silme işlemi başarısız.";
+
             return RedirectToAction("Index");
         }
     }

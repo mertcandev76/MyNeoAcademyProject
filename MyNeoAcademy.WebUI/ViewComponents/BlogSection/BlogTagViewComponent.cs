@@ -16,7 +16,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
         {
             var tags = new List<ResultTagDTO>();
 
-            var response = await _httpClient.GetAsync("tags"); // API endpoint
+            var response = await _httpClient.GetAsync("tags"); 
 
             if (response.IsSuccessStatusCode)
             {

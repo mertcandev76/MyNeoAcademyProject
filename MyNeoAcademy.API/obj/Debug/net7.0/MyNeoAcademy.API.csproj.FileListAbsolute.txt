@@ -90,3 +90,5 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net7.0\ref\MyNeoAcademy.API.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\bin\Debug\net7.0\MyNeoAcademy.Application.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\bin\Debug\net7.0\MyNeoAcademy.Application.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\bin\Debug\net7.0\MyNeoAcademy.Infrastructure.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\bin\Debug\net7.0\MyNeoAcademy.Infrastructure.pdb

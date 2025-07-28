@@ -1,0 +1,17 @@
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\bin\Debug\net7.0\MyNeoAcademy.Infrastructure.deps.json
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\bin\Debug\net7.0\MyNeoAcademy.Infrastructure.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\bin\Debug\net7.0\MyNeoAcademy.Infrastructure.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\bin\Debug\net7.0\MyNeoAcademy.Application.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\bin\Debug\net7.0\MyNeoAcademy.Entity.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\bin\Debug\net7.0\MyNeoAcademy.Application.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\bin\Debug\net7.0\MyNeoAcademy.Entity.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\MyNeoAcademy.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\MyNeoAcademy.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\MyNeoAcademy.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\MyNeoAcademy.Infrastructure.AssemblyInfo.cs
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\MyNeoAcademy.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\MyNeoAcademy.Infrastructure.csproj.CopyComplete
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\MyNeoAcademy.Infrastructure.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\refint\MyNeoAcademy.Infrastructure.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\MyNeoAcademy.Infrastructure.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Infrastructure\obj\Debug\net7.0\ref\MyNeoAcademy.Infrastructure.dll

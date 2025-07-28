@@ -14,10 +14,10 @@ namespace MyNeoAcademy.Application.Mapping
             CreateMap<Slider, ResultSliderDTO>().ReverseMap();
 
             CreateMap<CreateSliderWithFileDTO, Slider>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore()); // çünkü dosyayı SaveFileAsync ile yüklüyorsun
+                .ForMember(dest => dest.SliderID, opt => opt.Ignore()); 
 
-            CreateMap<UpdateSliderWithFileDTO, Slider>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+            CreateMap<UpdateSliderWithFileDTO, Slider>();
+ 
         }
     }
 }

@@ -8,20 +8,25 @@ namespace MyNeoAcademy.Application.Mapping
     {
         public InstructorMapping()
         {
+            CreateMap<Instructor, CreateInstructorDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.InstructorID, opt => opt.Ignore());
 
-            CreateMap<Instructor, CreateInstructorDTO>().ReverseMap();
             CreateMap<Instructor, UpdateInstructorDTO>().ReverseMap();
 
-
             CreateMap<Course, CourseReferenceDTO>();
+
             CreateMap<Instructor, ResultInstructorDTO>()
                 .ForMember(dest => dest.Courses, opt => opt.MapFrom(src => src.Courses));
 
             CreateMap<CreateInstructorWithFileDTO, Instructor>()
-          .ForMember(dest => dest.ImageUrl, opt => opt.Ignore()); 
+                .ForMember(dest => dest.InstructorID, opt => opt.Ignore()); 
 
-            CreateMap<UpdateInstructorWithFileDTO, Instructor>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+            CreateMap<UpdateInstructorWithFileDTO, Instructor>();
+
+
+
+
         }
     }
 }

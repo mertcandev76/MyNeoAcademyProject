@@ -1,4 +1,5 @@
-﻿using MyNeoAcademy.Entity.Entities;
+﻿using MyNeoAcademy.Application.DTOs;
+using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,15 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.Abstract
 {
-    public interface ICategoryService : IGenericService<Category>
+    public interface ICategoryService : IGenericService<
+       Category,
+       CreateCategoryDTO,
+       UpdateCategoryDTO,
+       ResultCategoryDTO
+   >
     {
-        //Özel Metotlar
-        Task<List<Category>> GetAllWithBlogAsync();
-        Task<Category?> GetByIdWithBlogAsync(int id);
+        Task<List<ResultCategoryDTO>> GetAllWithIncludesAsync();
+        Task<ResultCategoryDTO?> GetByIdWithIncludesAsync(int id);
+        Task<bool> DeleteByIdAsync(int id);
     }
 }

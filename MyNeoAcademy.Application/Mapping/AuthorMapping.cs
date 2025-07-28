@@ -9,8 +9,10 @@ namespace MyNeoAcademy.Application.Mapping
     {
         public AuthorMapping()
         {
+            CreateMap<Author, CreateAuthorDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.AuthorID, opt => opt.Ignore());
 
-            CreateMap<Author, CreateAuthorDTO>().ReverseMap();
             CreateMap<Author, UpdateAuthorDTO>().ReverseMap();
 
             CreateMap<Blog, BlogReferenceDTO>();
@@ -18,12 +20,13 @@ namespace MyNeoAcademy.Application.Mapping
             CreateMap<Author, ResultAuthorDTO>()
                 .ForMember(dest => dest.Blogs, opt => opt.MapFrom(src => src.Blogs));
 
-
             CreateMap<CreateAuthorWithFileDTO, Author>()
-            .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+                .ForMember(dest => dest.AuthorID, opt => opt.Ignore()); 
 
-            CreateMap<UpdateAuthorWithFileDTO, Author>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+            CreateMap<UpdateAuthorWithFileDTO, Author>();
+
+
+
 
         }
     }

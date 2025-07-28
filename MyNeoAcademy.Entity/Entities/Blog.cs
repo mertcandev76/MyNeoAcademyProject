@@ -17,7 +17,7 @@ namespace MyNeoAcademy.Entity.Entities
         public string? ImageUrl { get; set; }
         public DateTime PublishDate { get; set; }
 
-        // İlişkiler
+
         public int? AuthorID { get; set; }
         public Author? Author { get; set; }
 
@@ -26,12 +26,11 @@ namespace MyNeoAcademy.Entity.Entities
 
 
 
-        // Koleksiyonlar nullable değil, boş listeyle başlatıldı
+
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<BlogTag> BlogTags { get; set; } = new List<BlogTag>();
 
-        //public ICollection<Comment>? Comments { get; set; }
-        //public ICollection<BlogTag>? BlogTags { get; set; }
+
 
     }
 }

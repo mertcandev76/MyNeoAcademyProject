@@ -9,7 +9,10 @@ namespace MyNeoAcademy.Application.Mapping
         public CommentMapping()
         {
 
-            CreateMap<Comment, CreateCommentDTO>().ReverseMap();
+            CreateMap<Comment, CreateCommentDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.CommentID, opt => opt.Ignore());
+
             CreateMap<Comment, UpdateCommentDTO>().ReverseMap();
 
             CreateMap<Blog, BlogReferenceDTO>();
@@ -17,12 +20,14 @@ namespace MyNeoAcademy.Application.Mapping
             CreateMap<Comment, ResultCommentDTO>()
                 .ForMember(dest => dest.Blog, opt => opt.MapFrom(src => src.Blog));
 
-
             CreateMap<CreateCommentWithFileDTO, Comment>()
-            .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+                .ForMember(dest => dest.CommentID, opt => opt.Ignore()); 
 
-            CreateMap<UpdateCommentWithFileDTO, Comment>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+            CreateMap<UpdateCommentWithFileDTO, Comment>();
+
+            CreateMap<CreateCommentDTO, Comment>()
+    .ForMember(dest => dest.CreatedDate, opt => opt.Ignore());
+
         }
     }
 }

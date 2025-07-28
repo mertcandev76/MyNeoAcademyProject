@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
@@ -12,78 +11,95 @@ namespace MyNeoAcademy.API.Controllers
     [ApiController]
     public class TestimonialsController : ControllerBase
     {
-        private readonly IGenericService<Testimonial> _testimonialService;
-        private readonly IMapper _mapper;
+        private readonly ITestimonialService _testimonialService;
         private readonly IWebHostEnvironment _env;
 
-        public TestimonialsController(IGenericService<Testimonial> testimonialService, IMapper mapper, IWebHostEnvironment env)
+        public TestimonialsController(ITestimonialService testimonialService, IWebHostEnvironment env)
         {
             _testimonialService = testimonialService;
-            _mapper = mapper;
             _env = env;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get()
         {
-            var list = await _testimonialService.GetListAsync();
-            var dtoList = _mapper.Map<List<ResultTestimonialDTO>>(list);
-            return Ok(dtoList);
+            try
+            {
+                var testimonials = await _testimonialService.GetListAsync();
+                return Ok(testimonials);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var entity = await _testimonialService.GetByIdAsync(id);
-            if (entity == null) return NotFound("Referans bulunamadı.");
-            var dto = _mapper.Map<ResultTestimonialDTO>(entity);
-            return Ok(dto);
+            try
+            {
+                var testimonial = await _testimonialService.GetByIdAsync(id);
+                if (testimonial == null)
+                    return NotFound("Referans bulunamadı.");
+
+                return Ok(testimonial);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] CreateTestimonialWithFileDTO dto)
+        public async Task<IActionResult> Post([FromForm] CreateTestimonialWithFileDTO dto)
         {
-            if (dto.ImageFile == null)
-                return BadRequest("Bir profil fotoğrafı seçilmelidir.");
-
-            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/testimonials");
-            var entity = _mapper.Map<Testimonial>(dto);
-            entity.ImageUrl = imagePath;
-
-            await _testimonialService.CreateAsync(entity);
-            return CreatedAtAction(nameof(Detail), new { id = entity.TestimonialID }, "Yeni referans eklendi.");
+            try
+            {
+                await _testimonialService.CreateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Yeni referans kaydı oluşturuldu.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ekleme hatası: {ex.Message}");
+            }
         }
 
         [HttpPut]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update([FromForm] UpdateTestimonialWithFileDTO dto)
+        public async Task<IActionResult> Put([FromForm] UpdateTestimonialWithFileDTO dto)
         {
-            var entity = await _testimonialService.GetByIdAsync(dto.TestimonialID);
-            if (entity == null)
-                return NotFound("Referans bulunamadı.");
-
-            _mapper.Map(dto, entity);
-
-            if (dto.ImageFile != null)
+            try
             {
-                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/testimonials");
-                entity.ImageUrl = imagePath;
+                await _testimonialService.UpdateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Referans başarıyla güncellendi.");
             }
-
-            await _testimonialService.UpdateAsync(entity);
-            return Ok("Referans güncellendi.");
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var entity = await _testimonialService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound("Referans bulunamadı.");
+            try
+            {
+                var deleted = await _testimonialService.DeleteByIdAsync(id);
+                if (!deleted)
+                    return NotFound("Referans bulunamadı.");
 
-            await _testimonialService.DeleteAsync(entity);
-            return Ok("Referans silindi.");
+                return Ok("Referans başarıyla silindi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme hatası: {ex.Message}");
+            }
         }
     }
 }

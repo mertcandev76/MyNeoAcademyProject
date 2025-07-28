@@ -12,26 +12,26 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
         {
             _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var recentPosts = new List<ResultBlogDTO>();
+            var response = await _httpClient.GetAsync("blogs");
 
-            var response = await _httpClient.GetAsync("api/blog/recentposts"); // API endpoint adresi
+            if (!response.IsSuccessStatusCode)
+                return View(new List<ResultBlogDTO>()); // boş liste dön
 
-            if (response.IsSuccessStatusCode)
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            var options = new JsonSerializerOptions
             {
-                // Stream olarak JSON'u oku
-                using var responseStream = await response.Content.ReadAsStreamAsync();
+                PropertyNameCaseInsensitive = true
+            };
 
-                // JSON'u deserialize et
-                recentPosts = await JsonSerializer.DeserializeAsync<List<ResultBlogDTO>>(responseStream,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-            }
+            var blogList = await JsonSerializer.DeserializeAsync<List<ResultBlogDTO>>(stream, options)
+                            ?? new List<ResultBlogDTO>();
 
-            return View(recentPosts);
+            return View(blogList);
         }
     }
+
 }

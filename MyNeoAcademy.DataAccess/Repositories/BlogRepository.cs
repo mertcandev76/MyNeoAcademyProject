@@ -37,5 +37,6 @@ namespace MyNeoAcademy.DataAccess.Repositories
                      .ThenInclude(bt => bt.Tag)
                  .FirstOrDefaultAsync(b => b.BlogID == id);
         }
+
     }
 }

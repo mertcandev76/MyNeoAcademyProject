@@ -49,7 +49,8 @@
                     <label class="form-label">Mevcut Ön Görsel</label><br />
                     @if (!string.IsNullOrWhiteSpace(Model.ImageFrontUrl))
                     {
-                        <img src="https://localhost:7230/@Model.ImageFrontUrl" style="max-height:80px;" class="img-thumbnail" />
+           
+                        <img src="@Model.ImageFrontUrl" style="max-height:80px;" class="img-thumbnail" />
                     }
                     else
                     {
@@ -59,7 +60,7 @@
 
                 <div class="mb-3">
                     <label asp-for="ImageFrontFile" class="form-label">Yeni Ön Görsel (isteğe bağlı)</label>
-                    <input asp-for="ImageFrontFile" type="file" class="form-control" />
+                    <input asp-for="ImageFrontFile" type="file" class="form-control" accept=".jpg,.jpeg,.png" />
                     <span asp-validation-for="ImageFrontFile" class="text-danger"></span>
                 </div>
 
@@ -67,7 +68,8 @@
                     <label class="form-label">Mevcut Arka Görsel</label><br />
                     @if (!string.IsNullOrWhiteSpace(Model.ImageBackUrl))
                     {
-                        <img src="https://localhost:7230/@Model.ImageBackUrl" style="max-height:80px;" class="img-thumbnail" />
+
+                        <img src="@Model.ImageBackUrl" style="max-height:80px;" class="img-thumbnail" />
                     }
                     else
                     {
@@ -77,7 +79,7 @@
 
                 <div class="mb-3">
                     <label asp-for="ImageBackFile" class="form-label">Yeni Arka Görsel (isteğe bağlı)</label>
-                    <input asp-for="ImageBackFile" type="file" class="form-control" />
+                    <input asp-for="ImageBackFile" type="file" class="form-control" accept=".jpg,.jpeg,.png" />
                     <span asp-validation-for="ImageBackFile" class="text-danger"></span>
                 </div>
 

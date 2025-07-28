@@ -23,23 +23,22 @@ namespace MyNeoAcademy.Application.Validators
             RuleFor(x => x)
                 .Must(BeDifferentBlogTag)
                 .WithMessage("The selected blog and tag might already be associated.");
-            // This check should be handled in the API/database layer
+
 
             RuleFor(x => x.BlogID.ToString())
                 .MaximumLength(10)
-                .WithMessage("The Blog ID value appears to be too long. This might indicate a system error."); // Theoretical but protective
+                .WithMessage("The Blog ID value appears to be too long. This might indicate a system error.");
 
             RuleFor(x => x.TagID.ToString())
                 .MaximumLength(10)
                 .WithMessage("The Tag ID value appears to be too long. This might indicate a system error.");
         }
 
-        // In a real system, this check should be performed against the database
+
         private bool BeDifferentBlogTag(CreateBlogTagDTO dto)
         {
-            // This is just a placeholder logic. A proper check should be done against the data store.
-            // Otherwise, the system may accept duplicate blog-tag relationships.
-            return dto.BlogID != dto.TagID; // Dummy rule: prevent selecting the same ID for both Blog and Tag
+
+            return dto.BlogID != dto.TagID; 
         }
     }
 

@@ -16,8 +16,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
         public async Task<IViewComponentResult> InvokeAsync(int authorId)
         {
 
-            //var response = await _httpClient.GetAsync("authors/1");
-            var response = await _httpClient.GetAsync($"authors/{authorId}"); // ✔️ Dinamik
+            var response = await _httpClient.GetAsync($"authors/{authorId}");
 
             if (!response.IsSuccessStatusCode)
                 return View(new ResultAuthorDTO());

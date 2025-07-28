@@ -36,7 +36,7 @@ namespace MyNeoAcademy.Application.Validators
             RuleFor(x => x.CategoryID)
         .GreaterThan(0).WithMessage("Invalid category ID.");
 
-            Include(new CreateCategoryValidator()); // Create kuralları da geçerli
+            Include(new CreateCategoryValidator()); 
         }
     }
 }

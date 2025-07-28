@@ -12,6 +12,9 @@ namespace MyNeoAcademy.Application.Mapping
             CreateMap<Contact, CreateContactDTO>().ReverseMap();
             CreateMap<Contact, UpdateContactDTO>().ReverseMap();
             CreateMap<Contact, ResultContactDTO>().ReverseMap();
+
+            CreateMap<CreateContactDTO, Contact>()
+    .ForMember(dest => dest.CreatedDate, opt => opt.Ignore());
         }
     }
 }

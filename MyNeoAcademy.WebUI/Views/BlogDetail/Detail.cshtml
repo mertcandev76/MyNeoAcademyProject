@@ -39,10 +39,13 @@
                     @*                    @await Component.InvokeAsync("BlogSearch", new { query = Model.SearchTerm })*@
                     @*  @await Component.InvokeAsync("BlogSearch", new { query = "asp.net" })*@
                     @*    @await Component.InvokeAsync("BlogSearch", new { query = "" })*@
+  @*                  @await Component.InvokeAsync("BlogSearch")*@
+
                     <!-- Kategoriler -->
                     @await Component.InvokeAsync("BlogCategory")
                     <!-- Son Postlar -->
-                    @*   @await Component.InvokeAsync("BlogRecentPost")*@
+                       @await Component.InvokeAsync("BlogRecentPost")
+
                     <!-- Etiketler -->
                     @await Component.InvokeAsync("BlogTag")
                     <!-- Newsletter -->

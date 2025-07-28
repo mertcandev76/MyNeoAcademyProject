@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MyNeoAcademy.Application.Common;
+using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.DTOs
@@ -41,12 +44,23 @@ namespace MyNeoAcademy.Application.DTOs
         public int InstructorID { get; set; }
         public List<CourseReferenceDTO> Courses { get; set; } = new List<CourseReferenceDTO>();
     }
-    public class UpdateInstructorDTO : CreateInstructorDTO
+    public class UpdateInstructorDTO : CreateInstructorDTO,IHasId
     {
         public int InstructorID { get; set; }
+        [JsonIgnore]
+        public int Id
+        {
+            get => InstructorID;
+            set => InstructorID = value;
+        }
     }
-    public class UpdateInstructorWithFileDTO : CreateInstructorWithFileDTO
+    public class UpdateInstructorWithFileDTO : CreateInstructorWithFileDTO,IHasId
     {
         public int InstructorID { get; set; }
+        public int Id
+        {
+            get => InstructorID;
+            set => InstructorID = value;
+        }
     }
 }

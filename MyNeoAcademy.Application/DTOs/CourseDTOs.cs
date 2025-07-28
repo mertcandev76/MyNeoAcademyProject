@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MyNeoAcademy.Application.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.DTOs
@@ -46,14 +48,26 @@ namespace MyNeoAcademy.Application.DTOs
 
         public CategoryReferenceDTO? Category { get; set; }
 
-        public InstructorReferenceDTO? Instructor { get; set; } // Navigasyon property
+        public InstructorReferenceDTO? Instructor { get; set; } 
     }
-    public class UpdateCourseDTO : CreateCourseDTO
+    public class UpdateCourseDTO : CreateCourseDTO,IHasId
     {
         public int CourseID { get; set; }
+
+        [JsonIgnore]
+        public int Id
+        {
+            get => CourseID;
+            set => CourseID = value;
+        }
     }
-    public class UpdateCourseWithFileDTO : CreateCourseWithFileDTO
+    public class UpdateCourseWithFileDTO : CreateCourseWithFileDTO,IHasId
     {
         public int CourseID { get; set; }
+        public int Id
+        {
+            get => CourseID;
+            set => CourseID = value;
+        }
     }
 }

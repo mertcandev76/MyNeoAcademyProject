@@ -1,0 +1,32 @@
+﻿@model ResultBlogTagDTO
+@{
+    ViewData["Title"] = "Blog-Tag Detayı";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.BlogTagID</dd>
+
+                <dt class="col-sm-3">Blog Başlığı</dt>
+                <dd class="col-sm-9">@Model.Blog?.Title ?? "<span class='text-muted'>Yok</span>"</dd>
+
+                <dt class="col-sm-3">Etiket Adı</dt>
+                <dd class="col-sm-9">@Model.Tag?.Name ?? "<span class='text-muted'>Yok</span>"</dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-area="Admin" asp-controller="BlogTags" asp-action="Edit" asp-route-id="@Model.BlogTagID" class="btn btn-warning">Güncelle</a>
+            </div>
+        </div>
+    </div>
+</div>

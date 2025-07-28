@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyNeoAcademy.Application.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,30 +8,29 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.Abstract
 {
-    public interface IGenericService<T> where T : class
+    public interface IGenericService<TEntity, TCreateDto, TUpdateDto, TResultDto>
+        where TEntity : class
+        where TCreateDto : class
+        where TUpdateDto : class, IHasId
+        where TResultDto : class
     {
-        //Tüm verileri getirir
-        Task<List<T>> GetListAsync();
-        //Verilen id'ye sahip olan nesneyi getirir.
-        Task<T?> GetByIdAsync(int id);
-        //Yeni bir nesneyi veritabanına ekler.
-        Task CreateAsync(T entity);
-        //Var olan nesneyi günceller.
-        Task UpdateAsync(T entity);
-        //ID ile eşleşen kaydı siler.
-        Task DeleteAsync(T entity);
+        // Listeleme ve Detay için
+        Task<List<TResultDto>> GetListAsync();
+        Task<TResultDto?> GetByIdAsync(int id);
 
-        //Toplam kayıt sayısını döner.
+        // Oluşturma ve Güncelleme için
+        Task CreateAsync(TCreateDto dto);
+        Task UpdateAsync(TUpdateDto dto);
+
+        // Silme için
+        Task DeleteAsync(int id);
+
+        // Sayım
         Task<int> CountAsync();
 
-        //Belirli bir filtreye göre kayıt sayısını döner.
-        Task<int> FilteredCountAsync(Expression<Func<T, bool>> predicate);
-
-        //Belirli bir filtreye göre liste döner.
-        Task<List<T>> GetFilteredListAsync(Expression<Func<T, bool>> predicate);
-
-        //Belirli bir şarta uyan ilk nesneyi döner.
-        Task<T?> GetByFilterAsync(Expression<Func<T, bool>> predicate);
-
+        // (Opsiyonel) Gelişmiş filtreleme – DTO değil, Entity üzerinden tanımlanmalı!
+        Task<List<TResultDto>> GetFilteredListAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<TResultDto?> GetByFilterAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<int> FilteredCountAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }

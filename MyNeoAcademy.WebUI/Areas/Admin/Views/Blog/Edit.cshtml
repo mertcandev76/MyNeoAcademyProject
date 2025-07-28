@@ -35,12 +35,6 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="PublishDate" class="form-label">Yayın Tarihi</label>
-                    <input asp-for="PublishDate" type="datetime-local" class="form-control" />
-                    <span asp-validation-for="PublishDate" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
                     <label asp-for="CategoryID" class="form-label">Kategori</label>
                     <select asp-for="CategoryID" asp-items="(IEnumerable<SelectListItem>)ViewBag.Categories" class="form-control">
                         <option value="" disabled selected hidden>-- Kategori Seçin --</option>
@@ -60,7 +54,7 @@
                     <label class="form-label">Mevcut Blog Görseli</label><br />
                     @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
                     {
-                        <img src="https://localhost:7230/@Model.ImageUrl" style="max-height:80px;" class="img-thumbnail" />
+                        <img src="@Model.ImageUrl" style="max-height:80px;" class="img-thumbnail" />
                     }
                     else
                     {

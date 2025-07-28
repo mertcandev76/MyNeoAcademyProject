@@ -10,14 +10,22 @@ namespace MyNeoAcademy.Application.Mapping
         public TagMapping()
         {
 
-            CreateMap<Tag, CreateTagDTO>().ReverseMap();
+
+            CreateMap<Tag, CreateTagDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.TagID, opt => opt.Ignore());
+
+
             CreateMap<Tag, UpdateTagDTO>().ReverseMap();
+
 
             CreateMap<Blog, BlogReferenceDTO>();
 
-            // Result DTO - Detay için
+
             CreateMap<Tag, ResultTagDTO>()
-                .ForMember(dest => dest.Blogs, opt => opt.MapFrom<BlogTagsToBlogReferenceDTOResolver>());
+               .ForMember(dest => dest.Blogs, opt => opt.MapFrom<BlogTagsToBlogReferenceDTOResolver>());
+
+
         }
     }
 }

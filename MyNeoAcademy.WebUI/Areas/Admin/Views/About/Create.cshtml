@@ -46,13 +46,13 @@
 
                 <div class="mb-3">
                     <label class="form-label">Ön Görsel</label>
-                    <input asp-for="ImageFrontFile" type="file" class="form-control" />
+                    <input asp-for="ImageFrontFile" type="file" class="form-control" accept=".jpg,.jpeg,.png" />
                     <span asp-validation-for="ImageFrontFile" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Arka Görsel</label>
-                    <input asp-for="ImageBackFile" type="file" class="form-control" />
+                    <label asp-for="ImageBackFile" class="form-label">Yeni Arka Görsel (isteğe bağlı)</label>
+                    <input asp-for="ImageBackFile" type="file" class="form-control" accept=".jpg,.jpeg,.png" />
                     <span asp-validation-for="ImageBackFile" class="text-danger"></span>
                 </div>
 

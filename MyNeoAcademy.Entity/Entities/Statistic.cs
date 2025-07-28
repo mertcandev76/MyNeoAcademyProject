@@ -12,6 +12,6 @@ namespace MyNeoAcademy.Entity.Entities
         public string? SvgBase64 { get; set; }
         public string? ColorClass { get; set; }
         public int Count { get; set; }
-        public string? Label { get; set; }  // Hem Description hem Unit yerine ortak kullanım
+        public string? Label { get; set; }  
     }
 }

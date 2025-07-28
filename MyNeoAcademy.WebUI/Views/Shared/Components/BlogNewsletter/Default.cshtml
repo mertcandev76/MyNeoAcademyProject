@@ -1,6 +1,6 @@
 ﻿@model  CreateNewsletterDTO
 <aside class="single_sidebar_widget newsletter_widget">
-    <h4 class="widget_title" style="color: #2d2d2d;">Newsletter</h4>
+    <h4 class="widget_title" style="color: #2d2d2d;">Bülten</h4>
     @if (TempData["NewsletterMessage"] != null)
     {
         <div class="alert alert-info">
@@ -14,6 +14,6 @@
             <input asp-for="Email" class="form-control" placeholder="E-posta adresinizi girin" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
-        <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" type="submit">Subscribe</button>
+        <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" type="submit">Abone</button>
     </form>
 </aside>

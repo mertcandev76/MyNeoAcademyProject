@@ -8,19 +8,25 @@ namespace MyNeoAcademy.Application.Mapping
     {
         public BlogTagMapping()
         {
-            // Create ve Update DTO'lar (ID ile ilişki kuruluyor)
-            CreateMap<BlogTag, CreateBlogTagDTO>().ReverseMap();
+
+
+            CreateMap<BlogTag, CreateBlogTagDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.BlogTagID, opt => opt.Ignore());
+
+
             CreateMap<BlogTag, UpdateBlogTagDTO>().ReverseMap();
 
-            // Reference DTO - detay için
-            CreateMap<BlogTag, BlogTagReferenceDTO>()
-                .ForMember(dest => dest.Blog, opt => opt.MapFrom(src => src.Blog))
-                .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => src.Tag));
 
-            // Result DTO - detaylı gösterim için
+            CreateMap<Blog, BlogReferenceDTO>();
+            CreateMap<Blog, TagReferenceDTO>();
+
+
             CreateMap<BlogTag, ResultBlogTagDTO>()
                 .ForMember(dest => dest.Blog, opt => opt.MapFrom(src => src.Blog))
                 .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => src.Tag));
+
+
 
         }
     }

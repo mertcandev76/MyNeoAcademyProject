@@ -16,7 +16,13 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
         }
 
-        public async Task<About?> GetAllWithAboutFeatureAsync(int id)
+        public async Task<List<About>> GetAllWithIncludesAsync()
+        {
+            return await Table
+                .Include(a => a.Features)
+                .ToListAsync();
+        }
+        public async Task<About?> GetByIdWithIncludesAsync(int id)
         {
             return await Table
             .Include(a => a.Features)

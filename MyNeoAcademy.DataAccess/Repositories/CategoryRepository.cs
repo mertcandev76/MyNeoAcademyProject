@@ -16,7 +16,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
         }
 
-        public async Task<List<Category>> GetAllWithBlogAsync()
+        public async Task<List<Category>> GetAllWithIncludesAsync()
         {
             return await Table
              .Include(a => a.Blogs)
@@ -24,7 +24,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
              .ToListAsync();
         }
 
-        public async Task<Category?> GetByIdWithBlogAsync(int id)
+        public async Task<Category?> GetByIdWithIncludesAsync(int id)
         {
             return await Table
               .Include(a => a.Blogs)

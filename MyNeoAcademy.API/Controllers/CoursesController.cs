@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
@@ -13,74 +12,94 @@ namespace MyNeoAcademy.API.Controllers
     public class CoursesController : ControllerBase
     {
         private readonly ICourseService _courseService;
-        private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _env;
-        public CoursesController(ICourseService courseService, IMapper mapper, IWebHostEnvironment env)
+
+        public CoursesController(ICourseService courseService, IWebHostEnvironment env)
         {
             _courseService = courseService;
-            _mapper = mapper;
             _env = env;
         }
 
-    
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            try
+            {
+                var courses = await _courseService.GetAllWithIncludesAsync();
+                return Ok(courses);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
+        }
 
-            var list = await _courseService.GetAllWithCategoryAndInstructorAsync(); // Entity List<Blog>
-            var dtoList = _mapper.Map<List<ResultCourseDTO>>(list); // DTO List<ResultBlogDTO>
-            return Ok(dtoList); // DTO döndür
-        }
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var entity = await _courseService.GetByIdWithCategoryAndInstructorAsync(id);
-            if (entity == null) return NotFound("Kurs bulunamadı.");
-            var dto = _mapper.Map<ResultCourseDTO>(entity);
-            return Ok(dto);
+            try
+            {
+                var course = await _courseService.GetByIdWithIncludesAsync(id);
+                if (course == null)
+                    return NotFound("Course bulunamadı.");
+
+                return Ok(course);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
+
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] CreateCourseWithFileDTO dto)
+        public async Task<IActionResult> Post([FromForm] CreateCourseWithFileDTO dto)
         {
-            if (dto.ImageFile == null)
-                return BadRequest("Bir profil fotoğrafı seçilmelidir.");
-            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/courses");
-            var entity = _mapper.Map<Course>(dto);
-            entity.ImageUrl = imagePath;
-            await _courseService.CreateAsync(entity);
-            return CreatedAtAction(nameof(Detail), new { id = entity.CourseID }, "Yeni kurs eklendi.");
+            try
+            {
+                await _courseService.CreateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Yeni course kaydı oluşturuldu.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ekleme hatası: {ex.Message}");
+            }
         }
+
         [HttpPut]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update([FromForm] UpdateCourseWithFileDTO dto)
+        public async Task<IActionResult> Put([FromForm] UpdateCourseWithFileDTO dto)
         {
-            var entity = await _courseService.GetByIdAsync(dto.CourseID);
-            if (entity == null)
-                return NotFound("Kurs bulunamadı.");
-            
-           
-            _mapper.Map(dto, entity);
-            if (dto.ImageFile != null)
+            try
             {
-                // Dosyayı kaydet (FileHelper kendi helperın, dosya yolu ve klasör adını ihtiyacına göre ayarla)
-                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/courses");
-                entity.ImageUrl = imagePath;
+                await _courseService.UpdateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Course başarıyla güncellendi.");
             }
-
-            await _courseService.UpdateAsync(entity);
-            return Ok("Kurs Güncellendi");
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
+            }
         }
-        //Silme
+
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var entity = await _courseService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound("Kurs bulunamadı.");
+            try
+            {
+                var deleted = await _courseService.DeleteByIdAsync(id);
+                if (!deleted)
+                    return NotFound("Course bulunamadı.");
 
-            await _courseService.DeleteAsync(entity);
-            return Ok("Kurs silindi.");
+                return Ok("Course başarıyla silindi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme hatası: {ex.Message}");
+            }
         }
     }
 }

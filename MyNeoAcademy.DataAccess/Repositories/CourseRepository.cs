@@ -16,7 +16,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
         }
 
-        public async Task<List<Course>> GetAllWithCategoryAndInstructorAsync()
+        public async Task<List<Course>> GetAllWithIncludesAsync()
         {
             return await Table
                 .Include(c=>c.Category)
@@ -24,7 +24,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Course?> GetByIdWithCategoryAndInstructorAsync(int id)
+        public async Task<Course?> GetByIdWithIncludesAsync(int id)
         {
             return await Table
               .Include(c => c.Category)

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
-using MyNeoAcademy.API.Utilities;
 using FluentValidation;
 
 namespace MyNeoAcademy.API.Controllers
@@ -13,82 +12,95 @@ namespace MyNeoAcademy.API.Controllers
     [ApiController]
     public class SlidersController : ControllerBase
     {
-        private readonly IGenericService<Slider> _sliderService;
-        private readonly IMapper _mapper;
+        private readonly ISliderService _sliderService;
         private readonly IWebHostEnvironment _env;
 
-        public SlidersController(IGenericService<Slider> sliderService, IMapper mapper, IWebHostEnvironment env)
+        public SlidersController(ISliderService sliderService, IWebHostEnvironment env)
         {
             _sliderService = sliderService;
-            _mapper = mapper;
             _env = env;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get()
         {
-            var list = await _sliderService.GetListAsync();
-            var dtoList = _mapper.Map<List<ResultSliderDTO>>(list);
-            return Ok(dtoList);
+            try
+            {
+                var sliders = await _sliderService.GetListAsync(); 
+                return Ok(sliders);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var entity = await _sliderService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound("Slider bulunamadı.");
+            try
+            {
+                var slider = await _sliderService.GetByIdAsync(id);
+                if (slider == null)
+                    return NotFound("Slider bulunamadı.");
 
-            var dto = _mapper.Map<ResultSliderDTO>(entity);
-            return Ok(dto);
+                return Ok(slider);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] CreateSliderWithFileDTO dto)
+        public async Task<IActionResult> Post([FromForm] CreateSliderWithFileDTO dto)
         {
-            if (dto.ImageFile == null)
-                return BadRequest("Bir görsel dosyası seçilmelidir.");
-
-            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/sliders");
-            var entity = _mapper.Map<Slider>(dto);
-            entity.ImageUrl = imagePath;
-
-            await _sliderService.CreateAsync(entity);
-            return CreatedAtAction(nameof(GetById), new { id = entity.SliderID }, "Yeni Slider eklendi.");
+            try
+            {
+                await _sliderService.CreateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Yeni slider kaydı oluşturuldu.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ekleme hatası: {ex.Message}");
+            }
         }
 
         [HttpPut]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update([FromForm] UpdateSliderWithFileDTO dto)
+        public async Task<IActionResult> Put([FromForm] UpdateSliderWithFileDTO dto)
         {
-            var entity = await _sliderService.GetByIdAsync(dto.SliderID);
-            if (entity == null)
-                return NotFound("Slider bulunamadı.");
-
-            _mapper.Map(dto, entity);
-
-            if (dto.ImageFile != null)
+            try
             {
-                var imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/sliders");
-                entity.ImageUrl = imagePath;
+                await _sliderService.UpdateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Slider başarıyla güncellendi.");
             }
-
-            // Update metodu mevcut entity ile çağrılıyor
-            await _sliderService.UpdateAsync(entity);
-
-            return Ok("Slider güncellendi.");
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var entity = await _sliderService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound("Slider bulunamadı.");
+            try
+            {
+                var deleted = await _sliderService.DeleteByIdAsync(id);
+                if (!deleted)
+                    return NotFound("Slider bulunamadı.");
 
-            await _sliderService.DeleteAsync(entity);
-            return Ok("Slider silindi.");
+                return Ok("Slider başarıyla silindi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme hatası: {ex.Message}");
+            }
         }
     }
 }

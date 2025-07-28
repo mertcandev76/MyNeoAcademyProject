@@ -17,11 +17,12 @@ namespace MyNeoAcademy.Application.DTOs
         public string? Subject { get; set; }
 
         public string? Message { get; set; }
-        public DateTime CreatedDate { get; set; }
+
     }
     public class ResultContactDTO : CreateContactDTO
     {
         public int ContactID { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
     public class UpdateContactDTO : CreateContactDTO
     {

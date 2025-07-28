@@ -3,6 +3,8 @@ using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.WebUI.Helpers;
 using System.Text.Json;
 using System.Text;
+using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
@@ -10,143 +12,108 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]/{id?}")]
     public class AboutFeatureController : Controller
     {
+        private readonly IAboutFeatureApiService _aboutFeatureApiService;
+        private readonly IAboutApiService _aboutApiService;
 
-        private readonly HttpClient _client;
-        private readonly JsonSerializerOptions _jsonOptions;
-
-        public AboutFeatureController(IHttpClientFactory httpClientFactory)
+        public AboutFeatureController(
+            IAboutFeatureApiService aboutFeatureApiService,
+            IAboutApiService aboutApiService)
         {
-            _client = httpClientFactory.CreateClient("MyApiClient");
-
-            _jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _aboutFeatureApiService = aboutFeatureApiService;
+            _aboutApiService = aboutApiService;
         }
 
-        // 🔹 Listeleme
+        private async Task LoadAboutDropdownAsync(object? selectedValue = null)
+        {
+            var aboutList = await _aboutApiService.GetDropdownItemsAsync();
+            ViewBag.AboutList = new SelectList(aboutList, "Value", "Text", selectedValue);
+        }
+
         public async Task<IActionResult> Index()
         {
-            var response = await _client.GetAsync("aboutfeatures");
-
-            if (!response.IsSuccessStatusCode)
-                return View(new List<ResultAboutFeatureDTO>());
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var data = JsonSerializer.Deserialize<List<ResultAboutFeatureDTO>>(jsonData, _jsonOptions);
-
-            return View(data);
+            var features = await _aboutFeatureApiService.GetAllAsync();
+            return View(features);
         }
 
-        // 🔹 Detay
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var response = await _client.GetAsync($"aboutfeatures/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var feature = await _aboutFeatureApiService.GetByIdAsync(id);
+            if (feature == null)
                 return RedirectToAction("Index");
 
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var aboutFeature = JsonSerializer.Deserialize<ResultAboutFeatureDTO>(jsonData, _jsonOptions);
-
-            return View(aboutFeature);
+            return View(feature);
         }
 
-        // 🔹 Ekleme (GET)
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            await LoadDropdownsAsync();
+            await LoadAboutDropdownAsync();
             return View();
         }
 
-        // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateAboutFeatureDTO dto)
         {
             if (!ModelState.IsValid)
             {
-                await LoadDropdownsAsync();
+                await LoadAboutDropdownAsync();
                 return View(dto);
             }
 
-            var jsonContent = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
-
-            var response = await _client.PostAsync("aboutfeatures", jsonContent);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _aboutFeatureApiService.CreateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
-            ModelState.AddModelError("", "AboutFeature could not be created.");
-
-            await LoadDropdownsAsync();
+            ModelState.AddModelError("", "Özellik eklenemedi.");
+            await LoadAboutDropdownAsync();
             return View(dto);
         }
 
-        // 🔹 Güncelleme (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _client.GetAsync($"aboutfeatures/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var feature = await _aboutFeatureApiService.GetByIdAsync(id);
+            if (feature == null)
                 return RedirectToAction("Index");
 
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var aboutFeature = JsonSerializer.Deserialize<UpdateAboutFeatureDTO>(jsonData, _jsonOptions);
+            await LoadAboutDropdownAsync(feature.AboutID);
 
-            if (aboutFeature == null)
-                return RedirectToAction("Index");
+            var updateDto = new UpdateAboutFeatureDTO
+            {
+                AboutFeatureID = feature.AboutFeatureID,
+                IconClass = feature.IconClass,
+                Text = feature.Text,
+                AboutID = feature.AboutID
+            };
 
-            await LoadDropdownsAsync();
-            return View(aboutFeature);
+            return View(updateDto);
         }
 
-        // 🔹 Güncelleme (POST)
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateAboutFeatureDTO dto)
         {
             if (!ModelState.IsValid)
             {
-                await LoadDropdownsAsync();
+                await LoadAboutDropdownAsync(dto.AboutID);
                 return View(dto);
             }
 
-            var jsonContent = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
-
-            var response = await _client.PutAsync("aboutfeatures", jsonContent);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _aboutFeatureApiService.UpdateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
-            ModelState.AddModelError("", "AboutFeature could not be updated.");
-
-            await LoadDropdownsAsync();
+            ModelState.AddModelError("", "Özellik güncellenemedi.");
+            await LoadAboutDropdownAsync(dto.AboutID);
             return View(dto);
         }
 
-        // 🔹 Silme
-        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _client.DeleteAsync($"aboutfeatures/{id}");
+            var result = await _aboutFeatureApiService.DeleteAsync(id);
+            if (!result)
+                TempData["Error"] = "Silme işlemi başarısız.";
 
-            if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            TempData["Error"] = "AboutFeature could not be deleted.";
             return RedirectToAction("Index");
-        }
-
-        // 🔹 Dropdownları yükleyen yardımcı metot
-        private async Task LoadDropdownsAsync()
-        {
-            ViewBag.Abouts = await DropdownHelper.GetDropdownItemsAsync<ResultAboutDTO>(
-                _client,
-                "abouts",
-                a => a.Title!,
-                a => a.AboutID.ToString());
         }
     }
 }

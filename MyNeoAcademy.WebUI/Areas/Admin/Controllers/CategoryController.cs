@@ -3,6 +3,7 @@ using MyNeoAcademy.Application.DTOs;
 using System.Text.Json;
 using System.Text;
 using System.Net.Http;
+using MyNeoAcademy.WebUI.ApiServices.Abstract;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
@@ -10,126 +11,79 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]/{id?}")]
     public class CategoryController : Controller
     {
-        private readonly HttpClient _client;
-        private readonly JsonSerializerOptions _jsonOptions;
+        private readonly ICategoryApiService _categoryApiService;
 
-        public CategoryController(IHttpClientFactory httpClientFactory)
+        public CategoryController(ICategoryApiService categoryApiService)
         {
-            _client = httpClientFactory.CreateClient("MyApiClient");
-
-            _jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _categoryApiService = categoryApiService;
         }
 
-        // 🔹 Listeleme
         public async Task<IActionResult> Index()
         {
-            var response = await _client.GetAsync("categories");
-
-            if (!response.IsSuccessStatusCode)
-                return View(new List<ResultCategoryDTO>());
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var data = JsonSerializer.Deserialize<List<ResultCategoryDTO>>(jsonData, _jsonOptions);
-
+            var data = await _categoryApiService.GetAllAsync();
             return View(data);
         }
 
-        // 🔹 Detay
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var response = await _client.GetAsync($"categories/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var result = await _categoryApiService.GetByIdAsync(id);
+            if (result == null)
                 return RedirectToAction("Index");
 
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var category = JsonSerializer.Deserialize<ResultCategoryDTO>(jsonData, _jsonOptions);
-
-            return View(category);
+            return View(result);
         }
 
-        // 🔹 Ekleme (GET)
         [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
-        // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateCategoryDTO dto)
         {
-            var json = JsonSerializer.Serialize(dto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _client.PostAsync("categories", content);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _categoryApiService.CreateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Kategori eklenemedi.");
             return View(dto);
         }
 
-        // 🔹 Güncelleme (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _client.GetAsync($"categories/{id}");
-
-            if (!response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var category = JsonSerializer.Deserialize<ResultCategoryDTO>(jsonData, _jsonOptions);
-
-            if (category == null)
+            var result = await _categoryApiService.GetByIdAsync(id);
+            if (result == null)
                 return RedirectToAction("Index");
 
             var dto = new UpdateCategoryDTO
             {
-                CategoryID = category.CategoryID,
-                Name = category.Name,
-                Description = category.Description,
-                IconClass = category.IconClass
+                CategoryID = result.CategoryID,
+                Name = result.Name,
+                Description = result.Description,
+                IconClass = result.IconClass
             };
 
             return View(dto);
         }
 
-        // 🔹 Güncelleme (POST)
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateCategoryDTO dto)
         {
-            var json = JsonSerializer.Serialize(dto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _client.PutAsync("categories", content);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _categoryApiService.UpdateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Kategori güncellenemedi.");
             return View(dto);
         }
 
-        // 🔹 Silme
-        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _client.DeleteAsync($"categories/{id}");
+            var result = await _categoryApiService.DeleteAsync(id);
+            if (!result)
+                TempData["Error"] = "Silme işlemi başarısız.";
 
-            if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            TempData["Error"] = "Kategori silinemedi.";
             return RedirectToAction("Index");
         }
-
     }
 
 }

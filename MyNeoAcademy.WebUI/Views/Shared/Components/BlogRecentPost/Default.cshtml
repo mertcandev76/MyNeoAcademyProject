@@ -1,8 +1,8 @@
-﻿@*
-ResultBlogDTO
+﻿@model List<ResultBlogDTO>
+
 <aside class="single_sidebar_widget popular_post_widget">
     <h3 class="widget_title" style="color: #2d2d2d;">Recent Post</h3>
-    @foreach (var recent in recentPosts)
+    @foreach (var recent in Model)
     {
         <div class="media post_item">
             <img src="@recent.ImageUrl" alt="post">
@@ -14,4 +14,4 @@ ResultBlogDTO
             </div>
         </div>
     }
-</aside>*@
+</aside>

@@ -17,20 +17,20 @@ namespace MyNeoAcademy.Entity.Entities
 
         public string? ImageUrl { get; set; }
 
-        public int Rating { get; set; } // 0-5 arası yıldız
+        public int Rating { get; set; } 
         public int ReviewCount { get; set; }
 
         public int StudentCount { get; set; }
 
         public int LikeCount { get; set; }
 
-        public decimal? Price { get; set; } // Null ise "Free" yazılır
+        public decimal? Price { get; set; } 
 
-        // İlişkiler
+
         public int? CategoryID { get; set; }
         public Category? Category { get; set; }
-        public int? InstructorID { get; set; }       // Burada nullable yaptım, isteğe bağlı olabilir
-        public Instructor? Instructor { get; set; } // Navigasyon property
+        public int? InstructorID { get; set; }       
+        public Instructor? Instructor { get; set; } 
 
 
 

@@ -20,8 +20,8 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWJvdXRGZWF0dXJlXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/AboutFeature/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWJvdXRGZWF0dXJlXERldGFpbHMuY3NodG1s
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/AboutFeature/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWJvdXRGZWF0dXJlXERldGFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/AboutFeature/Edit.cshtml]
@@ -36,8 +36,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWJvdXRcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/About/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWJvdXRcRGV0YWlscy5jc2h0bWw=
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/About/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWJvdXRcRGV0YWlsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/About/Edit.cshtml]
@@ -52,8 +52,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXV0aG9yXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Author/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXV0aG9yXERldGFpbHMuY3NodG1s
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Author/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXV0aG9yXERldGFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Author/Edit.cshtml]
@@ -68,8 +68,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQmxvZ1RhZ1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/BlogTag/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQmxvZ1RhZ1xEZXRhaWxzLmNzaHRtbA==
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/BlogTag/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQmxvZ1RhZ1xEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/BlogTag/Edit.cshtml]
@@ -84,8 +84,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQmxvZ1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Blog/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQmxvZ1xEZXRhaWxzLmNzaHRtbA==
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Blog/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQmxvZ1xEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Blog/Edit.cshtml]
@@ -100,8 +100,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ2F0ZWdvcnlcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Category/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ2F0ZWdvcnlcRGV0YWlscy5jc2h0bWw=
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Category/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ2F0ZWdvcnlcRGV0YWlsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Category/Edit.cshtml]
@@ -116,8 +116,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ29tbWVudFxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Comment/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ29tbWVudFxEZXRhaWxzLmNzaHRtbA==
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Comment/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ29tbWVudFxEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Comment/Edit.cshtml]
@@ -132,8 +132,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ291cnNlXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Course/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ291cnNlXERldGFpbHMuY3NodG1s
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Course/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ291cnNlXERldGFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Course/Edit.cshtml]
@@ -148,8 +148,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcSW5zdHJ1Y3RvclxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Instructor/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcSW5zdHJ1Y3RvclxEZXRhaWxzLmNzaHRtbA==
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Instructor/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcSW5zdHJ1Y3RvclxEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Instructor/Edit.cshtml]
@@ -164,8 +164,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcTmV3c2xldHRlclxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Newsletter/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcTmV3c2xldHRlclxEZXRhaWxzLmNzaHRtbA==
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Newsletter/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcTmV3c2xldHRlclxEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Newsletter/Edit.cshtml]
@@ -204,12 +204,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXF9BZG1pbkxheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Shared/_DeleteModalPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXF9EZWxldGVNb2RhbFBhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Slider/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2xpZGVyXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Slider/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2xpZGVyXERldGFpbHMuY3NodG1s
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Slider/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2xpZGVyXERldGFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Slider/Edit.cshtml]
@@ -224,8 +228,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGFnXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Tag/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGFnXERldGFpbHMuY3NodG1s
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Tag/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGFnXERldGFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Tag/Edit.cshtml]
@@ -240,8 +244,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGVzdGltb25pYWxcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Testimonial/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGVzdGltb25pYWxcRGV0YWlscy5jc2h0bWw=
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Testimonial/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGVzdGltb25pYWxcRGV0YWlsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Testimonial/Edit.cshtml]
@@ -334,10 +338,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Views/Shared/Components/HomeSlider/Default.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcSG9tZVNsaWRlclxEZWZhdWx0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Views/Shared/Components/HomeStatistic/Default.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcSG9tZVN0YXRpc3RpY1xEZWZhdWx0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Views/Shared/Components/HomeTestimonial/Default.cshtml]

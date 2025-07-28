@@ -16,11 +16,19 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
         }
 
-        public async Task<Author?> GetAllWithBlogAsync(int id)
+
+        public async Task<List<Author>> GetAllWithIncludesAsync()
         {
             return await Table
-                .Include(a => a.Blogs)
-                .FirstOrDefaultAsync(a => a.AuthorID == id);
+             .Include(a => a.Blogs)
+             .ToListAsync();
+        }
+
+        public async Task<Author?> GetByIdWithIncludesAsync(int id)
+        {
+            return await Table
+             .Include(a => a.Blogs)
+             .FirstOrDefaultAsync(a => a.AuthorID == id);
         }
     }
 }

@@ -29,17 +29,17 @@
                 <div class="mb-3">
                     <label asp-for="AboutID" class="form-label">Bağlı Olduğu About</label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bg-light text-secondary">
-                                <i class="fas fa-info-circle"></i>
-                            </span>
-                        </div>
-                        <select asp-for="AboutID" asp-items="(IEnumerable<SelectListItem>)ViewBag.Abouts" class="form-control">
+                        <span class="input-group-text bg-light text-secondary">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        <select asp-for="AboutID" asp-items="(IEnumerable<SelectListItem>)ViewBag.AboutList" class="form-control">
                             <option disabled selected hidden>-- Hakkında seçin --</option>
                         </select>
                     </div>
                     <span asp-validation-for="AboutID" class="text-danger small"></span>
                 </div>
+
+
 
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-success">Kaydet</button>

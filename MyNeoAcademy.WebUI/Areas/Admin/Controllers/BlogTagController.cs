@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Application.DTOs;
+using MyNeoAcademy.WebUI.ApiServices.Abstract;
 using MyNeoAcademy.WebUI.Helpers;
 using System.Text.Json;
 
@@ -9,136 +10,104 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]/{id?}")]
     public class BlogTagController : Controller
     {
-        private readonly HttpClient _client;
-        private readonly JsonSerializerOptions _jsonOptions;
+        private readonly IBlogTagApiService _blogTagApiService;
 
-        public BlogTagController(IHttpClientFactory httpClientFactory)
+
+        private readonly IBlogApiService _blogApiService;
+        private readonly ITagApiService _tagApiService;
+
+        public BlogTagController(
+            IBlogTagApiService blogTagApiService,
+            IBlogApiService blogApiService,
+            ITagApiService tagApiService)
         {
-            _client = httpClientFactory.CreateClient("MyApiClient");
-            _jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _blogTagApiService = blogTagApiService;
+            _blogApiService = blogApiService;
+            _tagApiService = tagApiService;
         }
 
-        // 🔹 Listeleme
         public async Task<IActionResult> Index()
         {
-            var response = await _client.GetAsync("blogtags");
-
-            if (!response.IsSuccessStatusCode)
-                return View(new List<ResultBlogTagDTO>());
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var data = JsonSerializer.Deserialize<List<ResultBlogTagDTO>>(jsonData, _jsonOptions);
-
+            var data = await _blogTagApiService.GetAllAsync();
             return View(data);
         }
 
-        // 🔹 Detay
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var response = await _client.GetAsync($"blogtags/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var result = await _blogTagApiService.GetByIdAsync(id);
+            if (result == null)
                 return RedirectToAction("Index");
 
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var data = JsonSerializer.Deserialize<ResultBlogTagDTO>(jsonData, _jsonOptions);
-
-            return View(data);
+            return View(result);
         }
 
-        // 🔹 Ekleme (GET)
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            await LoadDropdownsAsync();
+            ViewBag.Blogs = await _blogApiService.GetDropdownItemsAsync();
+            ViewBag.Tags = await _tagApiService.GetDropdownItemsAsync();
+
             return View();
         }
 
-        // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateBlogTagDTO dto)
         {
-            var response = await _client.PostAsJsonAsync("blogtags", dto);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _blogTagApiService.CreateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
-            ModelState.AddModelError("", "Eşleştirme yapılamadı.");
-            await LoadDropdownsAsync();
+            ModelState.AddModelError("", "Blog-Etiket eklenemedi.");
+
+
+            ViewBag.Blogs = await _blogApiService.GetDropdownItemsAsync();
+            ViewBag.Tags = await _tagApiService.GetDropdownItemsAsync();
+
             return View(dto);
         }
 
-        // 🔹 Güncelleme (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _client.GetAsync($"blogtags/{id}");
-
-            if (!response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<ResultBlogTagDTO>(jsonData, _jsonOptions);
-
+            var result = await _blogTagApiService.GetByIdAsync(id);
             if (result == null)
                 return RedirectToAction("Index");
 
             var dto = new UpdateBlogTagDTO
             {
                 BlogTagID = result.BlogTagID,
-                BlogID = result.BlogID,
-                TagID = result.TagID
+                BlogID = result.Blog.BlogID,
+                TagID = result.Tag.TagID
             };
 
-            await LoadDropdownsAsync();
+            ViewBag.Blogs = await _blogApiService.GetDropdownItemsAsync();
+            ViewBag.Tags = await _tagApiService.GetDropdownItemsAsync();
+
             return View(dto);
         }
 
-        // 🔹 Güncelleme (POST)
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateBlogTagDTO dto)
         {
-            var response = await _client.PutAsJsonAsync("blogtags", dto);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _blogTagApiService.UpdateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
-            ModelState.AddModelError("", "Güncelleme başarısız.");
-            await LoadDropdownsAsync();
+            ModelState.AddModelError("", "Blog-Etiket güncellenemedi.");
+
+            ViewBag.Blogs = await _blogApiService.GetDropdownItemsAsync();
+            ViewBag.Tags = await _tagApiService.GetDropdownItemsAsync();
+
             return View(dto);
         }
 
-        // 🔹 Silme
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _client.DeleteAsync($"blogtags/{id}");
+            var result = await _blogTagApiService.DeleteAsync(id);
+            if (!result)
+                TempData["Error"] = "Silme işlemi başarısız.";
 
-            if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            TempData["Error"] = "Silme işlemi başarısız.";
             return RedirectToAction("Index");
-        }
-
-        // 🔹 Dropdownları yükleyen yardımcı metot
-        private async Task LoadDropdownsAsync()
-        {
-            ViewBag.Blogs = await DropdownHelper.GetDropdownItemsAsync<ResultBlogDTO>(
-                _client,
-                "blogs",
-                b => b.Title!,
-                b => b.BlogID.ToString()
-            );
-
-            ViewBag.Tags = await DropdownHelper.GetDropdownItemsAsync<ResultTagDTO>(
-                _client,
-                "tags",
-                t => t.Name!,
-                t => t.TagID.ToString()
-            );
         }
     }
 }

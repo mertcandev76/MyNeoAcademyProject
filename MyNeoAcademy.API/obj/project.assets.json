@@ -1781,6 +1781,19 @@
         "runtime": {
           "bin/placeholder/MyNeoAcademy.Entity.dll": {}
         }
+      },
+      "MyNeoAcademy.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "MyNeoAcademy.Application": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MyNeoAcademy.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MyNeoAcademy.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -4658,6 +4671,11 @@
       "type": "project",
       "path": "../MyNeoAcademy.Entity/MyNeoAcademy.Entity.csproj",
       "msbuildProject": "../MyNeoAcademy.Entity/MyNeoAcademy.Entity.csproj"
+    },
+    "MyNeoAcademy.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../MyNeoAcademy.Infrastructure/MyNeoAcademy.Infrastructure.csproj",
+      "msbuildProject": "../MyNeoAcademy.Infrastructure/MyNeoAcademy.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -4674,6 +4692,7 @@
       "Microsoft.Extensions.Hosting >= 7.0.0",
       "MyNeoAcademy.Application >= 1.0.0",
       "MyNeoAcademy.Business >= 1.0.0",
+      "MyNeoAcademy.Infrastructure >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.4.0"
     ]
   },
@@ -4715,6 +4734,9 @@
             },
             "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Business\\MyNeoAcademy.Business.csproj": {
               "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Business\\MyNeoAcademy.Business.csproj"
+            },
+            "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Infrastructure\\MyNeoAcademy.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Infrastructure\\MyNeoAcademy.Infrastructure.csproj"
             }
           }
         }

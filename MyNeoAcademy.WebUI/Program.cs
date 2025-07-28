@@ -1,62 +1,57 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
-using MyNeoAcademy.Application.Validators;
+﻿    using FluentValidation;
+    using FluentValidation.AspNetCore;
+    using MyNeoAcademy.Application.Validators;
+    using MyNeoAcademy.WebUI.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
-
-
-// Add FluentValidation servislerini IServiceCollection'a ekle
-builder.Services.AddFluentValidationAutoValidation();  // ModelState otomatik dolar
-builder.Services.AddFluentValidationClientsideAdapters();// Client-side validasyon için
-builder.Services.AddValidatorsFromAssemblyContaining<CreateSliderValidator>();// Validator sınıflarını tarat
+    var builder = WebApplication.CreateBuilder(args);
 
 
-
-// MVC servislerini ekle (burada sadece AddControllersWithViews çağrılır)
-builder.Services.AddControllersWithViews();
+    // Add FluentValidation servislerini IServiceCollection'a ekle
+    builder.Services.AddFluentValidationAutoValidation();  // ModelState otomatik dolar
+    builder.Services.AddFluentValidationClientsideAdapters();// Client-side validasyon için
+    builder.Services.AddValidatorsFromAssemblyContaining<CreateSliderValidator>();// Validator sınıflarını tarat
 
 
 
+    // MVC servislerini ekle (burada sadece AddControllersWithViews çağrılır)
 
-// 🔽 HttpClient servisi — API ile iletişim için
-builder.Services.AddHttpClient("MyApiClient", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7230/api/");
-    // İsteğe bağlı olarak default header vs. eklenebilir
-    // client.DefaultRequestHeaders.Add("Accept", "application/json");
-});
 
-// ------------------------------
-// UYGULAMA PIPELINE'I
-// ------------------------------
-var app = builder.Build();
+    builder.Services.AddApiServices("https://localhost:7230/api/");
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts(); // Üretimde güvenlik için
-}
+    builder.Services.AddControllersWithViews();
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
 
-app.UseRouting();
+    // ------------------------------
+    // UYGULAMA PIPELINE'I
+    // ------------------------------
+    var app = builder.Build();
 
-app.UseAuthorization();
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts(); // Üretimde güvenlik için
+    }
 
-// 🔽 Varsayılan route
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
 
-// 🔽 Areas desteği
-app.MapControllerRoute(
-    name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    app.UseRouting();
 
-app.MapControllerRoute(
-    name: "blogdetail",
-    pattern: "Blog/Detail/{id?}",
-    defaults: new { controller = "BlogDetail", action = "Detail" });
+    app.UseAuthorization();
 
-app.Run();
+    // 🔽 Varsayılan route
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    // 🔽 Areas desteği
+    app.MapControllerRoute(
+        name: "areas",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+    app.MapControllerRoute(
+        name: "blogdetail",
+        pattern: "Blog/Detail/{id?}",
+        defaults: new { controller = "BlogDetail", action = "Detail" });
+
+    app.Run();

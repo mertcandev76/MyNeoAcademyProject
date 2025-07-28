@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeoAcademy.Business", "My
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeoAcademy.WebUI", "MyNeoAcademy.WebUI\MyNeoAcademy.WebUI.csproj", "{4FDBC244-8B74-4490-AF48-AC9BAC4BC399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNeoAcademy.Application", "MyNeoAcademy.Application\MyNeoAcademy.Application.csproj", "{F47E77B1-8DCB-4D33-A976-8ACCD9840240}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeoAcademy.Application", "MyNeoAcademy.Application\MyNeoAcademy.Application.csproj", "{F47E77B1-8DCB-4D33-A976-8ACCD9840240}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNeoAcademy.Infrastructure", "MyNeoAcademy.Infrastructure\MyNeoAcademy.Infrastructure.csproj", "{B31153A0-ED87-45E5-BE6B-3ABA4D4CF364}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{F47E77B1-8DCB-4D33-A976-8ACCD9840240}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F47E77B1-8DCB-4D33-A976-8ACCD9840240}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F47E77B1-8DCB-4D33-A976-8ACCD9840240}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B31153A0-ED87-45E5-BE6B-3ABA4D4CF364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B31153A0-ED87-45E5-BE6B-3ABA4D4CF364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B31153A0-ED87-45E5-BE6B-3ABA4D4CF364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B31153A0-ED87-45E5-BE6B-3ABA4D4CF364}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

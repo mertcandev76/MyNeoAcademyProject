@@ -12,7 +12,7 @@ namespace MyNeoAcademy.DataAccess.Abstract
         Task<List<BlogTag>> GetAllWithIncludesAsync();
         Task<BlogTag?> GetByIdWithIncludesAsync(int id);
 
-        //Veritabanında belirttiğim BlogID ve TagID ilişkisi var mı?
+
         Task<bool> ExistsAsync(int blogId, int tagId);
     }
 }

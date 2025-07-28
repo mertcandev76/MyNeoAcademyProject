@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
@@ -14,78 +13,95 @@ namespace MyNeoAcademy.API.Controllers
     public class BlogsController : ControllerBase
     {
         private readonly IBlogService _blogService;
-        private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _env;
 
-        public BlogsController(IBlogService blogService, IMapper mapper, IWebHostEnvironment env)
+        public BlogsController(IBlogService blogService, IWebHostEnvironment env)
         {
             _blogService = blogService;
-            _mapper = mapper;
             _env = env;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var list = await _blogService.GetAllWithIncludesAsync();
-            var dtoList = _mapper.Map<List<ResultBlogDTO>>(list);
-            return Ok(dtoList);
+            try
+            {
+                var blogs = await _blogService.GetAllWithIncludesAsync();
+                return Ok(blogs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var entity = await _blogService.GetByIdWithIncludesAsync(id);
-            if (entity == null) return NotFound("Blog bulunamadı.");
-            var dto = _mapper.Map<ResultBlogDTO>(entity);
-            return Ok(dto);
+            try
+            {
+                var blog = await _blogService.GetByIdWithIncludesAsync(id);
+                if (blog == null)
+                    return NotFound("Blog bulunamadı.");
+
+                return Ok(blog);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] CreateBlogWithFileDTO dto)
+        public async Task<IActionResult> Post([FromForm] CreateBlogWithFileDTO dto)
         {
-            if (dto.ImageFile == null)
-                return BadRequest("Bir görsel dosyası seçilmelidir.");
-
-            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/blogs");
-            var entity = _mapper.Map<Blog>(dto);
-            entity.ImageUrl = imagePath;
-
-            await _blogService.CreateAsync(entity);
-            return CreatedAtAction(nameof(Detail), new { id = entity.BlogID }, "Yeni blog eklendi.");
+            try
+            {
+                await _blogService.CreateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Yeni blog kaydı oluşturuldu.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ekleme hatası: {ex.Message}");
+            }
         }
 
         [HttpPut]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update([FromForm] UpdateBlogWithFileDTO dto)
+        public async Task<IActionResult> Put([FromForm] UpdateBlogWithFileDTO dto)
         {
-            var entity = await _blogService.GetByIdAsync(dto.BlogID);
-            if (entity == null)
-                return NotFound("Blog bulunamadı.");
-
-            _mapper.Map(dto, entity);
-
-            if (dto.ImageFile != null)
+            try
             {
-                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/blogs");
-                entity.ImageUrl = imagePath;
+                await _blogService.UpdateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Blog başarıyla güncellendi.");
             }
-
-            await _blogService.UpdateAsync(entity);
-            return Ok("Blog güncellendi.");
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var entity = await _blogService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound("Blog bulunamadı.");
+            try
+            {
+                var deleted = await _blogService.DeleteByIdAsync(id);
+                if (!deleted)
+                    return NotFound("Blog bulunamadı.");
 
-            await _blogService.DeleteAsync(entity);
-            return Ok("Blog silindi.");
+                return Ok("Blog başarıyla silindi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme hatası: {ex.Message}");
+            }
         }
-
     }
+
 }

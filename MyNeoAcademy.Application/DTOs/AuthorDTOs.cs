@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MyNeoAcademy.Application.Common;
+using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.DTOs
@@ -33,12 +36,23 @@ namespace MyNeoAcademy.Application.DTOs
 
 
     }
-    public class UpdateAuthorDTO : CreateAuthorDTO
+    public class UpdateAuthorDTO : CreateAuthorDTO, IHasId
     {
         public int AuthorID { get; set; }
+        [JsonIgnore]
+        public int Id
+        {
+            get => AuthorID;
+            set => AuthorID = value;
+        }
     }
-    public class UpdateAuthorWithFileDTO : CreateAuthorWithFileDTO
+    public class UpdateAuthorWithFileDTO : CreateAuthorWithFileDTO, IHasId
     {
         public int AuthorID { get; set; }
+        public int Id
+        {
+            get => AuthorID;
+            set => AuthorID = value;
+        }
     }
 }

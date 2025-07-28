@@ -4,6 +4,7 @@ using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.WebUI.Helpers;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MyNeoAcademy.WebUI.ApiServices.Abstract;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
@@ -11,49 +12,35 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]/{id?}")]
     public class CourseController : Controller
     {
-        private readonly HttpClient _client;
-        private readonly JsonSerializerOptions _jsonOptions;
+        private readonly ICourseApiService _courseApiService;
+        private readonly ICategoryApiService _categoryApiService;
+        private readonly IInstructorApiService _instructorApiService;
 
-        public CourseController(IHttpClientFactory httpClientFactory)
+        public CourseController(
+            ICourseApiService courseApiService,
+            ICategoryApiService categoryApiService,
+            IInstructorApiService instructorApiService)
         {
-            _client = httpClientFactory.CreateClient("MyApiClient");
-
-            _jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _courseApiService = courseApiService;
+            _categoryApiService = categoryApiService;
+            _instructorApiService = instructorApiService;
         }
 
-        // 🔹 Listeleme
         public async Task<IActionResult> Index()
         {
-            var response = await _client.GetAsync("courses");
-
-            if (!response.IsSuccessStatusCode)
-                return View(new List<ResultCourseDTO>());
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var data = JsonSerializer.Deserialize<List<ResultCourseDTO>>(jsonData, _jsonOptions);
-
+            var data = await _courseApiService.GetAllAsync();
             return View(data);
         }
 
-        // 🔹 Detay
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var response = await _client.GetAsync($"courses/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var result = await _courseApiService.GetByIdAsync(id);
+            if (result == null)
                 return RedirectToAction("Index");
 
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var course = JsonSerializer.Deserialize<ResultCourseDTO>(jsonData, _jsonOptions);
-
-            return View(course);
+            return View(result);
         }
 
-        // 🔹 Ekleme (GET)
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -61,145 +48,83 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             return View();
         }
 
-
-        // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateCourseWithFileDTO dto)
         {
-            var formData = new MultipartFormDataContent
-    {
-        { new StringContent(dto.Title ?? ""), "Title" },
-        { new StringContent(dto.Description ?? ""), "Description" },
-        { new StringContent(dto.Rating.ToString()), "Rating" },
-        { new StringContent(dto.ReviewCount.ToString()), "ReviewCount" },
-        { new StringContent(dto.StudentCount.ToString()), "StudentCount" },
-        { new StringContent(dto.LikeCount.ToString()), "LikeCount" },
-        { new StringContent(dto.Price?.ToString() ?? "0"), "Price" },
-        { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" },
-        { new StringContent(dto.InstructorID?.ToString() ?? ""), "InstructorID" },
-    };
-
-            if (dto.ImageFile != null)
+            if (!ModelState.IsValid)
             {
-                var streamContent = new StreamContent(dto.ImageFile.OpenReadStream());
-                streamContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageFile.ContentType);
-                formData.Add(streamContent, "ImageFile", dto.ImageFile.FileName);
+                await LoadDropdownsAsync();
+                return View(dto);
             }
 
-            var response = await _client.PostAsync("courses", formData);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _courseApiService.CreateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
-            ModelState.AddModelError("", "Course could not be created.");
+            ModelState.AddModelError("", "Kurs eklenemedi.");
             await LoadDropdownsAsync();
             return View(dto);
         }
 
-
-        // 🔹 Güncelleme (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _client.GetAsync($"courses/{id}");
-
-            if (!response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var course = JsonSerializer.Deserialize<ResultCourseDTO>(jsonData, _jsonOptions);
-
-            if (course == null)
+            var result = await _courseApiService.GetByIdAsync(id);
+            if (result == null)
                 return RedirectToAction("Index");
 
             var dto = new UpdateCourseWithFileDTO
             {
-                CourseID = course.CourseID,
-                Title = course.Title,
-                Description = course.Description,
-                Rating = course.Rating,
-                ReviewCount = course.ReviewCount,
-                StudentCount = course.StudentCount,
-                LikeCount = course.LikeCount,
-                Price = course.Price,
-                CategoryID = course.CategoryID,
-                InstructorID = course.InstructorID,
-                ImageUrl = course.ImageUrl
+                CourseID = result.CourseID,
+                Title = result.Title,
+                Description = result.Description,
+                ImageUrl = result.ImageUrl,
+                Rating = result.Rating,
+                ReviewCount = result.ReviewCount,
+                StudentCount = result.StudentCount,
+                LikeCount = result.LikeCount,
+                Price = result.Price,
+                CategoryID = result.Category?.CategoryID,
+                InstructorID = result.Instructor?.InstructorID
             };
 
             await LoadDropdownsAsync();
             return View(dto);
         }
 
-
-        // 🔹 Güncelleme (POST)
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateCourseWithFileDTO dto)
         {
-            var formData = new MultipartFormDataContent
-    {
-        { new StringContent(dto.CourseID.ToString()), "CourseID" },
-        { new StringContent(dto.Title ?? ""), "Title" },
-        { new StringContent(dto.Description ?? ""), "Description" },
-        { new StringContent(dto.Rating.ToString()), "Rating" },
-        { new StringContent(dto.ReviewCount.ToString()), "ReviewCount" },
-        { new StringContent(dto.StudentCount.ToString()), "StudentCount" },
-        { new StringContent(dto.LikeCount.ToString()), "LikeCount" },
-        { new StringContent(dto.Price?.ToString() ?? "0"), "Price" },
-        { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" },
-        { new StringContent(dto.InstructorID?.ToString() ?? ""), "InstructorID" },
-    };
-
-            if (dto.ImageFile != null)
+            if (!ModelState.IsValid)
             {
-                var streamContent = new StreamContent(dto.ImageFile.OpenReadStream());
-                streamContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageFile.ContentType);
-                formData.Add(streamContent, "ImageFile", dto.ImageFile.FileName);
+                await LoadDropdownsAsync();
+                return View(dto);
             }
 
-            var response = await _client.PutAsync("courses", formData);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _courseApiService.UpdateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
-            ModelState.AddModelError("", "Course could not be updated.");
+            ModelState.AddModelError("", "Kurs güncellenemedi.");
             await LoadDropdownsAsync();
             return View(dto);
         }
 
-
-        // 🔹 Silme
-        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _client.DeleteAsync($"courses/{id}");
+            var result = await _courseApiService.DeleteAsync(id);
+            if (!result)
+                TempData["Error"] = "Silme işlemi başarısız.";
 
-            if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            TempData["Error"] = "Course could not be deleted.";
             return RedirectToAction("Index");
         }
-        // 🔹 Dropdownları yükleyen yardımcı metot
+
+
         private async Task LoadDropdownsAsync()
         {
-            var categories = await DropdownHelper.GetDropdownItemsAsync<ResultCategoryDTO>(
-                _client,
-                "categories",
-                c => c.Name!,
-                c => c.CategoryID.ToString());
-
-            ViewBag.Categories = categories ?? new List<SelectListItem>();
-
-            var instructors = await DropdownHelper.GetDropdownItemsAsync<ResultInstructorDTO>(
-                _client,
-                "instructors",
-                i => i.FullName,
-                i => i.InstructorID.ToString());
-
-            ViewBag.Instructors = instructors ?? new List<SelectListItem>();
+            ViewBag.Categories = await _categoryApiService.GetDropdownItemsAsync();
+            ViewBag.Instructors = await _instructorApiService.GetDropdownItemsAsync();
         }
-
     }
 }
 

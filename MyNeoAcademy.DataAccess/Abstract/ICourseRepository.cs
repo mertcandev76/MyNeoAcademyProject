@@ -9,8 +9,8 @@ namespace MyNeoAcademy.DataAccess.Abstract
 {
     public interface ICourseRepository:IRepository<Course>
     {
-        //Özel Metotlar
-        Task<List<Course>> GetAllWithCategoryAndInstructorAsync();
-        Task<Course?> GetByIdWithCategoryAndInstructorAsync(int id);
+
+        Task<List<Course>> GetAllWithIncludesAsync();
+        Task<Course?> GetByIdWithIncludesAsync(int id);
     }
 }

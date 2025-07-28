@@ -13,76 +13,89 @@ namespace MyNeoAcademy.API.Controllers
     [ApiController]
     public class NewslettersController : ControllerBase
     {
-       
-            private readonly IGenericService<Newsletter> _newsletterService;
-            private readonly IMapper _mapper;
+        private readonly INewsletterService _newsletterService;
 
-            public NewslettersController(IGenericService<Newsletter> newsletterService, IMapper mapper)
+        public NewslettersController(INewsletterService newsletterService)
+        {
+            _newsletterService = newsletterService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
             {
-                _newsletterService = newsletterService;
-                _mapper = mapper;
+                var newsletters = await _newsletterService.GetListAsync();
+                return Ok(newsletters);
             }
-
-            // GET: api/Newsletters
-            [HttpGet]
-            public async Task<IActionResult> GetAll()
+            catch (Exception ex)
             {
-                var list = await _newsletterService.GetListAsync();
-                var dtoList = _mapper.Map<List<ResultNewsletterDTO>>(list);
-                return Ok(dtoList);
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
             }
+        }
 
-            // GET: api/Newsletters/5
-            [HttpGet("{id:int}")]
-            public async Task<IActionResult> Detail(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
             {
-                var entity = await _newsletterService.GetByIdAsync(id);
-                if (entity == null)
-                    return NotFound("Newsletter not found.");
+                var newsletter = await _newsletterService.GetByIdAsync(id);
+                if (newsletter == null)
+                    return NotFound("Kayıt bulunamadı.");
 
-                var dto = _mapper.Map<ResultNewsletterDTO>(entity);
-                return Ok(dto);
+                return Ok(newsletter);
             }
-
-            // POST: api/Newsletters
-            [HttpPost]
-            public async Task<IActionResult> Create([FromBody] CreateNewsletterDTO dto)
+            catch (Exception ex)
             {
-                if (dto == null)
-                    return BadRequest("Invalid data provided.");
-
-                var entity = _mapper.Map<Newsletter>(dto);
-            // Optionally set additional properties like the subscription date if not provided
-            entity.SubscribedDate = DateTime.UtcNow;
-
-            await _newsletterService.CreateAsync(entity);
-                return CreatedAtAction(nameof(Detail), new { id = entity.NewsletterID }, "Newsletter subscription created successfully.");
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
             }
+        }
 
-            // PUT: api/Newsletters
-            [HttpPut]
-            public async Task<IActionResult> Update([FromBody] UpdateNewsletterDTO dto)
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] CreateNewsletterDTO dto)
+        {
+            try
             {
-                var entity = await _newsletterService.GetByIdAsync(dto.NewsletterID);
-                if (entity == null)
-                    return NotFound("Newsletter not found.");
-
-                _mapper.Map(dto, entity);
-                await _newsletterService.UpdateAsync(entity);
-                return Ok("Newsletter updated successfully.");
+                await _newsletterService.CreateAsync(dto);
+                return Ok("Abonelik başarıyla oluşturuldu.");
             }
-
-            // DELETE: api/Newsletters/5
-            [HttpDelete("{id:int}")]
-            public async Task<IActionResult> Delete(int id)
+            catch (Exception ex)
             {
-                var entity = await _newsletterService.GetByIdAsync(id);
-                if (entity == null)
-                    return NotFound("Newsletter not found.");
-
-                await _newsletterService.DeleteAsync(entity);
-                return Ok("Newsletter subscription deleted successfully.");
+                return StatusCode(500, $"Ekleme hatası: {ex.Message}");
             }
-        
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] UpdateNewsletterDTO dto)
+        {
+            try
+            {
+                await _newsletterService.UpdateAsync(dto);
+                return Ok("Abonelik bilgisi güncellendi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var deleted = await _newsletterService.DeleteByIdAsync(id);
+                if (!deleted)
+                    return NotFound("Kayıt bulunamadı.");
+
+                return Ok("Abonelik kaydı silindi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme hatası: {ex.Message}");
+            }
+        }
     }
+
 }
+

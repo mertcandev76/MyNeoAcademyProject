@@ -14,10 +14,10 @@ namespace MyNeoAcademy.Application.Mapping
             CreateMap<Testimonial, ResultTestimonialDTO>().ReverseMap();
 
             CreateMap<CreateTestimonialWithFileDTO, Testimonial>()
-          .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+          .ForMember(dest => dest.TestimonialID, opt => opt.Ignore());
 
-            CreateMap<UpdateTestimonialWithFileDTO, Testimonial>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+            CreateMap<UpdateTestimonialWithFileDTO, Testimonial>();
+
         }
     }
 }

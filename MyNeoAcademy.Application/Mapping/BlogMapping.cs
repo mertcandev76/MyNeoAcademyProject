@@ -9,30 +9,34 @@ namespace MyNeoAcademy.Application.Mapping
     {
         public BlogMapping()
         {
-            // Create ve Update DTO'lar
-            CreateMap<Blog, CreateBlogDTO>().ReverseMap();
+
+
+
+            CreateMap<Blog, CreateBlogDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.BlogID, opt => opt.Ignore());
+
             CreateMap<Blog, UpdateBlogDTO>().ReverseMap();
 
-            // Referans DTO'lar
             CreateMap<Category, CategoryReferenceDTO>();
             CreateMap<Author, AuthorReferenceDTO>();
             CreateMap<Comment, CommentReferenceDTO>();
             CreateMap<Tag, TagReferenceDTO>();
 
-            // Result DTO - Detay için
             CreateMap<Blog, ResultBlogDTO>()
-                .ForMember(dest => dest.BlogID, opt => opt.MapFrom(src => src.BlogID))
-                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category))
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom<BlogTagsToTagReferenceDTOResolver>());
 
-
             CreateMap<CreateBlogWithFileDTO, Blog>()
-    .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+                .ForMember(dest => dest.BlogID, opt => opt.Ignore());
 
-            CreateMap<UpdateBlogWithFileDTO, Blog>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+            CreateMap<UpdateBlogWithFileDTO, Blog>();
+
+            CreateMap<CreateBlogDTO, Blog>()
+    .ForMember(dest => dest.PublishDate, opt => opt.Ignore());
+
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
@@ -13,106 +12,126 @@ namespace MyNeoAcademy.API.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
-        private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _env;
 
-        public CommentsController(ICommentService commentService, IMapper mapper, IWebHostEnvironment env)
+        public CommentsController(ICommentService commentService, IWebHostEnvironment env)
         {
             _commentService = commentService;
-            _mapper = mapper;
             _env = env;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get()
         {
-            var list = await _commentService.GetAllWithBlogAsync();
-            var dtoList = _mapper.Map<List<ResultCommentDTO>>(list);
-            return Ok(dtoList);
+            try
+            {
+                var comments = await _commentService.GetAllWithIncludesAsync();
+                return Ok(comments);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var entity = await _commentService.GetByIdWithBlogAsync(id);
-            if (entity == null)
-                return NotFound("Yorum bulunamadı.");
+            try
+            {
+                var comment = await _commentService.GetByIdWithIncludesAsync(id);
+                if (comment == null)
+                    return NotFound("Yorum bulunamadı.");
 
-            var dto = _mapper.Map<ResultCommentDTO>(entity);
-            return Ok(dto);
+                return Ok(comment);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
-        // ** Yeni endpoint: blogId ile filtreli yorumlar **
-        [HttpGet("byblog/{blogId:int}")]
+        [HttpGet("ByBlog/{blogId:int}")]
         public async Task<IActionResult> GetByBlog(int blogId)
         {
-            var list = await _commentService.GetAllByBlogIdAsync(blogId);
-            var dtoList = _mapper.Map<List<ResultCommentDTO>>(list);
-            return Ok(dtoList);
+            try
+            {
+                var comments = await _commentService.GetByIdWithIncludesBlogAsync(blogId);
+                return Ok(comments);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
-        // Kullanıcı yorumları (resim yok)
+        //  Kullanıcı yorumları (resim yok)
         [HttpPost]
         [Route("create-user-comment")]
         public async Task<IActionResult> CreateUserComment([FromBody] CreateCommentDTO dto)
         {
-            var entity = _mapper.Map<Comment>(dto);
-            entity.CreatedDate = DateTime.Now;
-
-            await _commentService.CreateAsync(entity);
-
-            return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yorum başarıyla eklendi.");
+            try
+            {
+                await _commentService.CreateUserCommentAsync(dto);
+                return Ok("Yorum başarıyla gönderildi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Yorum ekleme hatası: {ex.Message}");
+            }
         }
-        
-        // Admin yorumları (resim zorunlu)
+
+        //  Admin yorumları (resim zorunlu)
         [HttpPost]
         [Route("create-admin-comment")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateAdminComment([FromForm] CreateCommentWithFileDTO dto)
         {
-            if (dto.ImageFile == null)
-                return BadRequest("Yorum görseli zorunludur.");
-
-            var entity = _mapper.Map<Comment>(dto);
-            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/comments");
-            entity.ImageUrl = imagePath;
-            entity.CreatedDate = DateTime.Now;
-
-            await _commentService.CreateAsync(entity);
-
-            return CreatedAtAction(nameof(Detail), new { id = entity.CommentID }, "Yorum başarıyla eklendi.");
+            try
+            {
+                await _commentService.CreateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Yönetici yorumu başarıyla eklendi.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Yorum ekleme hatası: {ex.Message}");
+            }
         }
-
 
         [HttpPut]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update([FromForm] UpdateCommentWithFileDTO dto)
+        public async Task<IActionResult> Put([FromForm] UpdateCommentWithFileDTO dto)
         {
-            var entity = await _commentService.GetByIdAsync(dto.CommentID);
-            if (entity == null)
-                return NotFound("Yorum bulunamadı.");
-
-            _mapper.Map(dto, entity);
-
-            if (dto.ImageFile != null)
+            try
             {
-                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/comments");
-                entity.ImageUrl = imagePath;
+                await _commentService.UpdateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Yorum güncellendi.");
             }
-
-            await _commentService.UpdateAsync(entity);
-            return Ok("Yorum güncellendi.");
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var entity = await _commentService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound("Yorum bulunamadı.");
+            try
+            {
+                var deleted = await _commentService.DeleteByIdAsync(id);
+                if (!deleted)
+                    return NotFound("Yorum bulunamadı.");
 
-            await _commentService.DeleteAsync(entity);
-            return Ok("Yorum silindi.");
+                return Ok("Yorum başarıyla silindi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme hatası: {ex.Message}");
+            }
         }
     }
 }

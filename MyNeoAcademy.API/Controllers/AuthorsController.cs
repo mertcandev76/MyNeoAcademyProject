@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyNeoAcademy.API.Utilities;
 using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
@@ -13,80 +12,94 @@ namespace MyNeoAcademy.API.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorService _authorService;
-        private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _env;
 
-        public AuthorsController(IAuthorService authorService, IMapper mapper, IWebHostEnvironment env)
+        public AuthorsController(IAuthorService authorService, IWebHostEnvironment env)
         {
             _authorService = authorService;
-            _mapper = mapper;
             _env = env;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get()
         {
-            var list = await _authorService.GetListAsync();
-            var dtoList = _mapper.Map<List<ResultAuthorDTO>>(list);
-            return Ok(dtoList);
+            try
+            {
+                var authors = await _authorService.GetAllWithIncludesAsync();
+                return Ok(authors);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var entity = await _authorService.GetAllWithBlogAsync(id);
-            if (entity == null)
-                return NotFound("Yazar bulunamadı.");
+            try
+            {
+                var author = await _authorService.GetByIdWithIncludesAsync(id);
+                if (author == null)
+                    return NotFound("Yazar bulunamadı.");
 
-            var dto = _mapper.Map<ResultAuthorDTO>(entity);
-            return Ok(dto);
+                return Ok(author);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] CreateAuthorWithFileDTO dto)
+        public async Task<IActionResult> Post([FromForm] CreateAuthorWithFileDTO dto)
         {
-            if (dto.ImageFile == null)
-                return BadRequest("Profil resmi zorunludur.");
-
-            string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/authors");
-            var entity = _mapper.Map<Author>(dto);
-            entity.ImageUrl = imagePath;
-
-            await _authorService.CreateAsync(entity);
-            return CreatedAtAction(nameof(Detail), new { id = entity.AuthorID }, "Yeni yazar eklendi.");
+            try
+            {
+                await _authorService.CreateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Yeni yazar kaydı oluşturuldu.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ekleme hatası: {ex.Message}");
+            }
         }
 
         [HttpPut]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update([FromForm] UpdateAuthorWithFileDTO dto)
+        public async Task<IActionResult> Put([FromForm] UpdateAuthorWithFileDTO dto)
         {
-            var entity = await _authorService.GetByIdAsync(dto.AuthorID);
-            if (entity == null)
-                return NotFound("Yazar bulunamadı.");
-
-
-            _mapper.Map(dto, entity);
-
-            if (dto.ImageFile != null)
+            try
             {
-                string imagePath = await FileHelper.SaveFileAsync(dto.ImageFile, _env.WebRootPath, "img/authors");
-                entity.ImageUrl = imagePath;
+                await _authorService.UpdateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Yazar güncellendi.");
             }
-
-            await _authorService.UpdateAsync(entity);
-            return Ok("Yazar güncellendi.");
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var entity = await _authorService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound("Yazar bulunamadı.");
+            try
+            {
+                var deleted = await _authorService.DeleteByIdAsync(id);
+                if (!deleted)
+                    return NotFound("Yazar bulunamadı.");
 
-            await _authorService.DeleteAsync(entity);
-            return Ok("Yazar silindi.");
+                return Ok("Yazar başarıyla silindi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme hatası: {ex.Message}");
+            }
         }
     }
 }

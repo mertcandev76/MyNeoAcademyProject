@@ -1,8 +1,14 @@
-﻿@*<aside class="single_sidebar_widget search_widget">
-    <form asp-action="Search" asp-controller="Blog" method="get">
+﻿@*@model List<ResultBlogDTO>
+@{
+    string query = Context.Request.Query["query"].FirstOrDefault() ?? "";
+}
+
+<aside class="single_sidebar_widget search_widget">
+    <form asp-action="Index" asp-controller="Blog" method="get">
         <div class="form-group">
             <div class="input-group mb-3">
                 <input name="query" type="text" class="form-control" placeholder="Search Keyword"
+                       value="@query"
                        onfocus="this.placeholder = ''"
                        onblur="this.placeholder = 'Search Keyword'">
                 <div class="input-group-append">
@@ -11,4 +17,22 @@
             </div>
         </div>
     </form>
-</aside>*@
+</aside>
+
+@if (Model != null && Model.Any())
+{
+    <div class="search_results mt-4">
+        <h5>Arama Sonuçları:</h5>
+        <ul class="list-group">
+            @foreach (var blog in Model)
+            {
+                <li class="list-group-item">
+                    <a asp-controller="Blog" asp-action="Detail" asp-route-id="@blog.BlogID">
+                        @blog.Title
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+*@

@@ -1,8 +1,10 @@
-﻿using MyNeoAcademy.Entity.Entities;
+﻿using MyNeoAcademy.Application.Common;
+using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.DTOs
@@ -27,8 +29,15 @@ namespace MyNeoAcademy.Application.DTOs
 
         public AboutReferenceDTO? About { get; set; }
     }
-    public class UpdateAboutFeatureDTO : CreateAboutFeatureDTO
+    public class UpdateAboutFeatureDTO : CreateAboutFeatureDTO,IHasId
     {
         public int AboutFeatureID { get; set; }
+
+        [JsonIgnore]
+        public int Id
+        {
+            get => AboutFeatureID;
+            set => AboutFeatureID = value;
+        }
     }
 }

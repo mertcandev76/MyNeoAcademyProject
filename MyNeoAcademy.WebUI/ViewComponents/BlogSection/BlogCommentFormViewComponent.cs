@@ -21,7 +21,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
             var dto = new CreateCommentDTO
             {
                 BlogID = blogId,
-                //CreatedDate = DateTime.Now
+
             };
 
             return Task.FromResult<IViewComponentResult>(View(dto));

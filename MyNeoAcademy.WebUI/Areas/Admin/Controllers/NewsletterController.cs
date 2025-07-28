@@ -6,126 +6,85 @@ using Microsoft.SqlServer.Server;
 using Microsoft.AspNetCore.Http.HttpResults;
 using MyNeoAcademy.Entity.Entities;
 using System.Xml.Linq;
+using MyNeoAcademy.WebUI.ApiServices.Abstract;
 
-[Area("Admin")]
-[Route("[area]/[controller]/[action]/{id?}")]
-public class NewsletterController : Controller
+namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
-    private readonly HttpClient _client;
-    private readonly JsonSerializerOptions _jsonOptions;
-
-    public NewsletterController(IHttpClientFactory httpClientFactory)
+    [Area("Admin")]
+    [Route("[area]/[controller]/[action]/{id?}")]
+    public class NewsletterController : Controller
     {
-        _client = httpClientFactory.CreateClient("MyApiClient");
+        private readonly INewsletterApiService _newsletterApiService;
 
-        _jsonOptions = new JsonSerializerOptions
+        public NewsletterController(INewsletterApiService newsletterApiService)
         {
-            PropertyNameCaseInsensitive = true
-        };
-    }
+            _newsletterApiService = newsletterApiService;
+        }
 
-    // 🔹 Listeleme
-    public async Task<IActionResult> Index()
-    {
-        var response = await _client.GetAsync("newsletters");
-
-        if (!response.IsSuccessStatusCode)
-            return View(new List<ResultNewsletterDTO>());
-
-        var jsonData = await response.Content.ReadAsStringAsync();
-        var data = JsonSerializer.Deserialize<List<ResultNewsletterDTO>>(jsonData, _jsonOptions);
-
-        return View(data);
-    }
-
-    // 🔹 Detay
-    [HttpGet]
-    public async Task<IActionResult> Details(int id)
-    {
-        var response = await _client.GetAsync($"newsletters/{id}");
-
-        if (!response.IsSuccessStatusCode)
-            return RedirectToAction("Index");
-
-        var jsonData = await response.Content.ReadAsStringAsync();
-        var newsletter = JsonSerializer.Deserialize<ResultNewsletterDTO>(jsonData, _jsonOptions);
-
-        return View(newsletter);
-    }
-
-    // 🔹 Ekleme (GET)
-    [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // 🔹 Ekleme (POST)
-    [HttpPost]
-    public async Task<IActionResult> Create(CreateNewsletterDTO dto)
-    {
-
-        var jsonContent = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
-
-        var response = await _client.PostAsync("newsletters", jsonContent);
-
-        if (response.IsSuccessStatusCode)
-            return RedirectToAction("Index");
-
-        ModelState.AddModelError("", "Newsletter could not be created.");
-        return View(dto);
-    }
-
-    // 🔹 Güncelleme (GET)
-    [HttpGet]
-    public async Task<IActionResult> Edit(int id)
-    {
-        var response = await _client.GetAsync($"newsletters/{id}");
-
-        if (!response.IsSuccessStatusCode)
-            return RedirectToAction("Index");
-
-        var jsonData = await response.Content.ReadAsStringAsync();
-        var resultNewsletter = JsonSerializer.Deserialize<ResultNewsletterDTO>(jsonData, _jsonOptions);
-
-        if (resultNewsletter == null)
-            return RedirectToAction("Index");
-
-        var dto = new UpdateNewsletterDTO
+        public async Task<IActionResult> Index()
         {
-            NewsletterID = resultNewsletter.NewsletterID,
-            Email = resultNewsletter.Email,
+            var data = await _newsletterApiService.GetAllAsync();
+            return View(data);
+        }
 
-        };
+        public async Task<IActionResult> Detail(int id)
+        {
+            var result = await _newsletterApiService.GetByIdAsync(id);
+            if (result == null)
+                return RedirectToAction("Index");
 
-        return View(dto);
-    }
+            return View(result);
+        }
 
-    // 🔹 Güncelleme (POST)
-    [HttpPost]
-    public async Task<IActionResult> Edit(UpdateNewsletterDTO dto)
-    {
-        var jsonContent = new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
+        [HttpGet]
+        public IActionResult Create() => View();
 
-        var response = await _client.PutAsync("newsletters", jsonContent);
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateNewsletterDTO dto)
+        {
+            var result = await _newsletterApiService.CreateAsync(dto);
+            if (result)
+                return RedirectToAction("Index");
 
-        if (response.IsSuccessStatusCode)
+            ModelState.AddModelError("", "Abonelik oluşturulamadı.");
+            return View(dto);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var result = await _newsletterApiService.GetByIdAsync(id);
+            if (result == null)
+                return RedirectToAction("Index");
+
+            var dto = new UpdateNewsletterDTO
+            {
+                NewsletterID = result.NewsletterID,
+                Email = result.Email
+            };
+
+            return View(dto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UpdateNewsletterDTO dto)
+        {
+            var result = await _newsletterApiService.UpdateAsync(dto);
+            if (result)
+                return RedirectToAction("Index");
+
+            ModelState.AddModelError("", "Abonelik güncellenemedi.");
+            return View(dto);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _newsletterApiService.DeleteAsync(id);
+            if (!result)
+                TempData["Error"] = "Silme işlemi başarısız.";
+
             return RedirectToAction("Index");
-
-        ModelState.AddModelError("", "Newsletter could not be updated.");
-        return View(dto);
+        }
     }
 
-    // 🔹 Silme
-    [HttpGet]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var response = await _client.DeleteAsync($"newsletters/{id}");
-
-        if (response.IsSuccessStatusCode)
-            return RedirectToAction("Index");
-
-        TempData["Error"] = "Newsletter could not be deleted.";
-        return RedirectToAction("Index");
-    }
 }

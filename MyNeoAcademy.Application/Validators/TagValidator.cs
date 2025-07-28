@@ -26,7 +26,7 @@ namespace MyNeoAcademy.Application.Validators
             RuleFor(x => x.TagID)
         .GreaterThan(0).WithMessage("Invalid Tag ID.");
 
-            Include(new CreateTagValidator()); // Create kuralları da geçerli
+            Include(new CreateTagValidator());
         }
     }
 }

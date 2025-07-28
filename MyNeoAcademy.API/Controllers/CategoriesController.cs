@@ -8,65 +8,90 @@ using MyNeoAcademy.Entity.Entities;
 namespace MyNeoAcademy.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController] // Otomatik model doğrulama sağlar
+    [ApiController] 
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        private readonly IMapper _mapper;
 
-        public CategoriesController(ICategoryService categoryService, IMapper mapper)
+        public CategoriesController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
-            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var list = await _categoryService.GetAllWithBlogAsync();
-            var dtoList = _mapper.Map<List<ResultCategoryDTO>>(list);
-            return Ok(dtoList);
+            try
+            {
+                var categories = await _categoryService.GetAllWithIncludesAsync();
+                return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Veriler alınırken bir hata oluştu: {ex.Message}");
+            }
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var entity = await _categoryService.GetByIdWithBlogAsync(id);
-            if (entity == null) return NotFound("Kategori bulunamadı.");
-            var dto = _mapper.Map<ResultCategoryDTO>(entity);
-            return Ok(dto);
+            try
+            {
+                var category = await _categoryService.GetByIdWithIncludesAsync(id);
+                return category is not null
+                    ? Ok(category)
+                    : NotFound("Kategori bulunamadı.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Bir hata oluştu: {ex.Message}");
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCategoryDTO dto)
+        public async Task<IActionResult> Post([FromBody] CreateCategoryDTO dto)
         {
-            var entity = _mapper.Map<Category>(dto);
-            await _categoryService.CreateAsync(entity);
-            return CreatedAtAction(nameof(Detail), new { id = entity.CategoryID }, "Yeni kategori eklendi.");
+            try
+            {
+                await _categoryService.CreateAsync(dto);
+                return Created(string.Empty, "Kategori başarıyla oluşturuldu.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Oluşturma sırasında bir hata oluştu: {ex.Message}");
+            }
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateCategoryDTO dto)
+        public async Task<IActionResult> Put([FromBody] UpdateCategoryDTO dto)
         {
-            var entity = await _categoryService.GetByIdAsync(dto.CategoryID);
-            if (entity == null)
-                return NotFound("Kategori bulunamadı.");
-
-            _mapper.Map(dto, entity); 
-
-            await _categoryService.UpdateAsync(entity);
-            return Ok("Kategori güncellendi.");
+            try
+            {
+                await _categoryService.UpdateAsync(dto);
+                return Ok("Kategori başarıyla güncellendi.");
+            }
+            catch (Exception ex)
+            {
+                return ex.Message == "Entity not found"
+                    ? NotFound("Kategori bulunamadı.")
+                    : StatusCode(500, $"Güncelleme sırasında bir hata oluştu: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var entity = await _categoryService.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound("Kategori bulunamadı.");
-
-            await _categoryService.DeleteAsync(entity);
-            return Ok("Kategori silindi.");
+            try
+            {
+                var success = await _categoryService.DeleteByIdAsync(id);
+                return success
+                    ? Ok("Kategori başarıyla silindi.")
+                    : NotFound("Kategori bulunamadı.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme sırasında bir hata oluştu: {ex.Message}");
+            }
         }
     }
 }

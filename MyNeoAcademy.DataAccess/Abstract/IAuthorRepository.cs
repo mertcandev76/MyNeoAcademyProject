@@ -9,7 +9,7 @@ namespace MyNeoAcademy.DataAccess.Abstract
 {
     public interface IAuthorRepository : IRepository<Author>
     {
-        //Özel Metotlar
-        Task<Author?> GetAllWithBlogAsync(int id);
+        Task<List<Author>> GetAllWithIncludesAsync();
+        Task<Author?> GetByIdWithIncludesAsync(int id);
     }
 }

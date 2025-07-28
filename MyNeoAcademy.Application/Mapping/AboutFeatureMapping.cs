@@ -9,13 +9,21 @@ namespace MyNeoAcademy.Application.Mapping
         public AboutFeatureMapping()
         {
 
-            CreateMap<AboutFeature, CreateAboutFeatureDTO>().ReverseMap();
+
+            CreateMap<AboutFeature, CreateAboutFeatureDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.AboutFeatureID, opt => opt.Ignore());
+
+
             CreateMap<AboutFeature, UpdateAboutFeatureDTO>().ReverseMap();
+
 
             CreateMap<About, AboutReferenceDTO>();
 
+
             CreateMap<AboutFeature, ResultAboutFeatureDTO>()
                 .ForMember(dest => dest.About, opt => opt.MapFrom(src => src.About));
+
         }
     }
 }

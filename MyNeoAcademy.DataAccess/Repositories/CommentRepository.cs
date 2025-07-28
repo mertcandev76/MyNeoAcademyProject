@@ -17,17 +17,17 @@ namespace MyNeoAcademy.DataAccess.Repositories
         }
 
 
-        public async Task<List<Comment>> GetAllWithBlogAsync()
+        public async Task<List<Comment>> GetAllWithIncludesAsync()
         {
             return await Table.Include(c => c.Blog).ToListAsync();
         }
 
-        public async Task<Comment?> GetByIdWithBlogAsync(int id)
+        public async Task<Comment?> GetByIdWithIncludesAsync(int id)
         {
             return await Table.Include(c => c.Blog).FirstOrDefaultAsync(c=>c.CommentID==id);
         }
 
-        public async Task<List<Comment>> GetAllByBlogIdAsync(int blogId)
+        public async Task<List<Comment>> GetByIdWithIncludesBlogAsync(int blogId)
         {
             return await Table
               .Where(c => c.BlogID == blogId)

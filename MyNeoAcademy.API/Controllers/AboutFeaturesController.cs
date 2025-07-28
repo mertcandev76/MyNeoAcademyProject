@@ -11,63 +11,87 @@ namespace MyNeoAcademy.API.Controllers
     [ApiController]
     public class AboutFeaturesController : ControllerBase
     {
-      
-            private readonly IGenericService<AboutFeature> _aboutFeatureService;
-            private readonly IMapper _mapper;
+        private readonly IAboutFeatureService _aboutFeatureService;
 
-            public AboutFeaturesController(IGenericService<AboutFeature> aboutFeatureService, IMapper mapper)
+        public AboutFeaturesController(IAboutFeatureService aboutFeatureService)
+        {
+            _aboutFeatureService = aboutFeatureService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
             {
-                _aboutFeatureService = aboutFeatureService;
-                _mapper = mapper;
+                var features = await _aboutFeatureService.GetAllWithIncludesAsync();
+                return Ok(features);
             }
-
-            [HttpGet]
-            public async Task<IActionResult> Get()
+            catch (Exception ex)
             {
-                var list = await _aboutFeatureService.GetListAsync(); // About ile birlikte getir
-                var dtoList = _mapper.Map<List<ResultAboutFeatureDTO>>(list);
-                return Ok(dtoList);
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
             }
+        }
 
-            [HttpGet("{id:int}")]
-            public async Task<IActionResult> Detail(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
             {
-                var entity = await _aboutFeatureService.GetByIdAsync(id);
-                if (entity == null) return NotFound("Özellik hakkı bulunamadı.");
-                var dto = _mapper.Map<ResultAboutFeatureDTO>(entity);
-                return Ok(dto);
-            }
+                var feature = await _aboutFeatureService.GetByIdWithIncludesAsync(id);
+                if (feature == null)
+                    return NotFound("Feature bulunamadı.");
 
-            [HttpPost]
-            public async Task<IActionResult> Create([FromBody] CreateAboutFeatureDTO dto)
+                return Ok(feature);
+            }
+            catch (Exception ex)
             {
-                var entity = _mapper.Map<AboutFeature>(dto);
-                await _aboutFeatureService.CreateAsync(entity);
-                return CreatedAtAction(nameof(Detail), new { id = entity.AboutFeatureID }, "Yeni özellik hakkı eklendi.");
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
             }
+        }
 
-            [HttpPut]
-            public async Task<IActionResult> Update([FromBody] UpdateAboutFeatureDTO dto)
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] CreateAboutFeatureDTO dto)
+        {
+            try
             {
-                var entity = await _aboutFeatureService.GetByIdAsync(dto.AboutFeatureID);
-                if (entity == null) return NotFound("Özellik hakkı  bulunamadı.");
-
-            // Güncelleme burada otomatik
-            _mapper.Map(dto, entity);
-
-            await _aboutFeatureService.UpdateAsync(entity);
-                return Ok("Özellik hakkı güncellendi.");
+                await _aboutFeatureService.CreateAsync(dto);
+                return Ok("Yeni özellik başarıyla eklendi.");
             }
-
-            [HttpDelete("{id:int}")]
-            public async Task<IActionResult> Delete(int id)
+            catch (Exception ex)
             {
-                var entity = await _aboutFeatureService.GetByIdAsync(id);
-                if (entity == null) return NotFound("Özellik hakkı bulunamadı.");
-
-                await _aboutFeatureService.DeleteAsync(entity);
-                return Ok("Özellik hakkı silindi.");
+                return StatusCode(500, $"Ekleme hatası: {ex.Message}");
             }
-        
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] UpdateAboutFeatureDTO dto)
+        {
+            try
+            {
+                await _aboutFeatureService.UpdateAsync(dto);
+                return Ok("Özellik başarıyla güncellendi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var deleted = await _aboutFeatureService.DeleteByIdAsync(id);
+                if (!deleted)
+                    return NotFound("Özellik bulunamadı.");
+
+                return Ok("Özellik başarıyla silindi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme hatası: {ex.Message}");
+            }
+        }
     }
 }

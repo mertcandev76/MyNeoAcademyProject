@@ -31,10 +31,10 @@
                                         (feature.Text.Length > 50 ? feature.Text.Substring(0, 50) + "..." : feature.Text))
                                 </td>
                                 <td>
-                                    <a asp-area="Admin" asp-controller="AboutFeature" asp-action="Details" asp-route-id="@feature.AboutFeatureID" class="btn btn-info btn-sm me-1">
+                                    <a asp-area="Admin" asp-controller="AboutFeature" asp-action="Detail" asp-route-id="@feature.AboutFeatureID" class="btn btn-info btn-sm me-1">
                                         <i class="fas fa-eye"></i> Detay
                                     </a>
-                                    <a asp-area="Admin" asp-controller="AboutFeature" asp-action="Edit" asp-route-id="@feature.AboutFeatureID" class="btn btn-warning btn-sm me-1">
+                                    <a asp-area="Admin" asp-controller="AboutFeature" asp-action="Edit" asp-route-id="@feature.AboutFeatureID" class="btn btn-warning">
                                         <i class="fas fa-edit"></i> Düzenle
                                     </a>
                                     <button type="button" class="btn btn-danger btn-sm"
@@ -62,23 +62,5 @@
 </div>
 
 <!-- Silme onay modalı -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content shadow">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="deleteModalLabel">Silme Onayı</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong id="deleteItemName"></strong> adlı özelliği silmek istediğinizden emin misiniz?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                <a id="confirmDeleteBtn" class="btn btn-danger">Sil</a>
-            </div>
-        </div>
-    </div>
-</div>
+@await Html.PartialAsync("~/Areas/Admin/Views/Shared/_DeleteModalPartial.cshtml")
 

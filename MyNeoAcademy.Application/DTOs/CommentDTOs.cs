@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MyNeoAcademy.Application.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.DTOs
@@ -28,17 +30,29 @@ namespace MyNeoAcademy.Application.DTOs
         public BlogReferenceDTO? Blog { get; set; }
         public DateTime CreatedDate { get; set; }
     }
-    public class UpdateCommentDTO : CreateCommentDTO
+    public class UpdateCommentDTO : CreateCommentDTO,IHasId
     {
         public int CommentID { get; set; }
+        [JsonIgnore]
+        public int Id
+        {
+            get => CommentID;
+            set => CommentID = value;
+        }
 
     }
     public class CreateCommentWithFileDTO : CreateCommentDTO
     {
         public IFormFile? ImageFile { get; set; }
     }
-    public class UpdateCommentWithFileDTO : CreateCommentWithFileDTO
+    public class UpdateCommentWithFileDTO : CreateCommentWithFileDTO, IHasId
     {
         public int CommentID { get; set; }
+
+        public int Id
+        {
+            get => CommentID;
+            set => CommentID = value;
+        }
     }
 }

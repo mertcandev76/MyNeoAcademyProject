@@ -8,25 +8,29 @@ namespace MyNeoAcademy.Application.Mapping
     {
         public AboutMapping()
         {
-            // Basic DTO Mappings
-            CreateMap<About, CreateAboutDTO>().ReverseMap();
+
+            CreateMap<About, CreateAboutDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.AboutID, opt => opt.Ignore());
+
+
             CreateMap<About, UpdateAboutDTO>().ReverseMap();
-            //.ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features));
 
 
             CreateMap<AboutFeature, AboutFeatureReferenceDTO>();
 
+
             CreateMap<About, ResultAboutDTO>()
                 .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features));
 
-            // File DTOs (ignore image paths)
-            CreateMap<CreateAboutWithFileDTO, About>()
-                .ForMember(dest => dest.ImageFrontUrl, opt => opt.Ignore())
-                .ForMember(dest => dest.ImageBackUrl, opt => opt.Ignore());
 
-            CreateMap<UpdateAboutWithFileDTO, About>()
-                .ForMember(dest => dest.ImageFrontUrl, opt => opt.Ignore())
-                .ForMember(dest => dest.ImageBackUrl, opt => opt.Ignore());
+            CreateMap<CreateAboutWithFileDTO, About>()
+                .ForMember(dest => dest.AboutID, opt => opt.Ignore()); 
+
+            CreateMap<UpdateAboutWithFileDTO, About>();
+
+
+
         }
     }
 }

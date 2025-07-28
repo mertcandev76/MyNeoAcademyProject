@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using MyNeoAcademy.Application.DTOs;
 using System.Text.Json;
+using MyNeoAcademy.WebUI.ApiServices.Abstract;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
@@ -9,96 +10,46 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]/{id?}")]
     public class AboutController : Controller
     {
-        private readonly HttpClient _client;
-        private readonly JsonSerializerOptions _jsonOptions;
+        private readonly IAboutApiService _aboutApiService;
 
-        public AboutController(IHttpClientFactory httpClientFactory)
+        public AboutController(IAboutApiService aboutApiService)
         {
-            _client = httpClientFactory.CreateClient("MyApiClient");
-            _jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _aboutApiService = aboutApiService;
         }
 
-        // 🔹 Listeleme
         public async Task<IActionResult> Index()
         {
-            var response = await _client.GetAsync("abouts");
-            if (!response.IsSuccessStatusCode)
-                return View(new List<ResultAboutDTO>());
-
-            var json = await response.Content.ReadAsStringAsync();
-            var data = JsonSerializer.Deserialize<List<ResultAboutDTO>>(json, _jsonOptions);
+            var data = await _aboutApiService.GetAllAsync();
             return View(data);
         }
 
-        // 🔹 Detay
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var response = await _client.GetAsync($"abouts/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var result = await _aboutApiService.GetByIdAsync(id);
+            if (result == null)
                 return RedirectToAction("Index");
 
-            var jsonData = await response.Content.ReadAsStringAsync();
-            var about = JsonSerializer.Deserialize<ResultAboutDTO>(jsonData, _jsonOptions);
-
-            return View(about);
+            return View(result);
         }
 
-        // 🔹 Ekleme (GET)
         [HttpGet]
         public IActionResult Create() => View();
 
-        // 🔹 Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> Create(CreateAboutWithFileDTO dto)
         {
-            var formData = new MultipartFormDataContent
-            {
-                { new StringContent(dto.Subtitle ?? ""), "Subtitle" },
-                { new StringContent(dto.Title ?? ""), "Title" },
-                { new StringContent(dto.Description ?? ""), "Description" },
-                { new StringContent(dto.ButtonText ?? ""), "ButtonText" },
-                { new StringContent(dto.ButtonLink ?? ""), "ButtonLink" }
-            };
-
-            if (dto.ImageFrontFile != null)
-            {
-                var frontContent = new StreamContent(dto.ImageFrontFile.OpenReadStream());
-                frontContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageFrontFile.ContentType);
-                formData.Add(frontContent, "ImageFrontFile", dto.ImageFrontFile.FileName);
-            }
-
-            if (dto.ImageBackFile != null)
-            {
-                var backContent = new StreamContent(dto.ImageBackFile.OpenReadStream());
-                backContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageBackFile.ContentType);
-                formData.Add(backContent, "ImageBackFile", dto.ImageBackFile.FileName);
-            }
-
-            var response = await _client.PostAsync("abouts", formData);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _aboutApiService.CreateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Hakkımızda bilgisi eklenemedi.");
             return View(dto);
         }
 
-        // 🔹 Güncelleme (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _client.GetAsync($"abouts/{id}");
-            if (!response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            var json = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<ResultAboutDTO>(json, _jsonOptions);
-
+            var result = await _aboutApiService.GetByIdAsync(id);
             if (result == null)
                 return RedirectToAction("Index");
 
@@ -117,53 +68,23 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             return View(dto);
         }
 
-        // 🔹 Güncelleme (POST)
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateAboutWithFileDTO dto)
         {
-            var formData = new MultipartFormDataContent
-            {
-                { new StringContent(dto.AboutID.ToString()), "AboutID" },
-                { new StringContent(dto.Subtitle ?? ""), "Subtitle" },
-                { new StringContent(dto.Title ?? ""), "Title" },
-                { new StringContent(dto.Description ?? ""), "Description" },
-                { new StringContent(dto.ButtonText ?? ""), "ButtonText" },
-                { new StringContent(dto.ButtonLink ?? ""), "ButtonLink" }
-            };
-
-            if (dto.ImageFrontFile != null)
-            {
-                var frontContent = new StreamContent(dto.ImageFrontFile.OpenReadStream());
-                frontContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageFrontFile.ContentType);
-                formData.Add(frontContent, "ImageFrontFile", dto.ImageFrontFile.FileName);
-            }
-
-            if (dto.ImageBackFile != null)
-            {
-                var backContent = new StreamContent(dto.ImageBackFile.OpenReadStream());
-                backContent.Headers.ContentType = new MediaTypeHeaderValue(dto.ImageBackFile.ContentType);
-                formData.Add(backContent, "ImageBackFile", dto.ImageBackFile.FileName);
-            }
-
-            var response = await _client.PutAsync("abouts", formData);
-
-            if (response.IsSuccessStatusCode)
+            var result = await _aboutApiService.UpdateAsync(dto);
+            if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Hakkımızda bilgisi güncellenemedi.");
             return View(dto);
         }
 
-        // 🔹 Silme
-        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _client.DeleteAsync($"abouts/{id}");
+            var result = await _aboutApiService.DeleteAsync(id);
+            if (!result)
+                TempData["Error"] = "Silme işlemi başarısız.";
 
-            if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
-
-            TempData["Error"] = "Hakkımızda bilgisi silinemedi.";
             return RedirectToAction("Index");
         }
     }

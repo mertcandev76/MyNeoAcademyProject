@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.ViewComponents.Home
 {
-    public class HomeAboutViewComponent: ViewComponent
+    public class HomeAboutViewComponent : ViewComponent
     {
         private readonly HttpClient _httpClient;
 
@@ -15,22 +15,28 @@ namespace MyNeoAcademy.WebUI.ViewComponents.Home
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-
-            var response = await _httpClient.GetAsync("abouts/1"); // tek nesne döner
-            //var response = await _httpClient.GetAsync("abouts/{aboutId}"); //tek nesne döner
-            if (!response.IsSuccessStatusCode)
-                return View(new ResultAboutDTO());
-
-            var stream = await response.Content.ReadAsStreamAsync();
-            var options = new JsonSerializerOptions
+            try
             {
-                PropertyNameCaseInsensitive = true
-            };
+                var response = await _httpClient.GetAsync("abouts");
 
-            var about = await JsonSerializer.DeserializeAsync<ResultAboutDTO>(stream, options)
-                         ?? new ResultAboutDTO();
+                if (response.IsSuccessStatusCode)
+                {
+                    var aboutList = await response.Content.ReadFromJsonAsync<List<ResultAboutDTO>>();
+                    var about = aboutList?.FirstOrDefault(); 
 
-            return View(about);
+                    if (about != null)
+                        return View(about);
+                }
+
+
+                return View(new ResultAboutDTO());
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"HomeAboutViewComponent hata: {ex.Message}");
+                return View(new ResultAboutDTO());
+            }
         }
     }
 }

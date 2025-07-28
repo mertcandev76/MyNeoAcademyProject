@@ -252,7 +252,6 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\n
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.AssemblyInfoInputs.cache
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.AssemblyInfo.cs
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.csproj.CoreCompileInputs.cache
-C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.RazorAssemblyInfo.cache
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.RazorAssemblyInfo.cs
@@ -274,3 +273,6 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\n
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\ref\MyNeoAcademy.WebUI.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Application.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Application.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Infrastructure.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\bin\Debug\net7.0\MyNeoAcademy.Infrastructure.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.WebUI\obj\Debug\net7.0\MyNeoAcademy.WebUI.MvcApplicationPartsAssemblyInfo.cs

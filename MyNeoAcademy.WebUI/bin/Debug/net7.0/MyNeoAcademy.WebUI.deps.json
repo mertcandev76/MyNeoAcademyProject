@@ -2752,6 +2752,7 @@
           "Microsoft.Extensions.Hosting": "7.0.0",
           "MyNeoAcademy.Application": "1.0.0",
           "MyNeoAcademy.Business": "1.0.0",
+          "MyNeoAcademy.Infrastructure": "1.0.0",
           "Swashbuckle.AspNetCore": "6.4.0"
         },
         "runtime": {
@@ -2803,6 +2804,14 @@
         },
         "runtime": {
           "MyNeoAcademy.Entity.dll": {}
+        }
+      },
+      "MyNeoAcademy.Infrastructure/1.0.0": {
+        "dependencies": {
+          "MyNeoAcademy.Application": "1.0.0"
+        },
+        "runtime": {
+          "MyNeoAcademy.Infrastructure.dll": {}
         }
       }
     }
@@ -4584,6 +4593,11 @@
       "sha512": ""
     },
     "MyNeoAcademy.Entity/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MyNeoAcademy.Infrastructure/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
