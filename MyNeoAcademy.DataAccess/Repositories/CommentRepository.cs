@@ -12,10 +12,9 @@ namespace MyNeoAcademy.DataAccess.Repositories
 {
     public class CommentRepository : GenericRepository<Comment>, ICommentRepository
     {
-        public CommentRepository(MyNeoAcademyContext myNeoAcademyContext) : base(myNeoAcademyContext)
+        public CommentRepository(MyNeoAcademyContext context) : base(context)
         {
         }
-
 
         public async Task<List<Comment>> GetAllWithIncludesAsync()
         {
@@ -24,15 +23,27 @@ namespace MyNeoAcademy.DataAccess.Repositories
 
         public async Task<Comment?> GetByIdWithIncludesAsync(int id)
         {
-            return await Table.Include(c => c.Blog).FirstOrDefaultAsync(c=>c.CommentID==id);
+            return await Table.Include(c => c.Blog).FirstOrDefaultAsync(c => c.CommentID == id);
         }
 
         public async Task<List<Comment>> GetByIdWithIncludesBlogAsync(int blogId)
         {
-            return await Table
-              .Where(c => c.BlogID == blogId)
-              .ToListAsync();
+            return await Table.Where(c => c.BlogID == blogId).ToListAsync();
         }
 
+        public async Task<List<Comment>> GetPagedCommentsAsync(int skip, int take)
+        {
+            return await Table
+                .Include(c => c.Blog)
+                .OrderByDescending(c => c.CreatedDate)
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalCountAsync()
+        {
+            return await Table.CountAsync();
+        }
     }
 }

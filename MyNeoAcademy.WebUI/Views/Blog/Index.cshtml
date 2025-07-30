@@ -1,0 +1,47 @@
+﻿@{
+    var queryPage = Context.Request.Query["page"];
+    int currentPage = int.TryParse(queryPage, out var parsedPage) ? parsedPage : 1;
+    int pageSize = 3;
+
+    ViewData["Title"] = "Blog List";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!--? Hero Start -->
+<div class="slider-area ">
+    <div class="slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap hero-cap2 text-center">
+                        <h2>Blog</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+<section class="blog_area section-padding">
+    <div class="container">
+        <div class="row">
+            <!-- BLOG İÇERİĞİ -->
+            <div class="col-lg-8 posts-list">
+                @* Blog listesi ViewComponent ile çağrılıyor. Pagination parametreleri veriliyor *@
+                @await Component.InvokeAsync("BlogList", new { displayType = "BlogMenu", page = currentPage, pageSize = pageSize })
+            </div>
+
+            <!-- SIDEBAR -->
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    @* İstersen buraya sidebar ViewComponent’larını ekleyebilirsin *@
+
+                    @await Component.InvokeAsync("CategoryList", new { displayType = "Sidebar" })
+                    @await Component.InvokeAsync("BlogRecentPost")
+                    @await Component.InvokeAsync("BlogTag")
+                    @await Component.InvokeAsync("BlogNewsletter")
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

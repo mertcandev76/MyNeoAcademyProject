@@ -21,7 +21,7 @@ namespace MyNeoAcademy.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
@@ -65,9 +65,36 @@ namespace MyNeoAcademy.API.Controllers
             }
         }
 
-        //  Kullanıcı yorumları (resim yok)
-        [HttpPost]
-        [Route("create-user-comment")]
+        // Yeni: blogId'ye göre sayfalı getirme
+        [HttpGet("pagedbyblog")]
+        public async Task<IActionResult> GetPagedByBlog([FromQuery] int blogId, [FromQuery] int page = 1, [FromQuery] int pageSize = 4)
+        {
+            try
+            {
+                var pagedResult = await _commentService.GetPagedByBlogAsync(blogId, page, pageSize);
+                return Ok(pagedResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sayfalama hatası: {ex.Message}");
+            }
+        }
+
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 4)
+        {
+            try
+            {
+                var pagedResult = await _commentService.GetPagedAsync(page, pageSize);
+                return Ok(pagedResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sayfalama hatası: {ex.Message}");
+            }
+        }
+
+        [HttpPost("create-user-comment")]
         public async Task<IActionResult> CreateUserComment([FromBody] CreateCommentDTO dto)
         {
             try
@@ -81,9 +108,7 @@ namespace MyNeoAcademy.API.Controllers
             }
         }
 
-        //  Admin yorumları (resim zorunlu)
-        [HttpPost]
-        [Route("create-admin-comment")]
+        [HttpPost("create-admin-comment")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateAdminComment([FromForm] CreateCommentWithFileDTO dto)
         {

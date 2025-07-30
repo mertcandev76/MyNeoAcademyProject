@@ -1,4 +1,4 @@
-﻿@model List<ResultCommentDTO>
+﻿@*@model List<ResultCommentDTO>
 
 <div class="comments-area">
     <h4>@Model.Count Comments</h4>
@@ -24,4 +24,57 @@
             </div>
         </div>
     }
+</div>*@
+
+
+@model PagedResultDTO<ResultCommentDTO>
+
+<div class="comments-area">
+    <h4>@Model.TotalCount @("Comment" + (Model.TotalCount != 1 ? "s" : ""))</h4>
+
+    @foreach (var comment in Model.Items)
+    {
+        <div class="comment-list">
+            <div class="single-comment justify-content-between d-flex">
+                <div class="user d-flex">
+                    <div class="thumb">
+                        <img src="@(!string.IsNullOrWhiteSpace(comment.ImageUrl) ? comment.ImageUrl : "/img/default-user.png")" alt="user" />
+                    </div>
+                    <div class="desc">
+                        <p class="comment">@comment.Content</p>
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <h5><span>@comment.UserName</span></h5>
+                                <p class="date">@comment.CreatedDate.ToString("MMMM dd, yyyy HH:mm")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Comments pagination">
+            <ul class="pagination">
+                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("Detail", "BlogDetail", new { id = ViewBag.BlogID, commentPage = Model.CurrentPage - 1 })" aria-label="Previous">‹</a>
+                </li>
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Detail", "BlogDetail", new { id = ViewBag.BlogID, commentPage = i })">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("Detail", "BlogDetail", new { id = ViewBag.BlogID, commentPage = Model.CurrentPage + 1 })" aria-label="Next">›</a>
+                </li>
+            </ul>
+        </nav>
+    }
+
+
 </div>

@@ -38,6 +38,7 @@
     <!-- JS here -->
     @await Component.InvokeAsync("SiteScripts")
 
-
+    @* Buraya eklenmeli *@
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using MyNeoAcademy.Application.Abstract;
-using MyNeoAcademy.Application.Abstract.MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.Entity.Entities;
@@ -14,11 +13,11 @@ using System.Threading.Tasks;
 namespace MyNeoAcademy.Business.Concrete
 {
     public class InstructorManager : GenericManager<
-        Instructor,
-        CreateInstructorDTO,
-        UpdateInstructorDTO,
-        ResultInstructorDTO>,
-        IInstructorService
+     Instructor,
+     CreateInstructorDTO,
+     UpdateInstructorDTO,
+     ResultInstructorDTO>,
+     IInstructorService
     {
         private readonly IInstructorRepository _instructorRepository;
         private readonly IFileService _fileService;
@@ -36,18 +35,20 @@ namespace MyNeoAcademy.Business.Concrete
             _httpContextAccessor = httpContextAccessor;
         }
 
-
-
+        private string GetBaseUrl()
+        {
+            var request = _httpContextAccessor.HttpContext?.Request;
+            return request != null && !string.IsNullOrEmpty(request.Host.Value)
+                ? $"{request.Scheme}://{request.Host}"
+                : "https://localhost:7230";
+        }
 
         public async Task<List<ResultInstructorDTO>> GetAllWithIncludesAsync()
         {
             var instructors = await _instructorRepository.GetAllWithIncludesAsync();
             var dtos = _mapper.Map<List<ResultInstructorDTO>>(instructors);
 
-            var request = _httpContextAccessor.HttpContext?.Request;
-            string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
-                ? $"{request.Scheme}://{request.Host}"
-                : "https://localhost:7230";
+            var baseUrl = GetBaseUrl();
 
             foreach (var dto in dtos)
             {
@@ -67,11 +68,7 @@ namespace MyNeoAcademy.Business.Concrete
                 return null;
 
             var dto = _mapper.Map<ResultInstructorDTO>(instructor);
-
-            var request = _httpContextAccessor.HttpContext?.Request;
-            string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
-                ? $"{request.Scheme}://{request.Host}"
-                : "https://localhost:7230";
+            var baseUrl = GetBaseUrl();
 
             if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
             {
@@ -87,7 +84,6 @@ namespace MyNeoAcademy.Business.Concrete
                 throw new ArgumentException("Eğitmen resmi zorunludur.");
 
             dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/instructors");
-
             await CreateAsync(dto);
         }
 
@@ -116,4 +112,5 @@ namespace MyNeoAcademy.Business.Concrete
             return true;
         }
     }
+
 }

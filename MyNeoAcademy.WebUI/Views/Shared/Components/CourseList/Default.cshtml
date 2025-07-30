@@ -1,0 +1,199 @@
+﻿@model List<ResultCourseDTO>
+@{
+    var displayType = ViewData["DisplayType"] as string ?? "Home";
+}
+
+@if (displayType == "Home")
+{
+    <!-- Anasayfa Popüler Kurslar -->
+    <div class="popular-course section-padding30">
+        <div class="container">
+            <div class="row justify-content-sm-center">
+                <div class="cl-xl-7 col-lg-8 col-md-10">
+                    <div class="section-tittle text-center mb-70">
+                        <span>Bu Haftanın En Popüler Dersi</span>
+                        <h2>Popüler Kursumuz</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var course in Model)
+                {
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="single-course mb-40">
+                            <div class="course-img">
+                                <img src="@course.ImageUrl" alt="@course.Title" />
+                            </div>
+                            <div class="course-caption">
+                                <div class="course-cap-top">
+                                    <h4><a href="#">@course.Title</a></h4>
+                                </div>
+                                <div class="course-cap-mid d-flex justify-content-between">
+                                    <div class="course-ratting">
+                                        @{
+                                            int fullStars = course.Rating;
+                                            bool halfStar = (course.Rating - fullStars) >= 0.5;
+                                            int emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+                                            for (int i = 0; i < fullStars; i++)
+                                            {
+                                                <i class="fas fa-star"></i>
+                                                ;
+                                            }
+                                            if (halfStar)
+                                            {
+                                                <i class="fas fa-star-half-alt"></i>
+                                                ;
+                                            }
+                                            for (int i = 0; i < emptyStars; i++)
+                                            {
+                                                <i class="far fa-star"></i>
+                                                ;
+                                            }
+                                        }
+                                    </div>
+                                    <ul><li>@course.ReviewCount Review</li></ul>
+                                </div>
+                                <div class="course-cap-bottom d-flex justify-content-between">
+                                    <ul>
+                                        <li><i class="ti-user"></i> @course.StudentCount</li>
+                                        <li><i class="ti-heart"></i> @course.LikeCount</li>
+                                    </ul>
+                                    <span>@(course.Price == null || course.Price == 0 ? "Free" : course.Price.Value.ToString("C"))</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="browse-btn2 text-center mt-50">
+                        <a href="/Course" class="btn">Daha Fazla Kurs Bul</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (displayType == "CourseMenu")
+{
+    @foreach (var course in Model)
+                        {
+                            <div class="col-xl-4 col-lg-4 col-md-6">
+                                <div class="single-course mb-70">
+                                    <div class="course-img">
+                                        <img src="@course.ImageUrl" alt="">
+                                    </div>
+                                    <div class="course-caption">
+                                        <div class="course-cap-top">
+                                            <h4><a href="#">@course.Title</a></h4>
+                                        </div>
+                                        <div class="course-cap-mid d-flex justify-content-between">
+                                            <div class="course-ratting">
+                                                @for (int i = 0; i < course.Rating; i++)
+                                                {
+                                                    <i class="fas fa-star"></i>
+                                                }
+                                            </div>
+                                            <ul><li>@course.ReviewCount Review</li></ul>
+                                        </div>
+                                        <div class="course-cap-bottom d-flex justify-content-between">
+                                            <ul>
+                                                <li><i class="ti-user"></i> @course.StudentCount</li>
+                                                <li><i class="ti-heart"></i> @course.LikeCount</li>
+                                            </ul>
+                                            <span>@(course.Price.HasValue ? course.Price.Value.ToString("C") : "Free")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+            //<div class="col-xl-4 col-lg-4 col-md-6">
+            //    <div class="single-course mb-70">
+            //        <div class="course-img">
+            //            <img src="@course.ImageUrl" alt="">
+            //        </div>
+            //        <div class="course-caption">
+            //            <div class="course-cap-top">
+            //                <h4><a href="#">@course.Title</a></h4>
+            //            </div>
+            //            <div class="course-cap-mid d-flex justify-content-between">
+            //                <div class="course-ratting">
+            //                    @for (int i = 0; i < course.Rating; i++)
+            //                    {
+            //                        <i class="fas fa-star"></i>
+            //                    }
+            //                </div>
+            //                <ul><li>@course.ReviewCount Review</li></ul>
+            //            </div>
+            //            <div class="course-cap-bottom d-flex justify-content-between">
+            //                <ul>
+            //                    <li><i class="ti-user"></i> @course.StudentCount</li>
+            //                    <li><i class="ti-heart"></i> @course.LikeCount</li>
+            //                </ul>
+            //                <span>@(course.Price.HasValue ? course.Price.Value.ToString("C") : "Free")</span>
+            //            </div>
+            //        </div>
+            //    </div>
+            //</div>
+
+
+
+
+    //<div class="col-md-9">
+    //    <div id="course-content">
+    //        <div class="row">
+    //            @if (Model != null)
+    //            {
+    //                @foreach (var course in Model)
+    //                {
+    //                    <div class="col-xl-12 col-lg-12 col-md-12">
+    //                        <div class="single-course mb-70">
+    //                            <div class="course-container">
+    //                                <div class="course-img">
+    //                                    <img src="@course.ImageUrl" alt="">
+    //                                </div>
+    //                                <div class="course-details">
+    //                                    <div class="course-caption">
+    //                                        <div class="course-cap-top">
+    //                                            <h4><a href="#">@course.Title</a></h4>
+    //                                        </div>
+    //                                        <div class="course-cap-mid d-flex justify-content-between">
+    //                                            <div class="course-ratting">
+    //                                                @for (int i = 0; i < course.Rating; i++)
+    //                                                {
+    //                                                    <i class="fas fa-star"></i>
+    //                                                }
+    //                                            </div>
+    //                                            <ul><li>@course.ReviewCount Review</li></ul>
+    //                                        </div>
+    //                                        <div class="course-cap-bottom d-flex justify-content-between">
+    //                                            <ul>
+    //                                                <li><i class="ti-user"></i> @course.StudentCount</li>
+    //                                                <li><i class="ti-heart"></i> @course.LikeCount</li>
+    //                                            </ul>
+    //                                            <span>@(course.Price.HasValue ? course.Price.Value.ToString("C") : "Free")</span>
+    //                                        </div>
+    //                                    </div>
+    //                                </div>
+    //                            </div>
+    //                        </div>
+    //                    </div>
+    //                }
+    //            }
+    //            else
+    //            {
+    //                <p>Kurslar yüklenemedi.</p>
+    //            }
+    //        </div>
+    //    </div>
+    //</div>
+
+}
+else
+{
+    <p>Geçersiz displayType: @displayType</p>
+}

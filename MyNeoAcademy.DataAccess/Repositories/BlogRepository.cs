@@ -38,5 +38,25 @@ namespace MyNeoAcademy.DataAccess.Repositories
                  .FirstOrDefaultAsync(b => b.BlogID == id);
         }
 
+        public async Task<(List<Blog> Blogs, int TotalCount)> GetPagedAsync(int page, int pageSize)
+        {
+            var query = Table
+                .Include(b => b.Author)
+                .Include(b => b.Category)
+                .Include(b => b.Comments)
+                .Include(b => b.BlogTags)
+                    .ThenInclude(bt => bt.Tag)
+                .OrderByDescending(b => b.PublishDate);
+
+            var totalCount = await query.CountAsync();
+
+            var blogs = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (blogs, totalCount);
+        }
+
     }
 }

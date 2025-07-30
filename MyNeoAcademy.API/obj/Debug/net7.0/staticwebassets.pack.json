@@ -93,6 +93,10 @@
       "PackagePath": "staticwebassets\\img\\blogs\\0e0d0d88-f4c0-43e2-92c9-b15b212e4059.png"
     },
     {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\blogs\\3bd1097e-d407-486c-a4bd-5532a73add50.png",
+      "PackagePath": "staticwebassets\\img\\blogs\\3bd1097e-d407-486c-a4bd-5532a73add50.png"
+    },
+    {
       "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\blogs\\58432064-ba38-4b8b-a356-15f00f87b3b5.png",
       "PackagePath": "staticwebassets\\img\\blogs\\58432064-ba38-4b8b-a356-15f00f87b3b5.png"
     },
@@ -111,6 +115,10 @@
     {
       "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\comments\\02f93988-678f-4e9e-a543-dc29e2601a98.png",
       "PackagePath": "staticwebassets\\img\\comments\\02f93988-678f-4e9e-a543-dc29e2601a98.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\comments\\0a0e9271-17f4-4282-8e38-425eba68b44d.png",
+      "PackagePath": "staticwebassets\\img\\comments\\0a0e9271-17f4-4282-8e38-425eba68b44d.png"
     },
     {
       "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\comments\\114819f3-815b-4aad-a5fc-2c3cea8e733e.png",
@@ -249,6 +257,18 @@
       "PackagePath": "staticwebassets\\img\\courses\\3aa0aa1d-2365-4868-bda9-30579b315780.png"
     },
     {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\courses\\700f9ef6-531e-48ad-a780-db636b297145.png",
+      "PackagePath": "staticwebassets\\img\\courses\\700f9ef6-531e-48ad-a780-db636b297145.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\courses\\82aec45c-5bb2-4a7f-a6b9-1c2c5df9e7bf.png",
+      "PackagePath": "staticwebassets\\img\\courses\\82aec45c-5bb2-4a7f-a6b9-1c2c5df9e7bf.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\courses\\b031ce5e-7db9-4a38-b30e-4e351b722d3b.png",
+      "PackagePath": "staticwebassets\\img\\courses\\b031ce5e-7db9-4a38-b30e-4e351b722d3b.png"
+    },
+    {
       "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\courses\\bfb26523-c249-4a6a-a7cc-794ddf2b6f30.png",
       "PackagePath": "staticwebassets\\img\\courses\\bfb26523-c249-4a6a-a7cc-794ddf2b6f30.png"
     },
@@ -281,6 +301,10 @@
       "PackagePath": "staticwebassets\\img\\instructors\\84e61c5a-dd01-4cfa-a9b1-cc4d9aaaeb3a.png"
     },
     {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\instructors\\ac7faf2d-dccc-4e5f-9670-45bda5aaba5e.png",
+      "PackagePath": "staticwebassets\\img\\instructors\\ac7faf2d-dccc-4e5f-9670-45bda5aaba5e.png"
+    },
+    {
       "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\instructors\\ac9a2ea8-86af-41c7-8ebf-7e930cb71e2f.png",
       "PackagePath": "staticwebassets\\img\\instructors\\ac9a2ea8-86af-41c7-8ebf-7e930cb71e2f.png"
     },
@@ -303,6 +327,34 @@
     {
       "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\instructors\\fae60ed7-ce75-4f58-b4b9-f7dafef45270.png",
       "PackagePath": "staticwebassets\\img\\instructors\\fae60ed7-ce75-4f58-b4b9-f7dafef45270.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\recentblogposts\\238ca1ef-3838-43a5-a22a-cd4d7c16cc5c.png",
+      "PackagePath": "staticwebassets\\img\\recentblogposts\\238ca1ef-3838-43a5-a22a-cd4d7c16cc5c.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\recentblogposts\\2435dd37-e762-4558-b54c-f7cebfea219b.png",
+      "PackagePath": "staticwebassets\\img\\recentblogposts\\2435dd37-e762-4558-b54c-f7cebfea219b.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\recentblogposts\\901666b1-9c46-4cf7-ab1b-786cfb6a451a.png",
+      "PackagePath": "staticwebassets\\img\\recentblogposts\\901666b1-9c46-4cf7-ab1b-786cfb6a451a.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\recentblogposts\\9c1e3ee1-19c8-4692-9cc9-b373f17259c9.png",
+      "PackagePath": "staticwebassets\\img\\recentblogposts\\9c1e3ee1-19c8-4692-9cc9-b373f17259c9.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\recentblogposts\\9d6b6e6c-7cb1-4ae2-994d-43963bfed6cb.png",
+      "PackagePath": "staticwebassets\\img\\recentblogposts\\9d6b6e6c-7cb1-4ae2-994d-43963bfed6cb.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\recentblogposts\\e396a819-62ec-4590-9201-438a4d32febb.png",
+      "PackagePath": "staticwebassets\\img\\recentblogposts\\e396a819-62ec-4590-9201-438a4d32febb.png"
+    },
+    {
+      "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\recentblogposts\\f100cd92-16fb-414f-b1b6-fd5961da2426.png",
+      "PackagePath": "staticwebassets\\img\\recentblogposts\\f100cd92-16fb-414f-b1b6-fd5961da2426.png"
     },
     {
       "Id": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.API\\wwwroot\\img\\sliders\\0621eff6-7f7d-4b48-92f7-c6fcc84c42e7.png",

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyNeoAcademy.Application.Abstract;
-using MyNeoAcademy.Application.Abstract.MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Business.Concrete;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.DataAccess.Repositories;
@@ -29,7 +28,8 @@ namespace MyNeoAcademy.Business.DependencyResolvers
             services.AddScoped<IBlogTagRepository, BlogTagRepository>();
 
             // Services
-            
+
+            services.AddScoped<IAboutDetailService, AboutDetailManager>();
             services.AddScoped<IRecentBlogPostService, RecentBlogPostManager>();
             services.AddScoped<INewsletterService, NewsletterManager>();
             services.AddScoped<ITestimonialService, TestimonialManager>();

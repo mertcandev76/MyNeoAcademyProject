@@ -8,7 +8,7 @@
 <!--? Slider Area End -->
 
 <!--? Categories Area Start -->
-@await Component.InvokeAsync("HomeCategory")
+@await Component.InvokeAsync("CategoryList", new { displayType = "Home" })
 <!-- Categories Area End -->
 
 @*<!--? Count Down Start -->
@@ -16,11 +16,13 @@
 <!-- Count Down End -->*@
 
 <!--? Popular Course Start -->
-@await Component.InvokeAsync("HomeCourse")
+@*@await Component.InvokeAsync("HomeCourse")*@
+@await Component.InvokeAsync("CourseList", new { displayType = "Home" })
+
 <!-- Popular Course End -->
 
 <!--? Team Ara Start -->
-@await Component.InvokeAsync("HomeInstructor")
+@await Component.InvokeAsync("InstructorList", new { displayType = "Home" })
 <!-- Team Ara End -->
 
 <!--? About Law Start-->
@@ -32,6 +34,7 @@
 <!-- Testimonial End -->
 
 <!--? Blog Area Start -->
-@await Component.InvokeAsync("HomeBlog")
+@*@await Component.InvokeAsync("HomeBlog")*@
+@await Component.InvokeAsync("BlogList", new { displayType = "Home", pageSize = 4 })
 <!-- Blog Area End -->
 

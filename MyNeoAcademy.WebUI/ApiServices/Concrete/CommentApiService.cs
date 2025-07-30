@@ -5,6 +5,7 @@ using MyNeoAcademy.Entity.Entities;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 
 namespace MyNeoAcademy.WebUI.ApiServices.Concrete
@@ -21,6 +22,24 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
             {
                 PropertyNameCaseInsensitive = true
             };
+        }
+
+        public async Task<PagedResultDTO<ResultCommentDTO>> GetPagedAsync(int page, int pageSize)
+        {
+            var response = await _httpClient.GetAsync($"comments/paged?page={page}&pageSize={pageSize}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<PagedResultDTO<ResultCommentDTO>>(json, _jsonOptions)!;
+        }
+
+        public async Task<PagedResultDTO<ResultCommentDTO>> GetPagedByBlogAsync(int blogId, int page, int pageSize)
+        {
+            var response = await _httpClient.GetAsync($"comments/pagedbyblog?blogId={blogId}&page={page}&pageSize={pageSize}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<PagedResultDTO<ResultCommentDTO>>(json, _jsonOptions)!;
         }
 
         public async Task<List<ResultCommentDTO>> GetAllAsync()
@@ -42,7 +61,14 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
             return JsonSerializer.Deserialize<ResultCommentDTO>(json, _jsonOptions);
         }
 
-        public async Task<bool> CreateAsync(CreateCommentWithFileDTO dto)
+        public async Task<bool> CreateUserCommentAsync(CreateCommentDTO dto)
+        {
+            var jsonContent = JsonContent.Create(dto);
+            var response = await _httpClient.PostAsync("comments/create-user-comment", jsonContent);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> CreateAdminCommentAsync(CreateCommentWithFileDTO dto)
         {
             var formData = GetFormData(dto);
             if (dto.ImageFile != null)
@@ -76,9 +102,10 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            var blogs = JsonSerializer.Deserialize<List<ResultBlogDTO>>(json, _jsonOptions);
 
-            return blogs?
+            var paged = JsonSerializer.Deserialize<PagedResultDTO<ResultBlogDTO>>(json, _jsonOptions);
+
+            return paged?.Items
                 .Select(b => new SelectListItem
                 {
                     Text = b.Title ?? "Başlıksız",
@@ -87,15 +114,21 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
                 ?? new List<SelectListItem>();
         }
 
+        // Helper for form data from CreateCommentDTO and UpdateCommentDTO base props
         private MultipartFormDataContent GetFormData(CreateCommentDTO dto)
         {
-            return new MultipartFormDataContent
-            {
-                { new StringContent(dto.UserName ?? ""), "UserName" },
-                { new StringContent(dto.Email ?? ""), "Email" },
-                { new StringContent(dto.Content ?? ""), "Content" },
-                { new StringContent(dto.BlogID.ToString()), "BlogID" }
-            };
+            var formData = new MultipartFormDataContent();
+
+            if (!string.IsNullOrEmpty(dto.UserName))
+                formData.Add(new StringContent(dto.UserName), nameof(dto.UserName));
+            if (!string.IsNullOrEmpty(dto.Email))
+                formData.Add(new StringContent(dto.Email), nameof(dto.Email));
+            if (!string.IsNullOrEmpty(dto.Content))
+                formData.Add(new StringContent(dto.Content), nameof(dto.Content));
+
+            formData.Add(new StringContent(dto.BlogID.ToString()), nameof(dto.BlogID));
+
+            return formData;
         }
 
         private StreamContent GetStreamContent(IFormFile file)

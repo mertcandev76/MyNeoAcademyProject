@@ -38,7 +38,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Blogs = await _commentApiService.GetBlogDropdownItemsAsync();
+            await LoadBlogsAsync();
             return View();
         }
 
@@ -47,16 +47,16 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Blogs = await _commentApiService.GetBlogDropdownItemsAsync();
+                await LoadBlogsAsync();
                 return View(dto);
             }
 
-            var result = await _commentApiService.CreateAsync(dto);
+            var result = await _commentApiService.CreateAdminCommentAsync(dto); // Burada admin methodu çağrıldı
             if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yorum eklenemedi.");
-            ViewBag.Blogs = await _commentApiService.GetBlogDropdownItemsAsync();
+            await LoadBlogsAsync();
             return View(dto);
         }
 
@@ -77,7 +77,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 BlogID = result.Blog?.BlogID ?? 0
             };
 
-            ViewBag.Blogs = await _commentApiService.GetBlogDropdownItemsAsync();
+            await LoadBlogsAsync();
             return View(dto);
         }
 
@@ -86,7 +86,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Blogs = await _commentApiService.GetBlogDropdownItemsAsync();
+                await LoadBlogsAsync();
                 return View(dto);
             }
 
@@ -95,7 +95,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yorum güncellenemedi.");
-            ViewBag.Blogs = await _commentApiService.GetBlogDropdownItemsAsync();
+            await LoadBlogsAsync();
             return View(dto);
         }
 
@@ -107,5 +107,11 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
+        private async Task LoadBlogsAsync()
+        {
+            ViewBag.Blogs = await _commentApiService.GetBlogDropdownItemsAsync();
+        }
     }
 }
+

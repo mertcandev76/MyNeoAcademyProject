@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.Abstract
 {
-    namespace MyNeoAcademy.Application.Abstract
-    {
+   
         public interface IInstructorService : IGenericService<
             Instructor,
             CreateInstructorDTO,
@@ -24,7 +23,7 @@ namespace MyNeoAcademy.Application.Abstract
             Task UpdateWithFileAsync(UpdateInstructorWithFileDTO dto, string webRootPath);
             Task<bool> DeleteByIdAsync(int id);
         }
-    }
+    
 
 
 }

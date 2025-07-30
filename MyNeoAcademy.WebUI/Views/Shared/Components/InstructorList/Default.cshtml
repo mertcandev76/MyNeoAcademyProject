@@ -1,0 +1,101 @@
+﻿@model List<ResultInstructorDTO>
+
+@{
+    var displayType = ViewData["DisplayType"] as string ?? "Home";
+}
+
+@if (displayType == "Home")
+{
+    <!-- Anasayfa Eğitmen Bölümü -->
+    <div class="team-area pt-160 pb-160 section-bg" data-background="/onlineedu-master/assets/img/gallery/section_bg02.png">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="cl-xl-7 col-lg-8 col-md-10">
+                    <div class="section-tittle section-tittle2 text-center mb-70">
+                        <span>Fakültemiz Hakkında Daha Fazla</span>
+                        <h2>En İyi Öğretmenlerimiz</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var teacher in Model)
+                {
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="single-team mb-30">
+                            <div class="team-img">
+                                <img src="@teacher.ImageUrl" alt="@teacher.FullName" />
+                                <ul class="team-social">
+                                    @if (!string.IsNullOrEmpty(teacher.FacebookUrl))
+                                    {
+                                        <li><a href="@teacher.FacebookUrl" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                                    }
+                                    @if (!string.IsNullOrEmpty(teacher.TwitterUrl))
+                                    {
+                                        <li><a href="@teacher.TwitterUrl" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                                    }
+                                    @if (!string.IsNullOrEmpty(teacher.WebsiteUrl))
+                                    {
+                                        <li><a href="@teacher.WebsiteUrl" target="_blank"><i class="fas fa-globe"></i></a></li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="team-caption">
+                                <h3><a href="#">@teacher.FullName</a></h3>
+                                <p>@teacher.Title</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="browse-btn2 text-center mt-70">
+                        <a href="/Instructor" class="btn white-btn">Tüm Fakülteyi Görüntüle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (displayType == "InstructorMenu")
+{
+    <!-- Eğitmen Menü Sayfası -->
+    <div class="team-area pt-160 pb-160">
+        <div class="container">
+            <div class="row">
+                @foreach (var instructor in Model)
+                {
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="single-team mb-30">
+                            <div class="team-img">
+                                <img src="@instructor.ImageUrl" alt="@instructor.FullName" class="img-fluid" />
+                                <ul class="team-social">
+                                    @if (!string.IsNullOrEmpty(instructor.FacebookUrl))
+                                    {
+                                        <li><a href="@instructor.FacebookUrl" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                                    }
+                                    @if (!string.IsNullOrEmpty(instructor.TwitterUrl))
+                                    {
+                                        <li><a href="@instructor.TwitterUrl" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                                    }
+                                    @if (!string.IsNullOrEmpty(instructor.WebsiteUrl))
+                                    {
+                                        <li><a href="@instructor.WebsiteUrl" target="_blank"><i class="fas fa-globe"></i></a></li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="team-caption">
+                                <h3><a href="#">@instructor.FullName</a></h3>
+                                <p>@(string.IsNullOrEmpty(instructor.Title) ? "Faculty" : instructor.Title)</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Geçersiz displayType: @displayType</p>
+}

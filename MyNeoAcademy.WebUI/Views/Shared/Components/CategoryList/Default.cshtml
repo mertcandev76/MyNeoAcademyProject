@@ -1,0 +1,86 @@
+﻿@model List<ResultCategoryDTO>
+
+@{
+    var displayType = ViewData["DisplayType"] as string ?? "Default";
+}
+
+@if (displayType == "Home")
+{
+    <!-- Ana sayfa kategori görünümü -->
+    <div class="categories-area section-padding30">
+        <div class="container">
+            <div class="row justify-content-sm-center">
+                <div class="cl-xl-7 col-lg-8 col-md-10">
+                    <div class="section-tittle text-center mb-70">
+                        <span>Popüler Çevrimiçi Kurslar</span>
+                        <h2>Tüm Kategorilere Göz Atalım</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var cat in Model)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="single-cat mb-50">
+                            <div class="cat-icon">
+                                <span class="@cat.IconClass"></span>
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="#">@cat.Name</a></h5>
+                                <p>@cat.Description</p>
+                                <a href="#" class="read-more1">Devamını oku</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="browse-btn2 text-center mt-50">
+                        <a href="/courses" class="btn">Daha Fazla Kurs Bul</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (displayType == "Sidebar")
+{
+    <!-- Blog sayfası sidebar kategori görünümü -->
+    <aside class="single_sidebar_widget post_category_widget">
+        <h4 class="widget_title" style="color: #2d2d2d;">Kategori</h4>
+        <ul class="list cat-list">
+            @foreach (var category in Model)
+            {
+                <li>
+                    <a href="@Url.Action("Category", "Blog", new { id = category.CategoryID })" class="d-flex">
+                        <p>@category.Name</p>
+                        <p>(@category.Blogs?.Count ?? 0)</p>
+                    </a>
+                </li>
+            }
+        </ul>
+    </aside>
+}
+else if (displayType == "Tabs")
+{
+
+
+
+    <nav>
+        <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link category-tab active" data-category-id="0" href="#" role="tab">Tümü</a>
+            @foreach (var cat in Model)
+            {
+                <a class="nav-item nav-link category-tab" data-category-id="@cat.CategoryID" href="#" role="tab">@cat.Name</a>
+            }
+        </div>
+    </nav>
+
+}
+else
+{
+    <p>Geçersiz displayType: @displayType</p>
+}
+
+

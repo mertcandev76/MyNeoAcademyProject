@@ -19,5 +19,7 @@ namespace MyNeoAcademy.Application.Abstract
         Task CreateWithFileAsync(CreateBlogWithFileDTO dto, string webRootPath);
         Task UpdateWithFileAsync(UpdateBlogWithFileDTO dto, string webRootPath);
         Task<bool> DeleteByIdAsync(int id);
+        Task<PagedResultDTO<ResultBlogDTO>> GetPagedAsync(int page, int pageSize);
+
     }
 }

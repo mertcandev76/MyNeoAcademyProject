@@ -21,13 +21,14 @@ namespace MyNeoAcademy.API.Controllers
             _env = env;
         }
 
+        //  Paginasyon destekli GET (yeni hali)
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
             try
             {
-                var blogs = await _blogService.GetAllWithIncludesAsync();
-                return Ok(blogs);
+                var pagedBlogs = await _blogService.GetPagedAsync(page, pageSize);
+                return Ok(pagedBlogs);
             }
             catch (Exception ex)
             {

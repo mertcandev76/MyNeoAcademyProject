@@ -1,0 +1,45 @@
+﻿@model UpdateAboutDetailDTO
+
+@{
+    ViewData["Title"] = "Hakkımızda Detay Güncelle";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" asp-area="Admin" method="post">
+                <input type="hidden" asp-for="AboutDetailID" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Başlık</label>
+                    <input asp-for="Title" class="form-control" placeholder="Başlık girin..." />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Paragraph1" class="form-label">Paragraf 1</label>
+                    <textarea asp-for="Paragraph1" class="form-control" placeholder="Birinci paragrafı girin..." rows="4"></textarea>
+                    <span asp-validation-for="Paragraph1" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Paragraph2" class="form-label">Paragraf 2</label>
+                    <textarea asp-for="Paragraph2" class="form-control" placeholder="İkinci paragrafı girin (opsiyonel)..." rows="4"></textarea>
+                    <span asp-validation-for="Paragraph2" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

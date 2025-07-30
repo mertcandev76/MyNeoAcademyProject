@@ -8,5 +8,12 @@ namespace MyNeoAcademy.WebUI.Controllers
         {
             return View();
         }
+        // ViewComponent'i AJAX ile tetiklemek için kullanılan Action
+        [HttpGet]
+        public IActionResult LoadCoursesByCategory(int categoryId)
+        {
+            return ViewComponent("CourseList", new { displayType = "CourseMenu", categoryId = categoryId });
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.DataAccess.Abstract;
@@ -36,18 +37,7 @@ namespace MyNeoAcademy.Business.Concrete
         public async Task<List<ResultCommentDTO>> GetAllWithIncludesAsync()
         {
             var comments = await _commentRepository.GetAllWithIncludesAsync();
-            var dtos = _mapper.Map<List<ResultCommentDTO>>(comments);
-
-            string baseUrl = GetBaseUrl();
-            foreach (var dto in dtos)
-            {
-                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-                {
-                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-                }
-            }
-
-            return dtos;
+            return MapWithImageUrls(comments);
         }
 
         public async Task<ResultCommentDTO?> GetByIdWithIncludesAsync(int id)
@@ -57,48 +47,85 @@ namespace MyNeoAcademy.Business.Concrete
                 return null;
 
             var dto = _mapper.Map<ResultCommentDTO>(comment);
-
-            string baseUrl = GetBaseUrl();
-            if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-            {
-                dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-            }
-
+            ApplyImageUrl(dto);
             return dto;
         }
 
         public async Task<List<ResultCommentDTO>> GetByIdWithIncludesBlogAsync(int blogId)
         {
             var comments = await _commentRepository.GetByIdWithIncludesBlogAsync(blogId);
-            var dtos = _mapper.Map<List<ResultCommentDTO>>(comments);
-
-            string baseUrl = GetBaseUrl();
-            foreach (var dto in dtos)
-            {
-                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-                {
-                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-                }
-            }
-
-            return dtos;
+            return MapWithImageUrls(comments);
         }
 
+        public async Task<PagedResultDTO<ResultCommentDTO>> GetPagedAsync(int page, int pageSize)
+        {
+            int skip = (page - 1) * pageSize;
+
+            var comments = await _commentRepository.GetPagedCommentsAsync(skip, pageSize);
+            var totalCount = await _commentRepository.GetTotalCountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            var dtos = _mapper.Map<List<ResultCommentDTO>>(comments);
+            foreach (var dto in dtos)
+            {
+                ApplyImageUrl(dto);
+            }
+
+            return new PagedResultDTO<ResultCommentDTO>
+            {
+                Items = dtos,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = totalPages
+            };
+        }
+
+        // Blog bazlı sayfalama metodu
+        public async Task<PagedResultDTO<ResultCommentDTO>> GetPagedByBlogAsync(int blogId, int page, int pageSize)
+        {
+            int skip = (page - 1) * pageSize;
+
+            var query = _commentRepository.Table.Where(c => c.BlogID == blogId);
+
+            var totalCount = await query.CountAsync();
+
+            var comments = await query
+                .OrderByDescending(c => c.CreatedDate)
+                .Skip(skip)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dtos = _mapper.Map<List<ResultCommentDTO>>(comments);
+            foreach (var dto in dtos)
+            {
+                ApplyImageUrl(dto);
+            }
+
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            return new PagedResultDTO<ResultCommentDTO>
+            {
+                Items = dtos,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = totalPages
+            };
+        }
 
         public override async Task CreateAsync(CreateCommentDTO dto)
         {
             var entity = _mapper.Map<Comment>(dto);
-            entity.CreatedDate = DateTime.UtcNow; 
+            entity.CreatedDate = DateTime.UtcNow;
             await _commentRepository.CreateAsync(entity);
         }
 
-        //  Kullanıcı yorumu (resimsiz)
         public async Task CreateUserCommentAsync(CreateCommentDTO dto)
         {
             await CreateAsync(dto);
         }
 
-        //  Admin yorumu (resimli)
         public async Task CreateWithFileAsync(CreateCommentWithFileDTO dto, string webRootPath)
         {
             if (dto.ImageFile != null)
@@ -141,5 +168,25 @@ namespace MyNeoAcademy.Business.Concrete
                 ? $"{request.Scheme}://{request.Host}"
                 : "https://localhost:7230";
         }
+
+        private void ApplyImageUrl(ResultCommentDTO dto)
+        {
+            if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
+            {
+                dto.ImageUrl = $"{GetBaseUrl()}/{dto.ImageUrl.TrimStart('/')}";
+            }
+        }
+
+        private List<ResultCommentDTO> MapWithImageUrls(List<Comment> comments)
+        {
+            var dtos = _mapper.Map<List<ResultCommentDTO>>(comments);
+            foreach (var dto in dtos)
+            {
+                ApplyImageUrl(dto);
+            }
+            return dtos;
+        }
     }
+
+
 }

@@ -117,5 +117,33 @@ namespace MyNeoAcademy.Business.Concrete
             await _blogRepository.DeleteAsync(entity);
             return true;
         }
+
+        public async Task<PagedResultDTO<ResultBlogDTO>> GetPagedAsync(int page, int pageSize)
+        {
+            var (blogs, totalCount) = await _blogRepository.GetPagedAsync(page, pageSize);
+            var blogDTOs = _mapper.Map<List<ResultBlogDTO>>(blogs);
+
+            var request = _httpContextAccessor.HttpContext?.Request;
+            string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
+                ? $"{request.Scheme}://{request.Host}"
+                : "https://localhost:7230";
+
+            foreach (var dto in blogDTOs)
+            {
+                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
+                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
+            }
+
+            int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+            return new PagedResultDTO<ResultBlogDTO>
+            {
+                Items = blogDTOs,
+                CurrentPage = page,
+                TotalPages = totalPages,
+                TotalCount = totalCount
+            };
+        }
+
     }
 }

@@ -1,51 +1,53 @@
 ﻿@model ResultBlogDTO
+
 @{
     ViewData["Title"] = "Detail";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    int commentPage = ViewBag.CommentPage ?? 1;
 }
-
+<!--? Hero Start -->
+<div class="slider-area ">
+    <div class="slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap hero-cap2 text-center">
+                        <h2>Blog Detayları</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
 <section class="blog_area single-post-area section-padding">
     <div class="container">
         <div class="row">
             <!-- BLOG İÇERİĞİ -->
             <div class="col-lg-8 posts-list">
-
                 <!-- İçerik -->
                 @await Component.InvokeAsync("BlogContent", new { id = Model.BlogID })
-
 
                 <!-- YAZAR -->
                 @await Component.InvokeAsync("BlogAuthor", new { authorId = Model.AuthorID })
 
-
                 <!-- YORUMLAR -->
-                @await Component.InvokeAsync("BlogComment", new { blogId = Model.BlogID })
+                @await Component.InvokeAsync("BlogComment", new { blogId = Model.BlogID, page = commentPage })
 
                 <!-- YORUM FORMU -->
-         
-
-
-                  @await Component.InvokeAsync("BlogCommentForm", new { blogId = Model.BlogID })
-
-
-          
-
-
+                @await Component.InvokeAsync("BlogCommentForm", new { blogId = Model.BlogID })
             </div>
 
             <div class="col-lg-4">
                 <div class="blog_right_sidebar">
-                    <!-- Arama -->
-
-                     @* @await Component.InvokeAsync("BlogSearch")*@
-
                     <!-- Kategoriler -->
-                    @await Component.InvokeAsync("BlogCategory")
+                    @await Component.InvokeAsync("CategoryList", new { displayType = "Sidebar" })
                     <!-- Son Postlar -->
-                       @await Component.InvokeAsync("BlogRecentPost")
+                    @await Component.InvokeAsync("BlogRecentPost")
 
                     <!-- Etiketler -->
                     @await Component.InvokeAsync("BlogTag")
+
                     <!-- Newsletter -->
                     @await Component.InvokeAsync("BlogNewsletter")
                 </div>
@@ -53,4 +55,3 @@
         </div>
     </div>
 </section>
-

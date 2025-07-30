@@ -1,0 +1,20 @@
+﻿@model List<ResultAboutDetailDTO>
+<div class="about-details section-padding30">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+@foreach (var item in Model)
+{
+                        <div class="about-details-cap mb-50">
+                            <h4>@item.Title</h4>
+                            <p>@item.Paragraph1</p>
+        @if (!string.IsNullOrEmpty(item.Paragraph2))
+        {
+                                    <p>@item.Paragraph2</p>
+        }
+                        </div>
+}
+            </div>
+        </div>
+    </div>
+</div>

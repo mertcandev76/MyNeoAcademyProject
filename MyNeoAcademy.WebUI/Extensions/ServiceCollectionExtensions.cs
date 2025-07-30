@@ -12,7 +12,7 @@ namespace MyNeoAcademy.WebUI.Extensions
                 client.BaseAddress = new Uri(baseApiUrl);
             });
 
-
+            services.AddScoped<IAboutDetailApiService, AboutDetailApiService>();
             services.AddScoped<IRecentBlogPostApiService, RecentBlogPostApiService>();
             services.AddScoped<INewsletterApiService, NewsletterApiService>();
             services.AddScoped<ITestimonialApiService, TestimonialApiService>();

@@ -4,5 +4,37 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h1>Index</h1>
 
+<!--? Hero Start -->
+<div class="slider-area">
+    <div class="slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap hero-cap2 text-center">
+                        <h2>Hakkımızda</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- About Details Start -->
+    @await Component.InvokeAsync("AboutDetailList")
+<!-- About Details End -->
+
+
+<!--? Count Down Start -->
+@await Component.InvokeAsync("StatisticList")
+<!-- Count Down End -->
+
+
+<!--? Testimonial Start -->
+@await Component.InvokeAsync("HomeTestimonial")
+<!-- Testimonial End -->
+
+<!--? About Law Start-->
+@await Component.InvokeAsync("HomeAbout")
+<!-- About Law End-->
