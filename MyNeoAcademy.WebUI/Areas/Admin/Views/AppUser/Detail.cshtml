@@ -1,0 +1,62 @@
+﻿@model ResultAppUserDTO
+
+@{
+    ViewData["Title"] = "Kullanıcı Detayı";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-primary">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Kullanıcı Adı</dt>
+                <dd class="col-sm-9">@Model.UserName</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+
+                <dt class="col-sm-3">Tam Adı</dt>
+                <dd class="col-sm-9">@Model.FullName</dd>
+
+                <dt class="col-sm-3">Durum</dt>
+                <dd class="col-sm-9">
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Aktif</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Pasif</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Profil Resmi</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                    {
+                        <img src="@Url.Content(Model.ProfileImageUrl)" alt="Profil Resmi" class="img-thumbnail" style="max-height: 120px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Resim bulunamadı.</span>
+                    }
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                <a asp-action="Edit" asp-area="Admin" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

@@ -16,6 +16,7 @@ namespace MyNeoAcademy.DataAccess.Abstract
 
         Task<List<Comment>> GetPagedCommentsAsync(int skip, int take);
         Task<int> GetTotalCountAsync();
+        Task<List<Comment>> GetByAppUserIdAsync(int appUserId);
 
     }
 }

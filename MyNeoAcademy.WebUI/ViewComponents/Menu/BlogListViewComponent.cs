@@ -13,19 +13,14 @@ namespace MyNeoAcademy.WebUI.ViewComponents.Menu
             _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
 
-        /// <summary>
-        /// displayType = "Home" veya "BlogMenu"
-        /// page = sayfa numarası (BlogMenu için)
-        /// pageSize = sayfa başına gösterilecek blog sayısı
-        /// </summary>
         public async Task<IViewComponentResult> InvokeAsync(string displayType = "Home", int page = 1, int pageSize = 4)
         {
             string url;
 
             if (displayType == "BlogMenu")
-                url = $"blogs?page={page}&pageSize={pageSize}"; // Pagination destekli API endpoint
+                url = $"blogs?page={page}&pageSize={pageSize}"; 
             else
-                url = "blogs"; // Anasayfa için tüm bloglar (API varsayılanı getirir)
+                url = "blogs"; 
 
             var response = await _httpClient.GetAsync(url);
 
@@ -42,7 +37,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.Menu
             var pagedResult = await JsonSerializer.DeserializeAsync<PagedResultDTO<ResultBlogDTO>>(stream, options)
                               ?? new PagedResultDTO<ResultBlogDTO>();
 
-            // Anasayfa ise sadece ilk pageSize kadarını göster
+
             if (displayType == "Home")
                 pagedResult.Items = pagedResult.Items.Take(pageSize).ToList();
 

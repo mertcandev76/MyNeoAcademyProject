@@ -15,7 +15,10 @@ namespace MyNeoAcademy.Entity.Entities
         public string? Title { get; set; }      
         public string? ImageUrl { get; set; }    
         public string? Content { get; set; }   
-        public int Rating { get; set; }        
+        public int Rating { get; set; }
+
+        public int? AppUserID { get; set; }
+        public AppUser? AppUser { get; set; }
     }
 }
 

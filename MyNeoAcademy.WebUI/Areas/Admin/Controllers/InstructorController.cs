@@ -3,20 +3,32 @@ using System.Net.Http.Headers;
 using MyNeoAcademy.Application.DTOs;
 using System.Text.Json;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MyNeoAcademy.WebUI.ApiServices.Concrete;
 
-    namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
-    {
-        [Area("Admin")]
-        [Route("[area]/[controller]/[action]/{id?}")]
+namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
+    
+{
+    [Authorize(Roles = "Admin")]
+    [Area("Admin")]
     public class InstructorController : Controller
     {
         private readonly IInstructorApiService _instructorApiService;
+        private readonly IAppUserApiService _appUserApiService;
 
-        public InstructorController(IInstructorApiService instructorApiService)
+        public InstructorController(IInstructorApiService instructorApiService, IAppUserApiService appUserApiService)
         {
             _instructorApiService = instructorApiService;
+            _appUserApiService = appUserApiService;
         }
+        private async Task LoadAppUserDropdownAsync(object? selectedValue = null)
+        {
 
+            var appUserList = await _appUserApiService.GetDropdownItemsByRoleAsync("Instructor");
+            ViewBag.AppUserList = new SelectList(appUserList, "Value", "Text", selectedValue);
+        }
         public async Task<IActionResult> Index()
         {
             var data = await _instructorApiService.GetAllAsync();
@@ -33,11 +45,20 @@ using MyNeoAcademy.WebUI.ApiServices.Abstract;
         }
 
         [HttpGet]
-        public IActionResult Create() => View();
+        public async Task<IActionResult> Create()
+        {
+            await LoadAppUserDropdownAsync();
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateInstructorWithFileDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                await LoadAppUserDropdownAsync(dto.AppUserID);
+                return View(dto);
+            }
             var result = await _instructorApiService.CreateAsync(dto);
             if (result)
                 return RedirectToAction("Index");
@@ -52,6 +73,7 @@ using MyNeoAcademy.WebUI.ApiServices.Abstract;
             var result = await _instructorApiService.GetByIdAsync(id);
             if (result == null)
                 return RedirectToAction("Index");
+            await LoadAppUserDropdownAsync(result.AppUserID);
 
             var dto = new UpdateInstructorWithFileDTO
             {
@@ -71,15 +93,22 @@ using MyNeoAcademy.WebUI.ApiServices.Abstract;
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateInstructorWithFileDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                await LoadAppUserDropdownAsync(dto.AppUserID);
+                return View(dto);
+            }
             var result = await _instructorApiService.UpdateAsync(dto);
             if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Eğitmen bilgisi güncellenemedi.");
+            await LoadAppUserDropdownAsync(dto.AppUserID);
             return View(dto);
         }
-
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _instructorApiService.DeleteAsync(id);
             if (!result)

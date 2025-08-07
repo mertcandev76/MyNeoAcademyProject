@@ -1,0 +1,64 @@
+﻿@model LoginRequestModel
+
+<div class="content">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-6">
+                <img src="~/login-form-07/images/undraw_remotely_2j6y.svg" alt="Giriş Resmi" class="img-fluid" />
+            </div>
+
+            <div class="col-md-6 contents">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="mb-4">
+                            <h3>Giriş Yap</h3>
+                            <p class="mb-4">Tekrar hoşgeldiniz! Lütfen hesabınıza giriş yapın.</p>
+                        </div>
+
+                        <!-- ModelState Hataları -->                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger">
+                                <strong>Formda hatalar var:</strong>
+                                <ul>
+                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <form asp-area="Auth" asp-controller="Login" asp-action="Index" method="post" novalidate>
+                            <div class="form-group first">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group last mb-4">
+                                <label asp-for="Password" class="form-label"></label>
+                                <input asp-for="Password" type="password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-flex mb-4 align-items-center">
+                                <div class="form-check">
+                                    <input asp-for="RememberMe" class="form-check-input" />
+                                    <label asp-for="RememberMe" class="form-check-label"></label>
+                                </div>
+                            </div>
+
+
+                                <input type="submit" value="Giriş Yap" class="btn btn-block btn-primary" />
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+

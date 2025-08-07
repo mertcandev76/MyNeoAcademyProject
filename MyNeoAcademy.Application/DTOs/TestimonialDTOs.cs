@@ -12,38 +12,33 @@ namespace MyNeoAcademy.Application.DTOs
 {
     public class CreateTestimonialDTO
     {
-
         public string FullName { get; set; } = null!;
         public string? Title { get; set; }
         public string? ImageUrl { get; set; }
         public string? Content { get; set; }
         public int Rating { get; set; }
+        public int? AppUserID { get; set; }
     }
+
     public class CreateTestimonialWithFileDTO : CreateTestimonialDTO
     {
         public IFormFile? ImageFile { get; set; }
     }
+
     public class ResultTestimonialDTO : CreateTestimonialDTO
     {
         public int TestimonialID { get; set; }
     }
-    public class UpdateTestimonialDTO : CreateTestimonialDTO,IHasId
+
+    public class UpdateTestimonialDTO : CreateTestimonialDTO, IHasId
     {
         public int TestimonialID { get; set; }
-        [JsonIgnore]
-        public int Id
-        {
-            get => TestimonialID;
-            set => TestimonialID = value;
-        }
+        [JsonIgnore] public int Id { get => TestimonialID; set => TestimonialID = value; }
     }
-    public class UpdateTestimonialWithFileDTO : CreateTestimonialWithFileDTO,IHasId
+
+    public class UpdateTestimonialWithFileDTO : CreateTestimonialWithFileDTO, IHasId
     {
         public int TestimonialID { get; set; }
-        public int Id
-        {
-            get => TestimonialID;
-            set => TestimonialID = value;
-        }
+        public int Id { get => TestimonialID; set => TestimonialID = value; }
     }
 }

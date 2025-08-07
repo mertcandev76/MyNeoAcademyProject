@@ -27,7 +27,7 @@
                             <div class="course-cap-mid d-flex justify-content-between">
                                 <div class="course-ratting">
                                     @{
-                                        // Yıldız dolulukları hesaplama ve gösterme
+
                                         int fullStars = course.Rating;
                                         bool halfStar = (course.Rating - fullStars) >= 0.5;
                                         int emptyStars = 5 - fullStars - (halfStar ? 1 : 0);

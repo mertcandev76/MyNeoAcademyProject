@@ -11,5 +11,6 @@ namespace MyNeoAcademy.DataAccess.Abstract
     {
         Task<List<Author>> GetAllWithIncludesAsync();
         Task<Author?> GetByIdWithIncludesAsync(int id);
+        Task<Author?> GetByAppUserIdAsync(int appUserId);
     }
 }

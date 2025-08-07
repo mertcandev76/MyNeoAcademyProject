@@ -6,19 +6,25 @@ using System.Text;
 using MyNeoAcademy.WebUI.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using MyNeoAcademy.WebUI.ApiServices.Concrete;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class CommentController : Controller
     {
         private readonly ICommentApiService _commentApiService;
+        private readonly IAppUserApiService _appUserApiService;
 
-        public CommentController(ICommentApiService commentApiService)
+        public CommentController(ICommentApiService commentApiService, IAppUserApiService appUserApiService)
         {
             _commentApiService = commentApiService;
+            _appUserApiService = appUserApiService;
         }
+
 
         public async Task<IActionResult> Index()
         {
@@ -38,7 +44,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            await LoadBlogsAsync();
+            await LoadAppUserDropdownAsync();
             return View();
         }
 
@@ -47,16 +53,16 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await LoadBlogsAsync();
+                await LoadAppUserDropdownAsync();
                 return View(dto);
             }
 
-            var result = await _commentApiService.CreateAdminCommentAsync(dto); // Burada admin methodu çağrıldı
+            var result = await _commentApiService.CreateAdminCommentAsync(dto); 
             if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yorum eklenemedi.");
-            await LoadBlogsAsync();
+            await LoadAppUserDropdownAsync();
             return View(dto);
         }
 
@@ -77,7 +83,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 BlogID = result.Blog?.BlogID ?? 0
             };
 
-            await LoadBlogsAsync();
+            await LoadAppUserDropdownAsync();
             return View(dto);
         }
 
@@ -86,7 +92,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await LoadBlogsAsync();
+                await LoadAppUserDropdownAsync();
                 return View(dto);
             }
 
@@ -95,11 +101,13 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yorum güncellenemedi.");
-            await LoadBlogsAsync();
+            await LoadAppUserDropdownAsync();
             return View(dto);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _commentApiService.DeleteAsync(id);
             if (!result)
@@ -107,9 +115,10 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
-
-        private async Task LoadBlogsAsync()
+        private async Task LoadAppUserDropdownAsync(object? selectedValue = null)
         {
+            var appUserList = await _appUserApiService.GetDropdownItemsByRoleAsync("User"); 
+            ViewBag.AppUserList = new SelectList(appUserList, "Value", "Text", selectedValue);
             ViewBag.Blogs = await _commentApiService.GetBlogDropdownItemsAsync();
         }
     }

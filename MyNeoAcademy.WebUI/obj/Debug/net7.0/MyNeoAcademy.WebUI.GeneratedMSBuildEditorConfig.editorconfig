@@ -64,6 +64,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWJvdXRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/AppUser/AssignRoles.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXBwVXNlclxBc3NpZ25Sb2xlcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/AppUser/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXBwVXNlclxEZXRhaWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/AppUser/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXBwVXNlclxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/AppUser/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXBwVXNlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Author/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXV0aG9yXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -208,6 +224,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVjZW50QmxvZ1Bvc3RcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Role/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUm9sZVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Role/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUm9sZVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Role/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUm9sZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/Shared/Components/AdminFooter/Default.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXENvbXBvbmVudHNcQWRtaW5Gb290ZXJcRGVmYXVsdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -290,6 +318,38 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Admin/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Auth/Views/Login/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQXV0aFxWaWV3c1xMb2dpblxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Auth/Views/Register/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQXV0aFxWaWV3c1xSZWdpc3RlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Auth/Views/Shared/Components/AuthHead/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQXV0aFxWaWV3c1xTaGFyZWRcQ29tcG9uZW50c1xBdXRoSGVhZFxEZWZhdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Auth/Views/Shared/Components/AuthScripts/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQXV0aFxWaWV3c1xTaGFyZWRcQ29tcG9uZW50c1xBdXRoU2NyaXB0c1xEZWZhdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Auth/Views/Shared/_AuthLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQXV0aFxWaWV3c1xTaGFyZWRcX0F1dGhMYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Auth/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQXV0aFxWaWV3c1xfVmlld0ltcG9ydHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Areas/Auth/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQXV0aFxWaWV3c1xfVmlld1N0YXJ0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mertcan/source/repos/MyNeoAcademyProject/MyNeoAcademy.WebUI/Views/About/Index.cshtml]

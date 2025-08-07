@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using MyNeoAcademy.WebUI.ApiServices.Concrete;
+using System.Data;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class RecentBlogPostController : Controller
     {
         private readonly IRecentBlogPostApiService _recentBlogPostApiService;
@@ -71,8 +74,9 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             ModelState.AddModelError("", "Blog gönderisi güncellenemedi.");
             return View(dto);
         }
-
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _recentBlogPostApiService.DeleteAsync(id);
             if (!result)

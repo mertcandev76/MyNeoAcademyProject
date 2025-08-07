@@ -10,6 +10,7 @@ namespace MyNeoAcademy.WebUI.ApiServices.Abstract
         Task<bool> CreateAsync(CreateBlogWithFileDTO dto);
         Task<bool> UpdateAsync(UpdateBlogWithFileDTO dto);
         Task<bool> DeleteAsync(int id);
-        Task<List<SelectListItem>> GetDropdownItemsAsync(); // Dropdown için
+        Task<List<SelectListItem>> GetDropdownItemsAsync();
     }
 }
+

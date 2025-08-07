@@ -41,6 +41,7 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
         {
             var response = await _httpClient.GetAsync("authors");
             response.EnsureSuccessStatusCode();
+
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<ResultAuthorDTO>>(json, _jsonOptions)!;
         }
@@ -48,6 +49,16 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
         public async Task<ResultAuthorDTO?> GetByIdAsync(int id)
         {
             var response = await _httpClient.GetAsync($"authors/{id}");
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ResultAuthorDTO>(json, _jsonOptions);
+        }
+
+        public async Task<ResultAuthorDTO?> GetByAppUserIdAsync(int appUserId)
+        {
+            var response = await _httpClient.GetAsync($"authors/appuser/{appUserId}");
             if (!response.IsSuccessStatusCode)
                 return null;
 
@@ -83,19 +94,23 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
             var response = await _httpClient.DeleteAsync($"authors/{id}");
             return response.IsSuccessStatusCode;
         }
-
-        // Ortak FormData üretici
         private MultipartFormDataContent GetFormData(CreateAuthorWithFileDTO dto)
         {
-            return new MultipartFormDataContent
-            {
-                { new StringContent(dto.Name ?? ""), "Name" },
-                { new StringContent(dto.Bio ?? ""), "Bio" },
-                { new StringContent(dto.FacebookUrl ?? ""), "FacebookUrl" },
-                { new StringContent(dto.TwitterUrl ?? ""), "TwitterUrl" },
-                { new StringContent(dto.WebsiteUrl ?? ""), "WebsiteUrl" },
-            };
+            var formData = new MultipartFormDataContent
+    {
+        { new StringContent(dto.Name ?? ""), "Name" },
+        { new StringContent(dto.Bio ?? ""), "Bio" },
+        { new StringContent(dto.FacebookUrl ?? ""), "FacebookUrl" },
+        { new StringContent(dto.TwitterUrl ?? ""), "TwitterUrl" },
+        { new StringContent(dto.WebsiteUrl ?? ""), "WebsiteUrl" }
+    };
+
+            if (dto.AppUserID.HasValue)
+                formData.Add(new StringContent(dto.AppUserID.Value.ToString()), "AppUserID");
+
+            return formData;
         }
+
 
         private StreamContent GetStreamContent(IFormFile file)
         {

@@ -43,8 +43,7 @@ namespace MyNeoAcademy.Business.Concrete
         public async Task<ResultCommentDTO?> GetByIdWithIncludesAsync(int id)
         {
             var comment = await _commentRepository.GetByIdWithIncludesAsync(id);
-            if (comment == null)
-                return null;
+            if (comment == null) return null;
 
             var dto = _mapper.Map<ResultCommentDTO>(comment);
             ApplyImageUrl(dto);
@@ -60,16 +59,11 @@ namespace MyNeoAcademy.Business.Concrete
         public async Task<PagedResultDTO<ResultCommentDTO>> GetPagedAsync(int page, int pageSize)
         {
             int skip = (page - 1) * pageSize;
-
             var comments = await _commentRepository.GetPagedCommentsAsync(skip, pageSize);
             var totalCount = await _commentRepository.GetTotalCountAsync();
-            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
-            var dtos = _mapper.Map<List<ResultCommentDTO>>(comments);
-            foreach (var dto in dtos)
-            {
-                ApplyImageUrl(dto);
-            }
+            var dtos = MapWithImageUrls(comments);
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
             return new PagedResultDTO<ResultCommentDTO>
             {
@@ -81,13 +75,11 @@ namespace MyNeoAcademy.Business.Concrete
             };
         }
 
-        // Blog bazlı sayfalama metodu
         public async Task<PagedResultDTO<ResultCommentDTO>> GetPagedByBlogAsync(int blogId, int page, int pageSize)
         {
             int skip = (page - 1) * pageSize;
 
             var query = _commentRepository.Table.Where(c => c.BlogID == blogId);
-
             var totalCount = await query.CountAsync();
 
             var comments = await query
@@ -96,13 +88,8 @@ namespace MyNeoAcademy.Business.Concrete
                 .Take(pageSize)
                 .ToListAsync();
 
-            var dtos = _mapper.Map<List<ResultCommentDTO>>(comments);
-            foreach (var dto in dtos)
-            {
-                ApplyImageUrl(dto);
-            }
-
-            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            var dtos = MapWithImageUrls(comments);
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
             return new PagedResultDTO<ResultCommentDTO>
             {
@@ -129,9 +116,7 @@ namespace MyNeoAcademy.Business.Concrete
         public async Task CreateWithFileAsync(CreateCommentWithFileDTO dto, string webRootPath)
         {
             if (dto.ImageFile != null)
-            {
                 dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/comments");
-            }
 
             await CreateAsync(dto);
         }
@@ -143,9 +128,7 @@ namespace MyNeoAcademy.Business.Concrete
                 throw new Exception("Yorum bulunamadı.");
 
             if (dto.ImageFile != null)
-            {
                 dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/comments");
-            }
 
             _mapper.Map(dto, entity);
             await _commentRepository.UpdateAsync(entity);
@@ -154,12 +137,18 @@ namespace MyNeoAcademy.Business.Concrete
         public async Task<bool> DeleteByIdAsync(int id)
         {
             var entity = await _commentRepository.GetByIdAsync(id);
-            if (entity == null)
-                return false;
+            if (entity == null) return false;
 
             await _commentRepository.DeleteAsync(entity);
             return true;
         }
+
+        public async Task<List<ResultCommentDTO>> GetByAppUserIdAsync(int appUserId)
+        {
+            var comments = await _commentRepository.GetByAppUserIdAsync(appUserId);
+            return MapWithImageUrls(comments);
+        }
+
 
         private string GetBaseUrl()
         {
@@ -172,21 +161,16 @@ namespace MyNeoAcademy.Business.Concrete
         private void ApplyImageUrl(ResultCommentDTO dto)
         {
             if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-            {
                 dto.ImageUrl = $"{GetBaseUrl()}/{dto.ImageUrl.TrimStart('/')}";
-            }
         }
 
         private List<ResultCommentDTO> MapWithImageUrls(List<Comment> comments)
         {
             var dtos = _mapper.Map<List<ResultCommentDTO>>(comments);
             foreach (var dto in dtos)
-            {
                 ApplyImageUrl(dto);
-            }
+
             return dtos;
         }
     }
-
-
 }

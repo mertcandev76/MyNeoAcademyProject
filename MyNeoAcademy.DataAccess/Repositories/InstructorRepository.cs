@@ -16,20 +16,30 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
         }
 
-
         public async Task<List<Instructor>> GetAllWithIncludesAsync()
         {
             return await Table
                 .Include(i => i.Courses)
+                .Include(i => i.AppUser) 
                 .ToListAsync();
         }
-        public async Task<Instructor?> GetByIdWithIncludesAsync(int id)  
+
+        public async Task<Instructor?> GetByIdWithIncludesAsync(int id)
         {
             return await Table
                 .Include(i => i.Courses)
+                .Include(i => i.AppUser) 
                 .FirstOrDefaultAsync(i => i.InstructorID == id);
         }
 
-      
+
+        public async Task<Instructor?> GetByAppUserIdAsync(int appUserId)
+        {
+            return await Table
+                .Include(i => i.Courses)
+                .Include(i => i.AppUser)
+                .FirstOrDefaultAsync(i => i.AppUserID == appUserId);
+        }
     }
+
 }

@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Business.Concrete
 {
-
     public class BlogManager : GenericManager<Blog, CreateBlogDTO, UpdateBlogDTO, ResultBlogDTO>, IBlogService
     {
         private readonly IBlogRepository _blogRepository;
@@ -36,50 +35,24 @@ namespace MyNeoAcademy.Business.Concrete
         {
             var blogs = await _blogRepository.GetAllWithIncludesAsync();
             var dtos = _mapper.Map<List<ResultBlogDTO>>(blogs);
-
-            var request = _httpContextAccessor.HttpContext?.Request;
-            string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
-                ? $"{request.Scheme}://{request.Host}"
-                : "https://localhost:7230";
-
-            foreach (var dto in dtos)
-            {
-                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-                {
-                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-                }
-            }
-
+            AddBaseUrlToImages(dtos);
             return dtos;
         }
 
         public async Task<ResultBlogDTO?> GetByIdWithIncludesAsync(int id)
         {
             var blog = await _blogRepository.GetByIdWithIncludesAsync(id);
+            if (blog == null) return null;
+
             var dto = _mapper.Map<ResultBlogDTO>(blog);
-
-            if (dto != null)
-            {
-                var request = _httpContextAccessor.HttpContext?.Request;
-                string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
-                    ? $"{request.Scheme}://{request.Host}"
-                    : "https://localhost:7230";
-
-                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-                {
-                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-                }
-            }
-
+            AddBaseUrlToImage(dto);
             return dto;
         }
-
 
         public override async Task CreateAsync(CreateBlogDTO dto)
         {
             var entity = _mapper.Map<Blog>(dto);
             entity.PublishDate = DateTime.UtcNow;
-
             await _blogRepository.CreateAsync(entity);
         }
 
@@ -89,10 +62,8 @@ namespace MyNeoAcademy.Business.Concrete
                 throw new ArgumentException("Görsel zorunludur.");
 
             dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/blogs");
-
             await CreateAsync(dto);
         }
-
 
         public async Task UpdateWithFileAsync(UpdateBlogWithFileDTO dto, string webRootPath)
         {
@@ -104,15 +75,13 @@ namespace MyNeoAcademy.Business.Concrete
                 dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/blogs");
 
             _mapper.Map(dto, entity);
-
             await _blogRepository.UpdateAsync(entity);
         }
 
         public async Task<bool> DeleteByIdAsync(int id)
         {
             var entity = await _blogRepository.GetByIdAsync(id);
-            if (entity == null)
-                return false;
+            if (entity == null) return false;
 
             await _blogRepository.DeleteAsync(entity);
             return true;
@@ -121,29 +90,51 @@ namespace MyNeoAcademy.Business.Concrete
         public async Task<PagedResultDTO<ResultBlogDTO>> GetPagedAsync(int page, int pageSize)
         {
             var (blogs, totalCount) = await _blogRepository.GetPagedAsync(page, pageSize);
-            var blogDTOs = _mapper.Map<List<ResultBlogDTO>>(blogs);
-
-            var request = _httpContextAccessor.HttpContext?.Request;
-            string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
-                ? $"{request.Scheme}://{request.Host}"
-                : "https://localhost:7230";
-
-            foreach (var dto in blogDTOs)
-            {
-                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-            }
+            var dtos = _mapper.Map<List<ResultBlogDTO>>(blogs);
+            AddBaseUrlToImages(dtos);
 
             int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
             return new PagedResultDTO<ResultBlogDTO>
             {
-                Items = blogDTOs,
+                Items = dtos,
                 CurrentPage = page,
                 TotalPages = totalPages,
                 TotalCount = totalCount
             };
         }
 
+
+        private void AddBaseUrlToImage(ResultBlogDTO dto)
+        {
+            if (dto == null) return;
+
+            var baseUrl = GetBaseUrl();
+            if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
+                dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
+        }
+
+
+        private void AddBaseUrlToImages(List<ResultBlogDTO> dtos)
+        {
+            if (dtos == null) return;
+
+            var baseUrl = GetBaseUrl();
+            foreach (var dto in dtos)
+            {
+                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
+                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
+            }
+        }
+
+
+        private string GetBaseUrl()
+        {
+            var request = _httpContextAccessor.HttpContext?.Request;
+            if (request != null && !string.IsNullOrEmpty(request.Host.Value))
+                return $"{request.Scheme}://{request.Host}";
+
+            return "https://localhost:7230"; 
+        }
     }
 }

@@ -3,11 +3,14 @@ using System.Net.Http.Headers;
 using MyNeoAcademy.Application.DTOs;
 using System.Text.Json;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using Microsoft.AspNetCore.Authorization;
+using MyNeoAcademy.WebUI.ApiServices.Concrete;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
+
     public class AboutController : Controller
     {
         private readonly IAboutApiService _aboutApiService;
@@ -78,8 +81,9 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             ModelState.AddModelError("", "Hakkımızda bilgisi güncellenemedi.");
             return View(dto);
         }
-
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _aboutApiService.DeleteAsync(id);
             if (!result)
@@ -87,5 +91,6 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
     }
 }

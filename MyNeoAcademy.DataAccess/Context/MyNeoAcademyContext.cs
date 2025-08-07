@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,64 +10,104 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.DataAccess.Context
 {
+    public class MyNeoAcademyContext : IdentityDbContext<AppUser, AppRole, int,
+                        IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>,
+                        IdentityRoleClaim<int>, IdentityUserToken<int>>
+    {
+        public MyNeoAcademyContext(DbContextOptions<MyNeoAcademyContext> options)
+            : base(options) { }
 
-        public class MyNeoAcademyContext : DbContext
-        {
-            public MyNeoAcademyContext(DbContextOptions<MyNeoAcademyContext> options)
-                : base(options)
-            {
-            }
-
-            public DbSet<About> Abouts { get; set; }
-            public DbSet<AboutDetail> AboutDetails { get; set; }
-            public DbSet<AboutFeature> AboutFeatures { get; set; }
-            public DbSet<Author> Authors { get; set; }
-            public DbSet<Blog> Blogs { get; set; }
-            public DbSet<BlogTag> BlogTags { get; set; }
-            public DbSet<Category> Categories { get; set; }
-            public DbSet<Comment> Comments { get; set; }
-            public DbSet<Contact> Contacts { get; set; }
-            public DbSet<Course> Courses { get; set; }
-            public DbSet<Instructor> Instructors { get; set; }
-            public DbSet<Newsletter> Newsletters { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<AppRole> AppRoles { get; set; }
+        public DbSet<AppUserRole> AppUserRoles { get; set; }
+        public DbSet<About> Abouts { get; set; }
+        public DbSet<AboutDetail> AboutDetails { get; set; }
+        public DbSet<AboutFeature> AboutFeatures { get; set; }
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<BlogTag> BlogTags { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Instructor> Instructors { get; set; }
+        public DbSet<Newsletter> Newsletters { get; set; }
         public DbSet<RecentBlogPost> RecentBlogPosts { get; set; }
         public DbSet<Slider> Sliders { get; set; }
-            public DbSet<Statistic> Statistics { get; set; }
-            public DbSet<Tag> Tags { get; set; }
-            public DbSet<Testimonial> Testimonials { get; set; }
+        public DbSet<Statistic> Statistics { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Testimonial> Testimonials { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // About - AboutFeature: One-to-Many
+            // AppUser - AppRole many-to-many
+            modelBuilder.Entity<AppUserRole>(entity =>
+            {
+                entity.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+                entity.HasOne(ur => ur.User)
+                      .WithMany(u => u.UserRoles)
+                      .HasForeignKey(ur => ur.UserId);
+
+                entity.HasOne(ur => ur.Role)
+                      .WithMany(r => r.UserRoles)
+                      .HasForeignKey(ur => ur.RoleId);
+            });
+
+            // ✅ AppUser - Author (1:1)
+            modelBuilder.Entity<AppUser>()
+                .HasOne(u => u.Author)
+                .WithOne(a => a.AppUser)
+                .HasForeignKey<Author>(a => a.AppUserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ✅ AppUser - Instructor (1:1)
+            modelBuilder.Entity<AppUser>()
+                .HasOne(u => u.Instructor)
+                .WithOne(i => i.AppUser)
+                .HasForeignKey<Instructor>(i => i.AppUserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            // AppUser - Comment (1:N)
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.AppUser)
+                .WithMany(u => u.Comments)
+                .HasForeignKey(c => c.AppUserID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // AppUser - Testimonial (1:N)
+            modelBuilder.Entity<Testimonial>()
+                .HasOne(t => t.AppUser)
+                .WithMany(u => u.Testimonials)
+                .HasForeignKey(t => t.AppUserID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // About - AboutFeature (1:N)
             modelBuilder.Entity<AboutFeature>()
                 .HasOne(af => af.About)
                 .WithMany(a => a.Features)
                 .HasForeignKey(af => af.AboutID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // AboutDetail: standalone, primary key konfigürasyonu
-            modelBuilder.Entity<AboutDetail>()
-                .HasKey(ad => ad.AboutDetailID);
-
-            // Author - Blog: One-to-Many (nullable AuthorID)
+            // Blog - Author (1:N)
             modelBuilder.Entity<Blog>()
                 .HasOne(b => b.Author)
                 .WithMany(a => a.Blogs)
                 .HasForeignKey(b => b.AuthorID)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Blog - Category: One-to-Many (nullable CategoryID)
+            // Blog - Category (1:N)
             modelBuilder.Entity<Blog>()
                 .HasOne(b => b.Category)
                 .WithMany(c => c.Blogs)
                 .HasForeignKey(b => b.CategoryID)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // BlogTag join entity: key + relations
-            modelBuilder.Entity<BlogTag>()
-                .HasKey(bt => bt.BlogTagID);
+            // BlogTag Config
+            modelBuilder.Entity<BlogTag>().HasKey(bt => bt.BlogTagID);
 
             modelBuilder.Entity<BlogTag>()
                 .HasOne(bt => bt.Blog)
@@ -79,103 +121,65 @@ namespace MyNeoAcademy.DataAccess.Context
                 .HasForeignKey(bt => bt.TagID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // RecentBlogPost: standalone
-            modelBuilder.Entity<RecentBlogPost>()
-                .HasKey(r => r.RecentBlogPostID);
-
-            modelBuilder.Entity<RecentBlogPost>()
-                .Property(r => r.CompactTitle)
-                .IsRequired()
-                .HasMaxLength(200); 
-
-            // Category - Course: One-to-Many (nullable CategoryID)
+            // Course - Category (1:N)
             modelBuilder.Entity<Course>()
                 .HasOne(c => c.Category)
                 .WithMany(cat => cat.Courses)
                 .HasForeignKey(c => c.CategoryID)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Course - Instructor: One-to-Many (nullable InstructorID)
+            // Course - Instructor (1:N)
             modelBuilder.Entity<Course>()
                 .HasOne(c => c.Instructor)
                 .WithMany(i => i.Courses)
                 .HasForeignKey(c => c.InstructorID)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // İşte buraya ekleyin:
             modelBuilder.Entity<Course>()
                 .Property(c => c.Price)
                 .HasColumnType("decimal(18,2)");
 
-            // Comment - Blog: One-to-Many (non-nullable BlogID)
+            // Comment - Blog (1:N)
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.Blog)
                 .WithMany(b => b.Comments)
                 .HasForeignKey(c => c.BlogID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Contact: standalone
-            modelBuilder.Entity<Contact>()
-                .HasKey(c => c.ContactID);
+            // Primary Key Configurations
+            modelBuilder.Entity<About>().HasKey(a => a.AboutID);
+            modelBuilder.Entity<AboutDetail>().HasKey(ad => ad.AboutDetailID);
+            modelBuilder.Entity<Author>().HasKey(a => a.AuthorID);
+            modelBuilder.Entity<Blog>().HasKey(b => b.BlogID);
+            modelBuilder.Entity<Category>().HasKey(c => c.CategoryID);
+            modelBuilder.Entity<Comment>().HasKey(c => c.CommentID);
+            modelBuilder.Entity<Contact>().HasKey(c => c.ContactID);
+            modelBuilder.Entity<Course>().HasKey(c => c.CourseID);
+            modelBuilder.Entity<Instructor>().HasKey(i => i.InstructorID);
+            modelBuilder.Entity<Newsletter>().HasKey(n => n.NewsletterID);
+            modelBuilder.Entity<RecentBlogPost>().HasKey(r => r.RecentBlogPostID);
+            modelBuilder.Entity<Slider>().HasKey(s => s.SliderID);
+            modelBuilder.Entity<Statistic>().HasKey(s => s.StatisticID);
+            modelBuilder.Entity<Tag>().HasKey(t => t.TagID);
+            modelBuilder.Entity<Testimonial>().HasKey(t => t.TestimonialID);
 
-            // Instructor: standalone + has many courses (configured above)
-            modelBuilder.Entity<Instructor>()
-                .HasKey(i => i.InstructorID);
-
-            // Newsletter: standalone
-            modelBuilder.Entity<Newsletter>()
-                .HasKey(n => n.NewsletterID);
+            // Property Configurations
+            modelBuilder.Entity<RecentBlogPost>()
+                .Property(r => r.CompactTitle)
+                .IsRequired()
+                .HasMaxLength(200);
 
             modelBuilder.Entity<Newsletter>()
                 .Property(n => n.Email)
                 .IsRequired();
 
-            // Slider: standalone
-            modelBuilder.Entity<Slider>()
-                .HasKey(s => s.SliderID);
-
-            // Statistic: standalone
-            modelBuilder.Entity<Statistic>()
-                .HasKey(s => s.StatisticID);
-
-            // Tag: standalone + has many BlogTags (configured above)
-            modelBuilder.Entity<Tag>()
-                .HasKey(t => t.TagID);
-
             modelBuilder.Entity<Tag>()
                 .Property(t => t.Name)
                 .IsRequired();
 
-            // Testimonial: standalone
-            modelBuilder.Entity<Testimonial>()
-                .HasKey(t => t.TestimonialID);
-
             modelBuilder.Entity<Testimonial>()
                 .Property(t => t.FullName)
                 .IsRequired();
-
-            // About: standalone + has many AboutFeatures (configured above)
-            modelBuilder.Entity<About>()
-                .HasKey(a => a.AboutID);
-
-            // Blog: standalone + relations configured above
-            modelBuilder.Entity<Blog>()
-                .HasKey(b => b.BlogID);
-
-            // Category: standalone + relations configured above
-            modelBuilder.Entity<Category>()
-                .HasKey(c => c.CategoryID);
-
-            // Course: standalone + relations configured above
-            modelBuilder.Entity<Course>()
-                .HasKey(c => c.CourseID);
-
-            // Comment: standalone + relation configured above
-            modelBuilder.Entity<Comment>()
-                .HasKey(c => c.CommentID);
-
         }
-
     }
 }
-

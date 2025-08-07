@@ -1,0 +1,19 @@
+﻿@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+@await Component.InvokeAsync("AuthHead")
+
+<body>
+    @RenderBody()
+
+    @await Component.InvokeAsync("AuthScripts")
+
+
+    <partial name="_ValidationScriptsPartial" />
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

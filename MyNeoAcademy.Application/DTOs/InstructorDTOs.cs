@@ -17,50 +17,38 @@ namespace MyNeoAcademy.Application.DTOs
     }
     public class CreateInstructorDTO
     {
-
-
         public string FullName { get; set; } = null!;
-
         public string? Title { get; set; }
-
         public string? Bio { get; set; }
-
         public string? ImageUrl { get; set; }
-
         public string? FacebookUrl { get; set; }
-
         public string? TwitterUrl { get; set; }
-
         public string? WebsiteUrl { get; set; }
-
-
+        public int? AppUserID { get; set; }
     }
+
     public class CreateInstructorWithFileDTO : CreateInstructorDTO
     {
         public IFormFile? ImageFile { get; set; }
     }
+
     public class ResultInstructorDTO : CreateInstructorDTO
     {
         public int InstructorID { get; set; }
-        public List<CourseReferenceDTO> Courses { get; set; } = new List<CourseReferenceDTO>();
+        public List<CourseReferenceDTO> Courses { get; set; } = new();
+
+        public string? AppUserFullName { get; set; }
     }
-    public class UpdateInstructorDTO : CreateInstructorDTO,IHasId
+
+    public class UpdateInstructorDTO : CreateInstructorDTO, IHasId
     {
         public int InstructorID { get; set; }
-        [JsonIgnore]
-        public int Id
-        {
-            get => InstructorID;
-            set => InstructorID = value;
-        }
+        [JsonIgnore] public int Id { get => InstructorID; set => InstructorID = value; }
     }
-    public class UpdateInstructorWithFileDTO : CreateInstructorWithFileDTO,IHasId
+
+    public class UpdateInstructorWithFileDTO : CreateInstructorWithFileDTO, IHasId
     {
         public int InstructorID { get; set; }
-        public int Id
-        {
-            get => InstructorID;
-            set => InstructorID = value;
-        }
+        public int Id { get => InstructorID; set => InstructorID = value; }
     }
 }

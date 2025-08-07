@@ -24,6 +24,7 @@
     <ProjectReference Include="..\MyNeoAcademy.Application\MyNeoAcademy.Application.csproj" />
     <ProjectReference Include="..\MyNeoAcademy.DataAccess\MyNeoAcademy.DataAccess.csproj" />
     <ProjectReference Include="..\MyNeoAcademy.Entity\MyNeoAcademy.Entity.csproj" />
+    <ProjectReference Include="..\MyNeoAcademy.Infrastructure\MyNeoAcademy.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

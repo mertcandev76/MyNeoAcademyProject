@@ -21,7 +21,7 @@ namespace MyNeoAcademy.API.Controllers
             _env = env;
         }
 
-        //  Paginasyon destekli GET (yeni hali)
+
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
@@ -35,6 +35,7 @@ namespace MyNeoAcademy.API.Controllers
                 return StatusCode(500, $"Sunucu hatası: {ex.Message}");
             }
         }
+
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
@@ -53,6 +54,7 @@ namespace MyNeoAcademy.API.Controllers
             }
         }
 
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Post([FromForm] CreateBlogWithFileDTO dto)
@@ -60,7 +62,7 @@ namespace MyNeoAcademy.API.Controllers
             try
             {
                 await _blogService.CreateWithFileAsync(dto, _env.WebRootPath);
-                return Ok("Yeni blog kaydı oluşturuldu.");
+                return Ok("Yeni blog kaydı başarıyla oluşturuldu.");
             }
             catch (ArgumentException ex)
             {
@@ -71,6 +73,7 @@ namespace MyNeoAcademy.API.Controllers
                 return StatusCode(500, $"Ekleme hatası: {ex.Message}");
             }
         }
+
 
         [HttpPut]
         [Consumes("multipart/form-data")]
@@ -86,6 +89,7 @@ namespace MyNeoAcademy.API.Controllers
                 return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
             }
         }
+
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)

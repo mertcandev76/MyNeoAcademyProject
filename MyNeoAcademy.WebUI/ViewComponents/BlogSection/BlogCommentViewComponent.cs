@@ -20,7 +20,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
             };
         }
 
-        // Varsayılan olarak page = 1, pageSize = 4
+
         public async Task<IViewComponentResult> InvokeAsync(int blogId, int page = 1, int pageSize = 4)
         {
             try
@@ -30,7 +30,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    // View'da mesaj gösterilecekse ModelState içine hata ekleyebilirsin
+
                     ViewData["Error"] = "Yorumlar yüklenirken bir hata oluştu.";
                     return View("Default", new PagedResultDTO<ResultCommentDTO>() { Items = new List<ResultCommentDTO>() });
                 }
@@ -40,7 +40,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
                                     ?? new PagedResultDTO<ResultCommentDTO>() { Items = new List<ResultCommentDTO>() };
                 ViewBag.BlogID = blogId;
 
-                return View("Default", pagedComments); // Özel view kullanıyorsan burayı değiştir
+                return View("Default", pagedComments); 
             }
             catch (Exception ex)
             {
@@ -49,35 +49,4 @@ namespace MyNeoAcademy.WebUI.ViewComponents.BlogSection
             }
         }
     }
-
-
-    //public class BlogCommentViewComponent : ViewComponent
-    //{
-    //    private readonly HttpClient _httpClient;
-
-    //    public BlogCommentViewComponent(IHttpClientFactory httpClientFactory)
-    //    {
-    //        _httpClient = httpClientFactory.CreateClient("MyApiClient");
-    //    }
-    //    public async Task<IViewComponentResult> InvokeAsync(int blogId)
-    //    {
-    //        var response = await _httpClient.GetAsync("comments");
-
-    //        if (!response.IsSuccessStatusCode)
-    //            return View(new List<ResultCommentDTO>());
-
-    //        var stream = await response.Content.ReadAsStreamAsync();
-
-    //        var options = new JsonSerializerOptions
-    //        {
-    //            PropertyNameCaseInsensitive = true
-    //        };
-
-    //        var comments = await JsonSerializer.DeserializeAsync<List<ResultCommentDTO>>(stream, options)
-    //                       ?? new List<ResultCommentDTO>();
-
-    //        return View(comments);
-    //    }
-
-    //}
 }

@@ -3,19 +3,34 @@ using System.Net.Http.Headers;
 using MyNeoAcademy.Application.DTOs;
 using System.Text.Json;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MyNeoAcademy.WebUI.ApiServices.Concrete;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class AuthorController : Controller
     {
         private readonly IAuthorApiService _authorApiService;
+        private readonly IAppUserApiService _appUserApiService;
 
-        public AuthorController(IAuthorApiService authorApiService)
+        public AuthorController(IAuthorApiService authorApiService, IAppUserApiService appUserApiService)
         {
             _authorApiService = authorApiService;
+            _appUserApiService = appUserApiService;
         }
+
+        private async Task LoadAppUserDropdownAsync(object? selectedValue = null)
+        {
+
+            var appUserList = await _appUserApiService.GetDropdownItemsByRoleAsync("Author");
+            ViewBag.AppUserList = new SelectList(appUserList, "Value", "Text", selectedValue);
+        }
+
+
 
         public async Task<IActionResult> Index()
         {
@@ -33,21 +48,30 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create() => View();
+        public async Task<IActionResult> Create()
+        {
+            await LoadAppUserDropdownAsync();
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateAuthorWithFileDTO dto)
         {
             if (!ModelState.IsValid)
+            {
+                await LoadAppUserDropdownAsync(dto.AppUserID);
                 return View(dto);
+            }
 
             var result = await _authorApiService.CreateAsync(dto);
             if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yazar eklenemedi.");
+            await LoadAppUserDropdownAsync(dto.AppUserID);
             return View(dto);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
@@ -55,6 +79,8 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             var result = await _authorApiService.GetByIdAsync(id);
             if (result == null)
                 return RedirectToAction("Index");
+
+            await LoadAppUserDropdownAsync(result.AppUserID);
 
             var dto = new UpdateAuthorWithFileDTO
             {
@@ -64,7 +90,8 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 ImageUrl = result.ImageUrl,
                 FacebookUrl = result.FacebookUrl,
                 TwitterUrl = result.TwitterUrl,
-                WebsiteUrl = result.WebsiteUrl
+                WebsiteUrl = result.WebsiteUrl,
+                AppUserID = result.AppUserID
             };
 
             return View(dto);
@@ -74,17 +101,23 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(UpdateAuthorWithFileDTO dto)
         {
             if (!ModelState.IsValid)
+            {
+                await LoadAppUserDropdownAsync(dto.AppUserID);
                 return View(dto);
+            }
 
             var result = await _authorApiService.UpdateAsync(dto);
             if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yazar güncellenemedi.");
+            await LoadAppUserDropdownAsync(dto.AppUserID);
             return View(dto);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _authorApiService.DeleteAsync(id);
             if (!result)

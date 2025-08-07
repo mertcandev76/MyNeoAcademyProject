@@ -51,6 +51,23 @@ namespace MyNeoAcademy.API.Controllers
             }
         }
 
+        [HttpGet("appuser/{appUserId:int}")]
+        public async Task<IActionResult> GetByAppUserId(int appUserId)
+        {
+            try
+            {
+                var author = await _authorService.GetByAppUserIdAsync(appUserId);
+                if (author == null)
+                    return NotFound("Yazara ait AppUser bulunamadı.");
+
+                return Ok(author);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Post([FromForm] CreateAuthorWithFileDTO dto)
@@ -58,7 +75,7 @@ namespace MyNeoAcademy.API.Controllers
             try
             {
                 await _authorService.CreateWithFileAsync(dto, _env.WebRootPath);
-                return Ok("Yeni yazar kaydı oluşturuldu.");
+                return Ok("Yeni yazar kaydı başarıyla oluşturuldu.");
             }
             catch (ArgumentException ex)
             {
@@ -77,7 +94,7 @@ namespace MyNeoAcademy.API.Controllers
             try
             {
                 await _authorService.UpdateWithFileAsync(dto, _env.WebRootPath);
-                return Ok("Yazar güncellendi.");
+                return Ok("Yazar bilgileri güncellendi.");
             }
             catch (Exception ex)
             {

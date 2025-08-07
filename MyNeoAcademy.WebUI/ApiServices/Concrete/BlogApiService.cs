@@ -44,6 +44,7 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
         public async Task<bool> CreateAsync(CreateBlogWithFileDTO dto)
         {
             var formData = GetFormData(dto);
+
             if (dto.ImageFile != null)
                 formData.Add(GetStreamContent(dto.ImageFile), "ImageFile", dto.ImageFile.FileName);
 
@@ -87,16 +88,19 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
 
         private MultipartFormDataContent GetFormData(CreateBlogDTO dto)
         {
-            return new MultipartFormDataContent
-            {
-                { new StringContent(dto.Title ?? ""), "Title" },
-                { new StringContent(dto.ShortDescription ?? ""), "ShortDescription" },
-                { new StringContent(dto.Content ?? ""), "Content" },
-                { new StringContent(dto.ImageUrl ?? ""), "ImageUrl" },
-                { new StringContent(dto.AuthorID?.ToString() ?? ""), "AuthorID" },
-                { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" }
-            };
+            var formData = new MultipartFormDataContent
+    {
+        { new StringContent(dto.Title ?? ""), "Title" },
+        { new StringContent(dto.ShortDescription ?? ""), "ShortDescription" },
+        { new StringContent(dto.Content ?? ""), "Content" },
+        { new StringContent(dto.ImageUrl ?? ""), "ImageUrl" },
+        { new StringContent(dto.AuthorID?.ToString() ?? ""), "AuthorID" },
+        { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" }
+    };
+
+            return formData;
         }
+
 
         private StreamContent GetStreamContent(IFormFile file)
         {
@@ -106,4 +110,5 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
         }
     }
 }
+
 

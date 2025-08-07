@@ -21,7 +21,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
             _dbSet = _myNeoAcademyContext.Set<TEntity>();
         }
 
-        // DbSet olarak Table property
+
         public IQueryable<TEntity> Table => _dbSet;
 
         public async Task<List<TEntity>> GetListAsync()

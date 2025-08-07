@@ -18,23 +18,33 @@ namespace MyNeoAcademy.DataAccess.Repositories
 
         public async Task<List<Comment>> GetAllWithIncludesAsync()
         {
-            return await Table.Include(c => c.Blog).ToListAsync();
+            return await Table
+                .Include(c => c.Blog)
+                .Include(c => c.AppUser) 
+                .ToListAsync();
         }
 
         public async Task<Comment?> GetByIdWithIncludesAsync(int id)
         {
-            return await Table.Include(c => c.Blog).FirstOrDefaultAsync(c => c.CommentID == id);
+            return await Table
+                .Include(c => c.Blog)
+                .Include(c => c.AppUser) 
+                .FirstOrDefaultAsync(c => c.CommentID == id);
         }
 
         public async Task<List<Comment>> GetByIdWithIncludesBlogAsync(int blogId)
         {
-            return await Table.Where(c => c.BlogID == blogId).ToListAsync();
+            return await Table
+                .Where(c => c.BlogID == blogId)
+                .Include(c => c.AppUser) 
+                .ToListAsync();
         }
 
         public async Task<List<Comment>> GetPagedCommentsAsync(int skip, int take)
         {
             return await Table
                 .Include(c => c.Blog)
+                .Include(c => c.AppUser) 
                 .OrderByDescending(c => c.CreatedDate)
                 .Skip(skip)
                 .Take(take)
@@ -45,5 +55,16 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             return await Table.CountAsync();
         }
+
+
+        public async Task<List<Comment>> GetByAppUserIdAsync(int appUserId)
+        {
+            return await Table
+                .Where(c => c.AppUserID == appUserId)
+                .Include(c => c.Blog)
+                .Include(c => c.AppUser)
+                .ToListAsync();
+        }
     }
+
 }

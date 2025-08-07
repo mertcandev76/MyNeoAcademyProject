@@ -12,7 +12,7 @@ namespace MyNeoAcademy.DataAccess.Abstract
             Task<List<Blog>> GetAllWithIncludesAsync();
             Task<Blog?> GetByIdWithIncludesAsync(int id);
         Task<(List<Blog> Blogs, int TotalCount)> GetPagedAsync(int page, int pageSize);
-
+   
 
     }
 }

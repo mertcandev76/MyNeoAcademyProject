@@ -51,6 +51,23 @@ namespace MyNeoAcademy.API.Controllers
             }
         }
 
+        [HttpGet("byuser/{appUserId:int}")]
+        public async Task<IActionResult> GetByAppUserId(int appUserId)
+        {
+            try
+            {
+                var testimonial = await _testimonialService.GetByAppUserIdAsync(appUserId);
+                if (testimonial == null)
+                    return NotFound("AppUser'a ait referans bulunamadı.");
+
+                return Ok(testimonial);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"AppUser verisi alınırken hata: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Post([FromForm] CreateTestimonialWithFileDTO dto)

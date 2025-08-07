@@ -5,11 +5,14 @@ using MyNeoAcademy.WebUI.Helpers;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using MyNeoAcademy.WebUI.ApiServices.Concrete;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class CourseController : Controller
     {
         private readonly ICourseApiService _courseApiService;
@@ -109,8 +112,9 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             await LoadDropdownsAsync();
             return View(dto);
         }
-
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _courseApiService.DeleteAsync(id);
             if (!result)
@@ -118,8 +122,6 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
-
-
         private async Task LoadDropdownsAsync()
         {
             ViewBag.Categories = await _categoryApiService.GetDropdownItemsAsync();

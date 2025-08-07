@@ -19,3 +19,5 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\obj\Debu
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\obj\Debug\net7.0\ref\MyNeoAcademy.Business.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\bin\Debug\net7.0\MyNeoAcademy.Application.dll
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\bin\Debug\net7.0\MyNeoAcademy.Application.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\bin\Debug\net7.0\MyNeoAcademy.Infrastructure.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.Business\bin\Debug\net7.0\MyNeoAcademy.Infrastructure.pdb

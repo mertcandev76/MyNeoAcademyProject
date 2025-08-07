@@ -9,11 +9,14 @@ using System.Net.Http;
 using System.Text.Json;
 using MyNeoAcademy.WebUI.Helpers;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using MyNeoAcademy.WebUI.ApiServices.Concrete;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class SliderController : Controller
     {
         private readonly ISliderApiService _sliderApiService;
@@ -82,8 +85,9 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             ModelState.AddModelError("", "Slider güncellenemedi.");
             return View(dto);
         }
-
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _sliderApiService.DeleteAsync(id);
             if (!result)

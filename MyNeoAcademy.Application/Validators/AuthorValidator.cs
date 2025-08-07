@@ -39,6 +39,7 @@ namespace MyNeoAcademy.Application.Validators
                 .Must(BeAValidUrl).When(x => !string.IsNullOrWhiteSpace(x.WebsiteUrl))
                 .WithMessage("Website URL must be a valid URL.");
         }
+
         private bool BeAValidUrl(string? url)
         {
             return Uri.TryCreate(url, UriKind.Absolute, out _);
@@ -63,7 +64,7 @@ namespace MyNeoAcademy.Application.Validators
         public UpdateAuthorValidator()
         {
             RuleFor(x => x.AuthorID)
-.GreaterThan(0).WithMessage("Invalid Author ID.");
+                .GreaterThan(0).WithMessage("Invalid Author ID.");
 
             Include(new CreateAuthorValidator());
         }
@@ -74,7 +75,7 @@ namespace MyNeoAcademy.Application.Validators
         public UpdateAuthorWithFileValidator()
         {
             RuleFor(x => x.AuthorID)
-       .GreaterThan(0).WithMessage("Invalid Instructor ID.");
+                .GreaterThan(0).WithMessage("Invalid Author ID.");
 
             Include(new CreateAuthorWithFileValidator());
         }

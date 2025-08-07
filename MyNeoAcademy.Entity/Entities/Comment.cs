@@ -17,5 +17,8 @@ namespace MyNeoAcademy.Entity.Entities
 
         public int BlogID { get; set; }
         public Blog? Blog { get; set; }
+
+        public int? AppUserID { get; set; }
+        public AppUser? AppUser { get; set; }
     }
 }

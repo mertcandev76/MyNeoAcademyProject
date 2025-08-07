@@ -67,6 +67,10 @@
               "target": "Package",
               "version": "[11.3.0, )"
             },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[7.0.20, )"
+            },
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
               "version": "[2.3.0, )"
@@ -262,6 +266,9 @@
               },
               "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Entity\\MyNeoAcademy.Entity.csproj": {
                 "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Entity\\MyNeoAcademy.Entity.csproj"
+              },
+              "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Infrastructure\\MyNeoAcademy.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\Mertcan\\source\\repos\\MyNeoAcademyProject\\MyNeoAcademy.Infrastructure\\MyNeoAcademy.Infrastructure.csproj"
               }
             }
           }
@@ -456,6 +463,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.20, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[7.0.20, )"

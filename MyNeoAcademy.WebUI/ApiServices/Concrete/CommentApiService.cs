@@ -61,6 +61,15 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
             return JsonSerializer.Deserialize<ResultCommentDTO>(json, _jsonOptions);
         }
 
+        public async Task<List<ResultCommentDTO>> GetByAppUserIdAsync(int appUserId)
+        {
+            var response = await _httpClient.GetAsync($"comments/byuser/{appUserId}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<ResultCommentDTO>>(json, _jsonOptions)!;
+        }
+
         public async Task<bool> CreateUserCommentAsync(CreateCommentDTO dto)
         {
             var jsonContent = JsonContent.Create(dto);
@@ -114,7 +123,6 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
                 ?? new List<SelectListItem>();
         }
 
-        // Helper for form data from CreateCommentDTO and UpdateCommentDTO base props
         private MultipartFormDataContent GetFormData(CreateCommentDTO dto)
         {
             var formData = new MultipartFormDataContent();
@@ -128,8 +136,12 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
 
             formData.Add(new StringContent(dto.BlogID.ToString()), nameof(dto.BlogID));
 
+            if (dto.AppUserID.HasValue)
+                formData.Add(new StringContent(dto.AppUserID.Value.ToString()), nameof(dto.AppUserID));
+
             return formData;
         }
+
 
         private StreamContent GetStreamContent(IFormFile file)
         {
@@ -139,3 +151,4 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
         }
     }
 }
+

@@ -15,7 +15,7 @@ namespace MyNeoAcademy.Application.Abstract
        ResultAboutDTO         
    >
     {
-        //Özel Metotlar
+
 
         Task<List<ResultAboutDTO>> GetAllWithIncludesAsync();
         Task<ResultAboutDTO?> GetByIdWithIncludesAsync(int id);

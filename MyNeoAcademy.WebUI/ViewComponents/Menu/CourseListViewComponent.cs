@@ -26,7 +26,6 @@ namespace MyNeoAcademy.WebUI.ViewComponents.Menu
                 PropertyNameCaseInsensitive = true
             }) ?? new List<ResultCourseDTO>();
 
-            // Eğer kategori seçildiyse filtre uygula
             if (categoryId > 0)
             {
                 courses = courses.Where(c => c.Category != null && c.Category.CategoryID == categoryId).ToList();

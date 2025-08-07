@@ -4,11 +4,14 @@ using System.Text.Json;
 using System.Text;
 using System.Net.Http;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using MyNeoAcademy.WebUI.ApiServices.Concrete;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class CategoryController : Controller
     {
         private readonly ICategoryApiService _categoryApiService;
@@ -75,8 +78,9 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             ModelState.AddModelError("", "Kategori güncellenemedi.");
             return View(dto);
         }
-
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _categoryApiService.DeleteAsync(id);
             if (!result)

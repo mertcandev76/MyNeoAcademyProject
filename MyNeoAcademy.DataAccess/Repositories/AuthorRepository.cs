@@ -21,6 +21,7 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             return await Table
              .Include(a => a.Blogs)
+              .Include(a => a.AppUser)
              .ToListAsync();
         }
 
@@ -28,7 +29,16 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             return await Table
              .Include(a => a.Blogs)
+              .Include(a => a.AppUser)
              .FirstOrDefaultAsync(a => a.AuthorID == id);
+        }
+
+        public async Task<Author?> GetByAppUserIdAsync(int appUserId)
+        {
+            return await Table
+                 .Include(a => a.Blogs)
+              .Include(a => a.AppUser)
+                .FirstOrDefaultAsync(i => i.AppUserID == appUserId);
         }
     }
 }

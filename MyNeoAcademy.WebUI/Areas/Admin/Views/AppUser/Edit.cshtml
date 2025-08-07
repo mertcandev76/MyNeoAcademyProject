@@ -1,0 +1,76 @@
+﻿@model UpdateAppUserViewModel
+
+@{
+    ViewData["Title"] = "Kullanıcı Güncelle";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" asp-route-id="@Model.UserDto.Id" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="UserDto.Id" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="UserDto.FirstName" class="form-label"></label>
+                    <input asp-for="UserDto.FirstName" class="form-control" placeholder="Adınızı girin..." />
+                    <span asp-validation-for="UserDto.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="UserDto.LastName" class="form-label"></label>
+                    <input asp-for="UserDto.LastName" class="form-control" placeholder="Soyadınızı girin..." />
+                    <span asp-validation-for="UserDto.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="UserDto.UserName" class="form-label"></label>
+                    <input asp-for="UserDto.UserName" class="form-control" placeholder="Kullanıcı adı girin..." />
+                    <span asp-validation-for="UserDto.UserName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="UserDto.Email" class="form-label"></label>
+                    <input asp-for="UserDto.Email" class="form-control" placeholder="Email adresi girin..." />
+                    <span asp-validation-for="UserDto.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input asp-for="UserDto.IsActive" class="form-check-input" />
+                    <label asp-for="UserDto.IsActive" class="form-check-label">Aktif mi?</label>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Mevcut Profil Resmi</label><br />
+                    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                    {
+                        <img src="@Model.ProfileImageUrl" class="img-thumbnail" style="max-height: 120px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Resim bulunamadı.</span>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="UserDto.ProfileImageFile" class="form-label">Yeni Profil Resmi</label>
+                    <input asp-for="UserDto.ProfileImageFile" type="file" class="form-control" />
+                    <span asp-validation-for="UserDto.ProfileImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <a asp-action="Index" asp-area="Admin" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+

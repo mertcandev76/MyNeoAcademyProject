@@ -23,44 +23,100 @@ namespace MyNeoAcademy.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var instructors = await _instructorService.GetAllWithIncludesAsync();
-            return Ok(instructors);
+            try
+            {
+                var instructors = await _instructorService.GetAllWithIncludesAsync();
+                return Ok(instructors);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var instructor = await _instructorService.GetByIdWithIncludesAsync(id);
-            if (instructor == null)
-                return NotFound("Eğitmen bulunamadı.");
+            try
+            {
+                var instructor = await _instructorService.GetByIdWithIncludesAsync(id);
+                if (instructor == null)
+                    return NotFound("Eğitmen bulunamadı.");
 
-            return Ok(instructor);
+                return Ok(instructor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
+        }
+
+        [HttpGet("byuser/{appUserId:int}")]
+        public async Task<IActionResult> GetByAppUserId(int appUserId)
+        {
+            try
+            {
+                var instructor = await _instructorService.GetByAppUserIdAsync(appUserId);
+                if (instructor == null)
+                    return NotFound("Eğitmen bulunamadı.");
+
+                return Ok(instructor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"AppUser verisi alınırken hata: {ex.Message}");
+            }
         }
 
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Post([FromForm] CreateInstructorWithFileDTO dto)
         {
-            await _instructorService.CreateWithFileAsync(dto, _env.WebRootPath);
-            return Ok("Yeni eğitmen kaydı oluşturuldu.");
+            try
+            {
+                await _instructorService.CreateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Yeni eğitmen kaydı oluşturuldu.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ekleme hatası: {ex.Message}");
+            }
         }
 
         [HttpPut]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Put([FromForm] UpdateInstructorWithFileDTO dto)
         {
-            await _instructorService.UpdateWithFileAsync(dto, _env.WebRootPath);
-            return Ok("Eğitmen güncellendi.");
+            try
+            {
+                await _instructorService.UpdateWithFileAsync(dto, _env.WebRootPath);
+                return Ok("Eğitmen güncellendi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Güncelleme hatası: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _instructorService.DeleteByIdAsync(id);
-            if (!deleted)
-                return NotFound("Eğitmen bulunamadı.");
+            try
+            {
+                var deleted = await _instructorService.DeleteByIdAsync(id);
+                if (!deleted)
+                    return NotFound("Eğitmen bulunamadı.");
 
-            return Ok("Eğitmen başarıyla silindi.");
+                return Ok("Eğitmen başarıyla silindi.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Silme hatası: {ex.Message}");
+            }
         }
     }
 }

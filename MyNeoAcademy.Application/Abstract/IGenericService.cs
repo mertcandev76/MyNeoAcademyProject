@@ -14,21 +14,12 @@ namespace MyNeoAcademy.Application.Abstract
         where TUpdateDto : class, IHasId
         where TResultDto : class
     {
-        // Listeleme ve Detay için
         Task<List<TResultDto>> GetListAsync();
         Task<TResultDto?> GetByIdAsync(int id);
-
-        // Oluşturma ve Güncelleme için
         Task CreateAsync(TCreateDto dto);
         Task UpdateAsync(TUpdateDto dto);
-
-        // Silme için
         Task DeleteAsync(int id);
-
-        // Sayım
         Task<int> CountAsync();
-
-        // (Opsiyonel) Gelişmiş filtreleme – DTO değil, Entity üzerinden tanımlanmalı!
         Task<List<TResultDto>> GetFilteredListAsync(Expression<Func<TEntity, bool>> predicate);
         Task<TResultDto?> GetByFilterAsync(Expression<Func<TEntity, bool>> predicate);
         Task<int> FilteredCountAsync(Expression<Func<TEntity, bool>> predicate);

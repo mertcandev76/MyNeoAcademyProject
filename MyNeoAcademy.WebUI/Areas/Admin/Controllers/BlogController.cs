@@ -5,27 +5,29 @@ using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.WebUI.Helpers;
 using System.Text.Json;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class BlogController : Controller
     {
         private readonly IBlogApiService _blogApiService;
         private readonly ICategoryApiService _categoryApiService;
         private readonly IAuthorApiService _authorApiService;
 
+
         public BlogController(
-            IBlogApiService blogApiService,
-            ICategoryApiService categoryApiService,
-            IAuthorApiService authorApiService)
+       IBlogApiService blogApiService,
+       ICategoryApiService categoryApiService,
+       IAuthorApiService authorApiService) 
         {
             _blogApiService = blogApiService;
             _categoryApiService = categoryApiService;
             _authorApiService = authorApiService;
         }
-
         public async Task<IActionResult> Index()
         {
             var data = await _blogApiService.GetAllAsync();
@@ -105,8 +107,9 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             await LoadDropdownsAsync();
             return View(dto);
         }
-
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _blogApiService.DeleteAsync(id);
             if (!result)

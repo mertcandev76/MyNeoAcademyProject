@@ -1,57 +1,74 @@
-﻿    using FluentValidation;
-    using FluentValidation.AspNetCore;
-    using MyNeoAcademy.Application.Validators;
-    using MyNeoAcademy.WebUI.Extensions;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using MyNeoAcademy.Application.Validators;
+using MyNeoAcademy.Application.Validators.Auth;
+using MyNeoAcademy.WebUI.Extensions;
 
-    var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-
-    // Add FluentValidation servislerini IServiceCollection'a ekle
-    builder.Services.AddFluentValidationAutoValidation();  // ModelState otomatik dolar
-    builder.Services.AddFluentValidationClientsideAdapters();// Client-side validasyon için
-    builder.Services.AddValidatorsFromAssemblyContaining<CreateSliderValidator>();// Validator sınıflarını tarat
-
-
-
-    // MVC servislerini ekle (burada sadece AddControllersWithViews çağrılır)
-
-
-    builder.Services.AddApiServices("https://localhost:7230/api/");
-
-    builder.Services.AddControllersWithViews();
-
-
-    // ------------------------------
-    // UYGULAMA PIPELINE'I
-    // ------------------------------
-    var app = builder.Build();
-
-    if (!app.Environment.IsDevelopment())
+// 🔐 Cookie Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opt =>
     {
-        app.UseExceptionHandler("/Home/Error");
-        app.UseHsts(); // Üretimde güvenlik için
-    }
+        opt.LoginPath = "/Auth/Login/Index";
+        opt.LogoutPath = "/Auth/Login/Logout";
+        opt.AccessDeniedPath = "/Auth/Login/AccessDenied";
+    });
 
-    app.UseHttpsRedirection();
-    app.UseStaticFiles();
+// ✅ FluentValidation: Tüm validatorları tarat
+builder.Services.AddFluentValidationAutoValidation();           // ModelState otomatik dolar
+builder.Services.AddFluentValidationClientsideAdapters();       // Client-side validation
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>(); //validator buradan yüklenecek
 
-    app.UseRouting();
+// 🔗 API Servislerini ekle
+builder.Services.AddApiServices("https://localhost:7230/api/");
 
-    app.UseAuthorization();
+// MVC servisleri
+builder.Services.AddControllersWithViews();
 
-    // 🔽 Varsayılan route
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+var app = builder.Build();
 
-    // 🔽 Areas desteği
-    app.MapControllerRoute(
-        name: "areas",
-        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+// ------------------------------
+// PIPELINE
+// ------------------------------
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts(); // Üretimde güvenlik için
+}
 
-    app.MapControllerRoute(
-        name: "blogdetail",
-        pattern: "Blog/Detail/{id?}",
-        defaults: new { controller = "BlogDetail", action = "Detail" });
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-    app.Run();
+app.UseRouting();
+
+app.UseAuthentication(); // ⬅️ Authentication önce olmalı
+app.UseAuthorization();
+
+
+
+// Areas route
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+// Varsayılan route
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+
+// Özel örnek route (isteğe bağlı)
+app.MapControllerRoute(
+    name: "blogdetail",
+    pattern: "Blog/Detail/{id?}",
+    defaults: new { controller = "BlogDetail", action = "Detail" });
+
+app.Run();
+
+
+
+
+

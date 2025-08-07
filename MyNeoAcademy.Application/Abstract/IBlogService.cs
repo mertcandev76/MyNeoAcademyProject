@@ -21,5 +21,6 @@ namespace MyNeoAcademy.Application.Abstract
         Task<bool> DeleteByIdAsync(int id);
         Task<PagedResultDTO<ResultBlogDTO>> GetPagedAsync(int page, int pageSize);
 
+
     }
 }

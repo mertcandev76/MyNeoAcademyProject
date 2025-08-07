@@ -1,7 +1,7 @@
 ﻿@model List<ResultCourseDTO>
 @{
     ViewData["Title"] = "Kurslar Listesi";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
 }
 
 <div class="container-fluid px-3">
@@ -62,5 +62,5 @@
     </div>
 </div>
 
-<!-- Silme onay modalı -->
+
 @await Html.PartialAsync("~/Areas/Admin/Views/Shared/_DeleteModalPartial.cshtml")

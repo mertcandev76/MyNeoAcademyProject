@@ -3,6 +3,7 @@ using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Business.Concrete;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.DataAccess.Repositories;
+using MyNeoAcademy.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace MyNeoAcademy.Business.DependencyResolvers
         public static IServiceCollection AddDependencyResolvers(this IServiceCollection services)
         {
             // Repositories
+            services.AddScoped<ITestimonialRepository, TestimonialRepository>();
             services.AddScoped<IInstructorRepository, InstructorRepository>();
             services.AddScoped<IAboutFeatureRepository, AboutFeatureRepository>();
             services.AddScoped<IAboutRepository, AboutRepository>();
@@ -29,6 +31,8 @@ namespace MyNeoAcademy.Business.DependencyResolvers
 
             // Services
 
+            services.AddScoped<IAppUserService, AppUserManager>();
+            services.AddScoped<IRoleService, RoleManagerService>();
             services.AddScoped<IAboutDetailService, AboutDetailManager>();
             services.AddScoped<IRecentBlogPostService, RecentBlogPostManager>();
             services.AddScoped<INewsletterService, NewsletterManager>();
@@ -45,12 +49,17 @@ namespace MyNeoAcademy.Business.DependencyResolvers
             services.AddScoped<ICourseService, CourseManager>();
             services.AddScoped<IBlogTagService, BlogTagManager>();
 
+            // ✅ Auth & Token Services
+            services.AddScoped<IAuthService, AuthManager>();
+            services.AddScoped<ITokenService, TokenService>();
+
             // Generic
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
             services.AddScoped(typeof(IGenericService<,,,>), typeof(GenericManager<,,,>));
 
             return services;
         }
+
 
     }
 }

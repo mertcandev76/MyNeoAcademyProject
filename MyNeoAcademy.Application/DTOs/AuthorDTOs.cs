@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MyNeoAcademy.Application.Common;
+using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,36 +24,30 @@ namespace MyNeoAcademy.Application.DTOs
         public string? FacebookUrl { get; set; }
         public string? TwitterUrl { get; set; }
         public string? WebsiteUrl { get; set; }
+        public int? AppUserID { get; set; }
     }
+
     public class CreateAuthorWithFileDTO : CreateAuthorDTO
     {
         public IFormFile? ImageFile { get; set; }
     }
+
     public class ResultAuthorDTO : CreateAuthorDTO
     {
         public int AuthorID { get; set; }
-
-        public List<BlogReferenceDTO> Blogs { get; set; } = new List<BlogReferenceDTO>();
-
-
+        public List<BlogReferenceDTO> Blogs { get; set; } = new();
+        public string? AppUserFullName { get; set; }
     }
+
     public class UpdateAuthorDTO : CreateAuthorDTO, IHasId
     {
         public int AuthorID { get; set; }
-        [JsonIgnore]
-        public int Id
-        {
-            get => AuthorID;
-            set => AuthorID = value;
-        }
+        [JsonIgnore] public int Id { get => AuthorID; set => AuthorID = value; }
     }
+
     public class UpdateAuthorWithFileDTO : CreateAuthorWithFileDTO, IHasId
     {
         public int AuthorID { get; set; }
-        public int Id
-        {
-            get => AuthorID;
-            set => AuthorID = value;
-        }
+        public int Id { get => AuthorID; set => AuthorID = value; }
     }
 }

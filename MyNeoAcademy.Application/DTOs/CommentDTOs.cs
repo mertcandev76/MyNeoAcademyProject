@@ -21,38 +21,31 @@ namespace MyNeoAcademy.Application.DTOs
         public string? Email { get; set; }
         public string? Content { get; set; }
         public string? ImageUrl { get; set; }
-
         public int BlogID { get; set; }
+        public int? AppUserID { get; set; }
     }
+
+    public class CreateCommentWithFileDTO : CreateCommentDTO
+    {
+        public IFormFile? ImageFile { get; set; }
+    }
+
     public class ResultCommentDTO : CreateCommentDTO
     {
         public int CommentID { get; set; }
         public BlogReferenceDTO? Blog { get; set; }
         public DateTime CreatedDate { get; set; }
     }
-    public class UpdateCommentDTO : CreateCommentDTO,IHasId
+
+    public class UpdateCommentDTO : CreateCommentDTO, IHasId
     {
         public int CommentID { get; set; }
-        [JsonIgnore]
-        public int Id
-        {
-            get => CommentID;
-            set => CommentID = value;
-        }
+        [JsonIgnore] public int Id { get => CommentID; set => CommentID = value; }
+    }
 
-    }
-    public class CreateCommentWithFileDTO : CreateCommentDTO
-    {
-        public IFormFile? ImageFile { get; set; }
-    }
     public class UpdateCommentWithFileDTO : CreateCommentWithFileDTO, IHasId
     {
         public int CommentID { get; set; }
-
-        public int Id
-        {
-            get => CommentID;
-            set => CommentID = value;
-        }
+        public int Id { get => CommentID; set => CommentID = value; }
     }
 }

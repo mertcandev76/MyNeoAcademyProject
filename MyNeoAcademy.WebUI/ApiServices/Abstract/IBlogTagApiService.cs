@@ -10,8 +10,6 @@ namespace MyNeoAcademy.WebUI.ApiServices.Abstract
         Task<bool> CreateAsync(CreateBlogTagDTO dto);
         Task<bool> UpdateAsync(UpdateBlogTagDTO dto);
         Task<bool> DeleteAsync(int id);
-
-        // Ekstra: Belirli blogId ve tagId ile var mı kontrolü
         Task<bool> ExistsAsync(int blogId, int tagId);
 
     }

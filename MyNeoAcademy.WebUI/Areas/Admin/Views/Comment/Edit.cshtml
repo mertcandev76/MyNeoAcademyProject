@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Yorum Güncelle";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
 }
 
 <div class="container mt-5">
@@ -60,6 +60,20 @@
                     </div>
                     <span asp-validation-for="BlogID" class="text-danger small"></span>
                 </div>
+
+                <div class="mb-3">
+                    <label asp-for="AppUserID" class="form-label">Kullanıcı Seç</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-secondary">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <select asp-for="AppUserID" asp-items="(IEnumerable<SelectListItem>)ViewBag.AppUserList" class="form-control">
+                            <option disabled selected hidden>-- Kullanıcı seçin --</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="AppUserID" class="text-danger small"></span>
+                </div>
+
 
                 <div class="mb-3">
                     <label class="form-label">Mevcut Görsel</label><br />

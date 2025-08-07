@@ -17,5 +17,8 @@ namespace MyNeoAcademy.Entity.Entities
         public string? WebsiteUrl { get; set; }
 
         public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+
+        public int? AppUserID { get; set; }
+        public AppUser? AppUser { get; set; }
     }
 }

@@ -37,6 +37,17 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
             return JsonSerializer.Deserialize<ResultTestimonialDTO>(json, _jsonOptions);
         }
 
+        // **AppUserId ile referans getirme**
+        public async Task<ResultTestimonialDTO?> GetByAppUserIdAsync(int appUserId)
+        {
+            var response = await _httpClient.GetAsync($"testimonials/byuser/{appUserId}");
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ResultTestimonialDTO>(json, _jsonOptions);
+        }
+
         public async Task<bool> CreateAsync(CreateTestimonialWithFileDTO dto)
         {
             var formData = GetFormData(dto);
@@ -67,15 +78,23 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
 
         private MultipartFormDataContent GetFormData(CreateTestimonialDTO dto)
         {
-            return new MultipartFormDataContent
+            var formData = new MultipartFormDataContent
+    {
+        { new StringContent(dto.FullName), "FullName" },
+        { new StringContent(dto.Title ?? ""), "Title" },
+        { new StringContent(dto.ImageUrl ?? ""), "ImageUrl" },
+        { new StringContent(dto.Content ?? ""), "Content" },
+        { new StringContent(dto.Rating.ToString()), "Rating" }
+    };
+
+            if (dto.AppUserID.HasValue)
             {
-                { new StringContent(dto.FullName), "FullName" },
-                { new StringContent(dto.Title ?? ""), "Title" },
-                { new StringContent(dto.ImageUrl ?? ""), "ImageUrl" },
-                { new StringContent(dto.Content ?? ""), "Content" },
-                { new StringContent(dto.Rating.ToString()), "Rating" }
-            };
+                formData.Add(new StringContent(dto.AppUserID.Value.ToString()), "AppUserID");
+            }
+
+            return formData;
         }
+
 
         private StreamContent GetStreamContent(IFormFile file)
         {
@@ -85,3 +104,4 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
         }
     }
 }
+

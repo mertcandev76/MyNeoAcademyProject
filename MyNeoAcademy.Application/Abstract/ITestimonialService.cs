@@ -18,5 +18,6 @@ namespace MyNeoAcademy.Application.Abstract
         Task CreateWithFileAsync(CreateTestimonialWithFileDTO dto, string webRootPath);
         Task UpdateWithFileAsync(UpdateTestimonialWithFileDTO dto, string webRootPath);
         Task<bool> DeleteByIdAsync(int id);
+        Task<ResultTestimonialDTO?> GetByAppUserIdAsync(int appUserId);
     }
 }

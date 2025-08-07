@@ -1,0 +1,15 @@
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\bin\Debug\net7.0\MyNeoAcademy.DTO.deps.json
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\bin\Debug\net7.0\MyNeoAcademy.DTO.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\bin\Debug\net7.0\MyNeoAcademy.DTO.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\bin\Debug\net7.0\MyNeoAcademy.Entity.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\bin\Debug\net7.0\MyNeoAcademy.Entity.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\MyNeoAcademy.DTO.csproj.AssemblyReference.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\MyNeoAcademy.DTO.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\MyNeoAcademy.DTO.AssemblyInfoInputs.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\MyNeoAcademy.DTO.AssemblyInfo.cs
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\MyNeoAcademy.DTO.csproj.CoreCompileInputs.cache
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\MyNeoAcademy.DTO.csproj.CopyComplete
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\MyNeoAcademy.DTO.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\refint\MyNeoAcademy.DTO.dll
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\MyNeoAcademy.DTO.pdb
+C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.DTO\obj\Debug\net7.0\ref\MyNeoAcademy.DTO.dll

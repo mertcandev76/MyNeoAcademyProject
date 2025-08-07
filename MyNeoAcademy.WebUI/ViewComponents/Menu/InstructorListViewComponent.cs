@@ -13,7 +13,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.Menu
             _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
 
-        // displayType: "Home" veya "All" gibi farklı kullanım senaryoları
+
         public async Task<IViewComponentResult> InvokeAsync(string displayType = "Home")
         {
             var response = await _httpClient.GetAsync("instructors");
@@ -31,7 +31,7 @@ namespace MyNeoAcademy.WebUI.ViewComponents.Menu
             var instructors = await JsonSerializer.DeserializeAsync<List<ResultInstructorDTO>>(stream, options)
                               ?? new List<ResultInstructorDTO>();
 
-            // Home'da sadece ilk 4 eğitmen göster
+
             if (displayType == "Home")
                 instructors = instructors.Take(4).ToList();
 

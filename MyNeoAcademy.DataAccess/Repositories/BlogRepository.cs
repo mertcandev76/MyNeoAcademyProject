@@ -22,20 +22,18 @@ namespace MyNeoAcademy.DataAccess.Repositories
                 .Include(b => b.Author)
                 .Include(b => b.Category)
                 .Include(b => b.Comments)
-                .Include(b => b.BlogTags)
-                    .ThenInclude(bt => bt.Tag)
+                .Include(b => b.BlogTags).ThenInclude(bt => bt.Tag)
                 .ToListAsync();
         }
 
         public async Task<Blog?> GetByIdWithIncludesAsync(int id)
         {
             return await Table
-                 .Include(b => b.Author)
-                 .Include(b => b.Category)
-                 .Include(b => b.Comments)
-                 .Include(b => b.BlogTags)
-                     .ThenInclude(bt => bt.Tag)
-                 .FirstOrDefaultAsync(b => b.BlogID == id);
+                .Include(b => b.Author)
+                .Include(b => b.Category)
+                .Include(b => b.Comments)
+                .Include(b => b.BlogTags).ThenInclude(bt => bt.Tag)
+                .FirstOrDefaultAsync(b => b.BlogID == id);
         }
 
         public async Task<(List<Blog> Blogs, int TotalCount)> GetPagedAsync(int page, int pageSize)
@@ -44,19 +42,16 @@ namespace MyNeoAcademy.DataAccess.Repositories
                 .Include(b => b.Author)
                 .Include(b => b.Category)
                 .Include(b => b.Comments)
-                .Include(b => b.BlogTags)
-                    .ThenInclude(bt => bt.Tag)
+                .Include(b => b.BlogTags).ThenInclude(bt => bt.Tag)
                 .OrderByDescending(b => b.PublishDate);
 
             var totalCount = await query.CountAsync();
-
-            var blogs = await query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            var blogs = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
             return (blogs, totalCount);
         }
 
+
     }
+
 }

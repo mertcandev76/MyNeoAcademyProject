@@ -36,10 +36,7 @@ namespace MyNeoAcademy.Business.Concrete
             var authors = await _authorRepository.GetAllWithIncludesAsync();
             var dtos = _mapper.Map<List<ResultAuthorDTO>>(authors);
 
-            var request = _httpContextAccessor.HttpContext?.Request;
-            string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
-                ? $"{request.Scheme}://{request.Host}"
-                : "https://localhost:7230";
+            string baseUrl = GetBaseUrl();
 
             foreach (var dto in dtos)
             {
@@ -55,15 +52,28 @@ namespace MyNeoAcademy.Business.Concrete
         public async Task<ResultAuthorDTO?> GetByIdWithIncludesAsync(int id)
         {
             var author = await _authorRepository.GetByIdWithIncludesAsync(id);
-            if (author == null)
-                return null;
+            if (author == null) return null;
 
             var dto = _mapper.Map<ResultAuthorDTO>(author);
 
-            var request = _httpContextAccessor.HttpContext?.Request;
-            string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
-                ? $"{request.Scheme}://{request.Host}"
-                : "https://localhost:7230";
+            string baseUrl = GetBaseUrl();
+
+            if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
+            {
+                dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
+            }
+
+            return dto;
+        }
+
+        public async Task<ResultAuthorDTO?> GetByAppUserIdAsync(int appUserId)
+        {
+            var author = await _authorRepository.GetByAppUserIdAsync(appUserId);
+            if (author == null) return null;
+
+            var dto = _mapper.Map<ResultAuthorDTO>(author);
+
+            string baseUrl = GetBaseUrl();
 
             if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
             {
@@ -100,11 +110,21 @@ namespace MyNeoAcademy.Business.Concrete
         public async Task<bool> DeleteByIdAsync(int id)
         {
             var entity = await _authorRepository.GetByIdAsync(id);
-            if (entity == null)
-                return false;
+            if (entity == null) return false;
 
             await _authorRepository.DeleteAsync(entity);
             return true;
+        }
+
+
+        private string GetBaseUrl()
+        {
+            var request = _httpContextAccessor.HttpContext?.Request;
+            if (request != null && !string.IsNullOrEmpty(request.Host.Value))
+            {
+                return $"{request.Scheme}://{request.Host}";
+            }
+            return "https://localhost:7230"; 
         }
     }
 }

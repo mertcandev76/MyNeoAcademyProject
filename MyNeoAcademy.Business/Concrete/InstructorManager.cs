@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 namespace MyNeoAcademy.Business.Concrete
 {
     public class InstructorManager : GenericManager<
-     Instructor,
-     CreateInstructorDTO,
-     UpdateInstructorDTO,
-     ResultInstructorDTO>,
-     IInstructorService
+        Instructor,
+        CreateInstructorDTO,
+        UpdateInstructorDTO,
+        ResultInstructorDTO>,
+        IInstructorService
     {
         private readonly IInstructorRepository _instructorRepository;
         private readonly IFileService _fileService;
@@ -43,19 +43,22 @@ namespace MyNeoAcademy.Business.Concrete
                 : "https://localhost:7230";
         }
 
+        private void ApplyImageUrl(ResultInstructorDTO dto)
+        {
+            if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
+            {
+                dto.ImageUrl = $"{GetBaseUrl()}/{dto.ImageUrl.TrimStart('/')}";
+            }
+        }
+
         public async Task<List<ResultInstructorDTO>> GetAllWithIncludesAsync()
         {
             var instructors = await _instructorRepository.GetAllWithIncludesAsync();
             var dtos = _mapper.Map<List<ResultInstructorDTO>>(instructors);
 
-            var baseUrl = GetBaseUrl();
-
             foreach (var dto in dtos)
             {
-                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-                {
-                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-                }
+                ApplyImageUrl(dto);
             }
 
             return dtos;
@@ -68,20 +71,14 @@ namespace MyNeoAcademy.Business.Concrete
                 return null;
 
             var dto = _mapper.Map<ResultInstructorDTO>(instructor);
-            var baseUrl = GetBaseUrl();
-
-            if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-            {
-                dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-            }
-
+            ApplyImageUrl(dto);
             return dto;
         }
 
         public async Task CreateWithFileAsync(CreateInstructorWithFileDTO dto, string webRootPath)
         {
             if (dto.ImageFile == null)
-                throw new ArgumentException("Eğitmen resmi zorunludur.");
+                throw new ArgumentException("Eğitmen görseli zorunludur.");
 
             dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/instructors");
             await CreateAsync(dto);
@@ -111,6 +108,16 @@ namespace MyNeoAcademy.Business.Concrete
             await _instructorRepository.DeleteAsync(entity);
             return true;
         }
-    }
 
+        public async Task<ResultInstructorDTO?> GetByAppUserIdAsync(int appUserId)
+        {
+            var instructor = await _instructorRepository.GetByAppUserIdAsync(appUserId);
+            if (instructor == null)
+                return null;
+
+            var dto = _mapper.Map<ResultInstructorDTO>(instructor);
+            ApplyImageUrl(dto);
+            return dto;
+        }
+    }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyNeoAcademy.Application.DTOs
 {
-    // Pagination için generic PagedResultDTO
+
     public class PagedResultDTO<T>
     {
         public List<T> Items { get; set; } = new();

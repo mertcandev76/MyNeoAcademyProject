@@ -5,11 +5,14 @@ using System.Text.Json;
 using System.Text;
 using MyNeoAcademy.WebUI.ApiServices.Abstract;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using MyNeoAcademy.WebUI.ApiServices.Concrete;
 
 namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class AboutFeatureController : Controller
     {
         private readonly IAboutFeatureApiService _aboutFeatureApiService;
@@ -107,7 +110,9 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
             return View(dto);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var result = await _aboutFeatureApiService.DeleteAsync(id);
             if (!result)
@@ -115,6 +120,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
     }
 }
 

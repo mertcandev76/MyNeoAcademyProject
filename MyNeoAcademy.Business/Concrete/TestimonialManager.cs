@@ -30,6 +30,22 @@ namespace MyNeoAcademy.Business.Concrete
             _httpContextAccessor = httpContextAccessor;
         }
 
+        private string GetBaseUrl()
+        {
+            var request = _httpContextAccessor.HttpContext?.Request;
+            return request != null && !string.IsNullOrEmpty(request.Host.Value)
+                ? $"{request.Scheme}://{request.Host}"
+                : "https://localhost:7230";
+        }
+
+        private void ApplyImageUrl(ResultTestimonialDTO dto)
+        {
+            if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
+            {
+                dto.ImageUrl = $"{GetBaseUrl()}/{dto.ImageUrl.TrimStart('/')}";
+            }
+        }
+
         public async Task CreateWithFileAsync(CreateTestimonialWithFileDTO dto, string webRootPath)
         {
             if (dto.ImageFile == null)
@@ -69,17 +85,9 @@ namespace MyNeoAcademy.Business.Concrete
             var testimonials = await _testimonialRepository.GetListAsync();
             var dtos = _mapper.Map<List<ResultTestimonialDTO>>(testimonials);
 
-            var request = _httpContextAccessor.HttpContext?.Request;
-            string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
-                ? $"{request.Scheme}://{request.Host}"
-                : "https://localhost:7230";
-
             foreach (var dto in dtos)
             {
-                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-                {
-                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-                }
+                ApplyImageUrl(dto);
             }
 
             return dtos;
@@ -88,22 +96,25 @@ namespace MyNeoAcademy.Business.Concrete
         public override async Task<ResultTestimonialDTO?> GetByIdAsync(int id)
         {
             var entity = await _testimonialRepository.GetByIdAsync(id);
+            if (entity == null)
+                return null;
+
             var dto = _mapper.Map<ResultTestimonialDTO>(entity);
-
-            if (dto != null)
-            {
-                var request = _httpContextAccessor.HttpContext?.Request;
-                string baseUrl = request != null && !string.IsNullOrEmpty(request.Host.Value)
-                    ? $"{request.Scheme}://{request.Host}"
-                    : "https://localhost:7230";
-
-                if (!string.IsNullOrWhiteSpace(dto.ImageUrl) && !dto.ImageUrl.StartsWith("http"))
-                {
-                    dto.ImageUrl = $"{baseUrl}/{dto.ImageUrl.TrimStart('/')}";
-                }
-            }
-
+            ApplyImageUrl(dto);
             return dto;
         }
+
+        public async Task<ResultTestimonialDTO?> GetByAppUserIdAsync(int appUserId)
+        {
+            var testimonials = await GetFilteredListAsync(t => t.AppUserID == appUserId);
+            var dto = testimonials.FirstOrDefault();
+
+            if (dto == null)
+                return null;
+
+            ApplyImageUrl(dto);
+            return dto;
+        }
+
     }
 }

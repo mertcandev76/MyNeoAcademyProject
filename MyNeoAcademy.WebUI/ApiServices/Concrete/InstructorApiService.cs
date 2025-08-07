@@ -57,6 +57,16 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
             return JsonSerializer.Deserialize<ResultInstructorDTO>(json, _jsonOptions);
         }
 
+        public async Task<ResultInstructorDTO?> GetByAppUserIdAsync(int appUserId)
+        {
+            var response = await _httpClient.GetAsync($"instructors/byuser/{appUserId}");
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ResultInstructorDTO>(json, _jsonOptions);
+        }
+
         public async Task<bool> CreateAsync(CreateInstructorWithFileDTO dto)
         {
             var formData = GetFormData(dto);
@@ -97,6 +107,8 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
                 { new StringContent(dto.TwitterUrl ?? ""), "TwitterUrl" },
                 { new StringContent(dto.WebsiteUrl ?? ""), "WebsiteUrl" }
             };
+            if (dto.AppUserID.HasValue)
+                formData.Add(new StringContent(dto.AppUserID.Value.ToString()), "AppUserID");
             return formData;
         }
 
@@ -108,3 +120,4 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
         }
     }
 }
+

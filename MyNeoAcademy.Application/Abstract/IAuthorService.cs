@@ -20,6 +20,7 @@ namespace MyNeoAcademy.Application.Abstract
         Task CreateWithFileAsync(CreateAuthorWithFileDTO dto, string webRootPath);
         Task UpdateWithFileAsync(UpdateAuthorWithFileDTO dto, string webRootPath);
         Task<bool> DeleteByIdAsync(int id);
+        Task<ResultAuthorDTO?> GetByAppUserIdAsync(int appUserId);
 
     }
 

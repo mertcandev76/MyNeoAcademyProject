@@ -24,6 +24,9 @@ namespace MyNeoAcademy.Entity.Entities
 
         public string? WebsiteUrl { get; set; }
 
+        public int? AppUserID { get; set; }
+        public AppUser? AppUser { get; set; }
+
         public ICollection<Course> Courses { get; set; } = new List<Course>();
     }
 }

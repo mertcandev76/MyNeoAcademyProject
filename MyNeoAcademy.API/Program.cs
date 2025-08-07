@@ -1,42 +1,41 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyNeoAcademy.Application.Abstract;
-using MyNeoAcademy.Business.Concrete;
-using MyNeoAcademy.DataAccess.Abstract;
-using MyNeoAcademy.DataAccess.Context;
-using MyNeoAcademy.DataAccess.Repositories;
-using MyNeoAcademy.Business.DependencyResolvers;
-using FluentValidation;
-using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using System.Text;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using MyNeoAcademy.Entity.Entities;
+using MyNeoAcademy.DataAccess.Context;
+using MyNeoAcademy.Application.Abstract;
+using MyNeoAcademy.Application.Validators;
+using MyNeoAcademy.Business.Concrete;
+using MyNeoAcademy.Business.DependencyResolvers;
+using MyNeoAcademy.DataAccess.Abstract;
+using MyNeoAcademy.DataAccess.Repositories;
 using MyNeoAcademy.Infrastructure.Services;
-using MyNeoAcademy.Application.Validators; 
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MyNeoAcademy.Application.Mapping.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- CORS servislerini ekle ---
+// ------------------------------
+// 🔹 CORS
+// ------------------------------
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowUIOrigin",
         policy => policy
-            .WithOrigins("https://localhost:7283") // UI projenin adresi
+            .WithOrigins("https://localhost:7283")
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
 
-// 🔹 AutoMapper – Tüm profilleri tara (Mapping klasöründeki profiller dahil)
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-// 🔹 FluentValidation – Tüm validator sınıflarını tara
-builder.Services.AddValidatorsFromAssembly(typeof(CreateAboutFeatureValidator).Assembly); // Application katmanı validator'ları
-builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());              // API katmanı validator'ları (varsa)
-
-// 🔹 FluentValidation AutoValidation (ModelState otomatik dolar)
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
-
-// 🔹 JSON Serileştirme Ayarları
+// ------------------------------
+// 🔹 JSON ve FluentValidation Ayarları
+// ------------------------------
 builder.Services.AddControllers()
     .AddJsonOptions(opt =>
     {
@@ -44,33 +43,112 @@ builder.Services.AddControllers()
         opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
-// 🔹 DbContext – SQL Server bağlantısı
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssembly(typeof(CreateAboutFeatureValidator).Assembly);
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+// ------------------------------
+// 🔹 AutoMapper
+// ------------------------------
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+//builder.Services.AddAutoMapper(cfg =>
+//{
+//    cfg.AddMaps(typeof(AppUserMappingProfile).Assembly); // mapping klasörünü tarar
+//});
+
+// ------------------------------
+// 🔹 DbContext
+// ------------------------------
 builder.Services.AddDbContext<MyNeoAcademyContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
 });
 
-// 🔹 Katman bağımlılıkları (Business, DAL)
+// ------------------------------
+// 🔐 Identity & JWT Authentication
+// ------------------------------
+builder.Services.AddIdentity<AppUser, AppRole>()
+    .AddEntityFrameworkStores<MyNeoAcademyContext>()
+    .AddDefaultTokenProviders();
+
+// 🔐 JWT Ayarları
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = true;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+// ------------------------------
+// 🔹 Swagger + JWT Desteği
+// ------------------------------
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "MyNeoAcademy API", Version = "v1" });
+
+    // JWT token desteği
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Bearer {token} şeklinde giriniz"
+    });
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+// ------------------------------
+// 🔹 Katmanlar & Servisler
+// ------------------------------
 builder.Services.AddDependencyResolvers();
-
-// HttpContext erişimi için
 builder.Services.AddHttpContextAccessor();
-
-// 🔹 Dosya işlemleri için servis
 builder.Services.AddScoped<IFileService, FileService>();
 
-// 🔹 Swagger (API dokümantasyonu)
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+// ------------------------------
+// UYGULAMA PIPELINE'I
+// ------------------------------
 var app = builder.Build();
 
 app.UseStaticFiles();
-
-// CORS middleware'i aktif et (mutlaka UseRouting öncesinde olmalı)
 app.UseCors("AllowUIOrigin");
 
-// 🔹 Geliştirme ortamında Swagger aç
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -78,9 +156,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseAuthentication(); // 🔐 Token doğrulama
+app.UseAuthorization();  // 🔒 Yetki kontrol
 
 app.MapControllers();
-
 app.Run();

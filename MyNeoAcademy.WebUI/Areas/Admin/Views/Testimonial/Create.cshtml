@@ -1,7 +1,7 @@
 ﻿@model CreateTestimonialWithFileDTO
 @{
     ViewData["Title"] = "Yeni Referans Ekle";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
 }
 
 <div class="container mt-5">
@@ -36,6 +36,18 @@
                     <label asp-for="Rating" class="form-label">Puan</label>
                     <input asp-for="Rating" class="form-control" type="number" min="1" max="5" />
                     <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="AppUserID" class="form-label">Kullanıcı Seç</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-secondary">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <select asp-for="AppUserID" asp-items="(IEnumerable<SelectListItem>)ViewBag.AppUserList" class="form-control">
+                            <option disabled selected hidden>-- Kullanıcı seçin --</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="AppUserID" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">

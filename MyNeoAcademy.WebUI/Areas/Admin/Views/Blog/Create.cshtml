@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Yeni Blog Ekle";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
 }
 
 <div class="container mt-5">
@@ -49,6 +49,8 @@
                     </select>
                     <span asp-validation-for="AuthorID" class="text-danger"></span>
                 </div>
+
+
 
                 <div class="mb-3">
                     <label asp-for="ImageFile" class="form-label">Blog Resmi</label>
