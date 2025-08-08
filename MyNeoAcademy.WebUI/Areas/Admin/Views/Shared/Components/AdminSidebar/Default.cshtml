@@ -4,6 +4,8 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav" class="p-t-30">
+
+                <!-- Dashboard -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="index.html" aria-expanded="false">
                         <i class="mdi mdi-view-dashboard"></i>
@@ -11,20 +13,33 @@
                     </a>
                 </li>
 
+                <!-- Kullanıcılar & Roller -->
+                <li class="sidebar-item">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="AppUser" asp-area="Admin" asp-action="Index" aria-expanded="false">
+                        <i class="mdi mdi-account-multiple-outline"></i>
+                        <span class="hide-menu">Kullanıcı Profilleri</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Role" asp-area="Admin" asp-action="Index" aria-expanded="false">
+                        <i class="mdi mdi-shield-account"></i>
+                        <span class="hide-menu">Roller</span>
+                    </a>
+                </li>
+
+                <!-- Hakkımızda -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="About" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-information-outline"></i>
                         <span class="hide-menu">Hakkımızda</span>
                     </a>
                 </li>
-
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="AboutDetail" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-file-document-outline"></i>
                         <span class="hide-menu">Hakkımızda Detay</span>
                     </a>
                 </li>
-
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="AboutFeature" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-star-outline"></i>
@@ -32,6 +47,7 @@
                     </a>
                 </li>
 
+                <!-- Yazarlar -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Author" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-account-circle"></i>
@@ -39,6 +55,7 @@
                     </a>
                 </li>
 
+                <!-- Blog -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Blog" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-note-text"></i>
@@ -47,7 +64,7 @@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="RecentBlogPost" asp-area="Admin" asp-action="Index" aria-expanded="false">
-                        <i class="mdi mdi-note-text"></i>
+                        <i class="mdi mdi-post-outline"></i>
                         <span class="hide-menu">Blog Gönderi</span>
                     </a>
                 </li>
@@ -58,6 +75,7 @@
                     </a>
                 </li>
 
+                <!-- Kategoriler -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Category" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-format-list-bulleted"></i>
@@ -65,6 +83,7 @@
                     </a>
                 </li>
 
+                <!-- Yorumlar & Aboneler -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Comment" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-comment-multiple-outline"></i>
@@ -73,10 +92,12 @@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Newsletter" asp-area="Admin" asp-action="Index" aria-expanded="false">
-                        <i class="mdi mdi-comment-multiple-outline"></i>
+                        <i class="mdi mdi-email-newsletter"></i>
                         <span class="hide-menu">Aboneler</span>
                     </a>
                 </li>
+
+                <!-- İletişim -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Contact" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-phone"></i>
@@ -84,13 +105,13 @@
                     </a>
                 </li>
 
+                <!-- Kurslar & Eğitmenler -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Course" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-school"></i>
                         <span class="hide-menu">Kurslar</span>
                     </a>
                 </li>
-
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Instructor" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-account-tie"></i>
@@ -98,6 +119,7 @@
                     </a>
                 </li>
 
+                <!-- Slider -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Slider" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-image-multiple"></i>
@@ -105,6 +127,7 @@
                     </a>
                 </li>
 
+                <!-- İstatistikler -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Statistic" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-chart-bar"></i>
@@ -112,6 +135,7 @@
                     </a>
                 </li>
 
+                <!-- Genel Etiketler -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Tag" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-tag-outline"></i>
@@ -119,6 +143,7 @@
                     </a>
                 </li>
 
+                <!-- Referanslar -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-controller="Testimonial" asp-area="Admin" asp-action="Index" aria-expanded="false">
                         <i class="mdi mdi-comment-account-outline"></i>

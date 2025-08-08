@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MyNeoAcademy.WebUI.Areas.Admin.ViewComponents
+namespace MyNeoAcademy.WebUI.ViewComponents.Common
 {
-    public class AdminHeaderViewComponent:ViewComponent
+    public class CommonFooterViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {

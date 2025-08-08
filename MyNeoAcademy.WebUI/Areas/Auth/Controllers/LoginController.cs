@@ -67,7 +67,9 @@ namespace MyNeoAcademy.WebUI.Areas.Auth.Controllers
             else if (tokenResult.Roles.Contains("Author"))
                 return RedirectToAction("Index", "Dashboard", new { area = "Author" });
             else if (tokenResult.Roles.Contains("Instructor"))
-                return RedirectToAction("Index", "Dashboard", new { area = "Instructor" });
+                return RedirectToAction("MyCourses", "Course", new { area = "Instructor" });
+            //else if (tokenResult.Roles.Contains("Instructor"))
+            //    return RedirectToAction("Index", "Dashboard", new { area = "Instructor" });
             else if (tokenResult.Roles.Contains("Moderator"))
                 return RedirectToAction("Index", "Panel", new { area = "Moderator" });
             else if (tokenResult.Roles.Contains("User"))

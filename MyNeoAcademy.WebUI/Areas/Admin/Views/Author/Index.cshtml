@@ -42,14 +42,19 @@
                                     <a asp-action="Edit" asp-area="Admin" asp-route-id="@item.AuthorID" class="btn btn-warning btn-sm me-1">
                                         <i class="fas fa-edit"></i> Düzenle
                                     </a>
-                                    <button type="button" class="btn btn-danger btn-sm"
+
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm"
                                             data-toggle="modal"
                                             data-target="#deleteModal"
                                             data-id="@item.AuthorID"
                                             data-name="@item.Name"
-                                            data-controller="Author">
+                                            data-controller="Author"
+                                            data-area="Admin"
+                                            title="Sil">
                                         <i class="fas fa-trash"></i> Sil
                                     </button>
+
                                 </td>
                             </tr>
                         }
@@ -67,5 +72,5 @@
 </div>
 
 
-@await Html.PartialAsync("~/Areas/Admin/Views/Shared/_DeleteModalPartial.cshtml")
+@await Html.PartialAsync("_DeleteModalPartial")
 

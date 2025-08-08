@@ -21,11 +21,20 @@
         const id = button.data('id');
         const name = button.data('name');
         const controller = button.data('controller');
+        const area = button.data('area'); // optional
 
-        $('#deleteForm').attr('action', `/Admin/${controller}/DeleteConfirmed?id=${id}`);
+        let actionUrl = "";
+
+        if (area)
+            actionUrl = `/${area}/${controller}/DeleteConfirmed/${id}`;
+        else
+            actionUrl = `/${controller}/DeleteConfirmed/${id}`;
+
+        $('#deleteForm').attr('action', actionUrl);
         $('#deleteItemName').text(name);
     });
 </script>
+
 
 
 

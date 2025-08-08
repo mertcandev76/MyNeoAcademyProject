@@ -49,12 +49,16 @@
                                     <a asp-action="AssignRoles" asp-route-id="@user.Id" class="btn btn-info btn-sm text-white me-1">
                                         <i class="fas fa-user-tag"></i> Rol Ata
                                     </a>
-                                    <button type="button" class="btn btn-danger btn-sm"
+
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm"
                                             data-toggle="modal"
                                             data-target="#deleteModal"
                                             data-id="@user.Id"
                                             data-name="@user.UserName"
-                                            data-controller="AppUser">
+                                            data-controller="AppUser"
+                                            data-area="Admin"
+                                            title="Sil">
                                         <i class="fas fa-trash"></i> Sil
                                     </button>
 
@@ -75,6 +79,6 @@
 </div>
 
 
-@await Html.PartialAsync("~/Areas/Admin/Views/Shared/_DeleteModalPartial.cshtml")
+@await Html.PartialAsync("_DeleteModalPartial")
 
 

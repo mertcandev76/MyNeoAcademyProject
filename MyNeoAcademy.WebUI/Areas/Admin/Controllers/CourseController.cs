@@ -16,17 +16,11 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     public class CourseController : Controller
     {
         private readonly ICourseApiService _courseApiService;
-        private readonly ICategoryApiService _categoryApiService;
-        private readonly IInstructorApiService _instructorApiService;
 
         public CourseController(
-            ICourseApiService courseApiService,
-            ICategoryApiService categoryApiService,
-            IInstructorApiService instructorApiService)
+            ICourseApiService courseApiService)
         {
             _courseApiService = courseApiService;
-            _categoryApiService = categoryApiService;
-            _instructorApiService = instructorApiService;
         }
 
         public async Task<IActionResult> Index()
@@ -43,75 +37,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 
             return View(result);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Create()
-        {
-            await LoadDropdownsAsync();
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateCourseWithFileDTO dto)
-        {
-            if (!ModelState.IsValid)
-            {
-                await LoadDropdownsAsync();
-                return View(dto);
-            }
-
-            var result = await _courseApiService.CreateAsync(dto);
-            if (result)
-                return RedirectToAction("Index");
-
-            ModelState.AddModelError("", "Kurs eklenemedi.");
-            await LoadDropdownsAsync();
-            return View(dto);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var result = await _courseApiService.GetByIdAsync(id);
-            if (result == null)
-                return RedirectToAction("Index");
-
-            var dto = new UpdateCourseWithFileDTO
-            {
-                CourseID = result.CourseID,
-                Title = result.Title,
-                Description = result.Description,
-                ImageUrl = result.ImageUrl,
-                Rating = result.Rating,
-                ReviewCount = result.ReviewCount,
-                StudentCount = result.StudentCount,
-                LikeCount = result.LikeCount,
-                Price = result.Price,
-                CategoryID = result.Category?.CategoryID,
-                InstructorID = result.Instructor?.InstructorID
-            };
-
-            await LoadDropdownsAsync();
-            return View(dto);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(UpdateCourseWithFileDTO dto)
-        {
-            if (!ModelState.IsValid)
-            {
-                await LoadDropdownsAsync();
-                return View(dto);
-            }
-
-            var result = await _courseApiService.UpdateAsync(dto);
-            if (result)
-                return RedirectToAction("Index");
-
-            ModelState.AddModelError("", "Kurs güncellenemedi.");
-            await LoadDropdownsAsync();
-            return View(dto);
-        }
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -121,11 +47,6 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 TempData["Error"] = "Silme işlemi başarısız.";
 
             return RedirectToAction("Index");
-        }
-        private async Task LoadDropdownsAsync()
-        {
-            ViewBag.Categories = await _categoryApiService.GetDropdownItemsAsync();
-            ViewBag.Instructors = await _instructorApiService.GetDropdownItemsAsync();
         }
     }
 }

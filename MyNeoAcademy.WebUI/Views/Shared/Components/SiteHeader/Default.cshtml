@@ -22,8 +22,16 @@
                         </div>
                         <div class="header-info-right">
                             <ul>
-                                <li><a href="#"><i class="ti-user"></i>Giriş</a></li>
-                                <li><a href="#"><i class="ti-lock"></i>Kayıt Ol</a></li>
+                                <li>
+                                    <a asp-area="Auth" asp-controller="Login" asp-action="Index">
+                                        <i class="ti-user"></i> Giriş
+                                    </a>
+                                </li>
+                                <li>
+                                    <a asp-area="Auth" asp-controller="Register" asp-action="Index">
+                                       <i class="ti-lock"></i>Kayıt Ol
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>

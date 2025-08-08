@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MyNeoAcademy.WebUI.Areas.Admin.ViewComponents
+namespace MyNeoAcademy.WebUI.ViewComponents.Common
 {
-    public class AdminScriptsViewComponent:ViewComponent
+    public class CommonRightSidebarViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {

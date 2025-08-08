@@ -7,7 +7,7 @@
 <html dir="ltr" lang="en">
 
 
-@await Component.InvokeAsync("AdminHead")
+@await Component.InvokeAsync("CommonHead")
 
 <body>
     <!-- Preloader - style you can find in spinners.css -->
@@ -25,7 +25,7 @@
     <div id="main-wrapper">
 
         <!-- Topbar header - style you can find in pages.scss -->
-        @await Component.InvokeAsync("AdminHeader")
+        @await Component.InvokeAsync("CommonHeader")
         <!-- End Topbar header -->
 
 
@@ -37,7 +37,7 @@
         <div class="page-wrapper">
 
             <!-- Bread crumb and right sidebar toggle -->
-            @await Component.InvokeAsync("AdminRightSidebar")
+            @await Component.InvokeAsync("CommonRightSidebar")
             <!-- End Bread crumb and right sidebar toggle -->
 
             <!-- Container fluid  -->
@@ -48,7 +48,7 @@
 
 
             <!-- footer -->
-            @await Component.InvokeAsync("AdminFooter")
+            @await Component.InvokeAsync("CommonFooter")
             <!-- End footer -->
 
         </div>
@@ -60,7 +60,7 @@
 
 
     <!-- All Jquery -->
-    @await Component.InvokeAsync("AdminScripts")
+    @await Component.InvokeAsync("CommonScripts")
     <!-- End Jquery -->
 
 </body>

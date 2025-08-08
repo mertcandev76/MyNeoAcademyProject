@@ -82,23 +82,42 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
                 }).ToList()
                 ?? new List<SelectListItem>();
         }
-
-        private MultipartFormDataContent GetFormData(CreateCourseDTO dto)
+        private MultipartFormDataContent GetFormData(CreateCourseWithFileDTO dto)
         {
-            return new MultipartFormDataContent
-            {
-                { new StringContent(dto.Title ?? ""), "Title" },
-                { new StringContent(dto.Description ?? ""), "Description" },
-                { new StringContent(dto.ImageUrl ?? ""), "ImageUrl" },
-                { new StringContent(dto.Rating.ToString()), "Rating" },
-                { new StringContent(dto.ReviewCount.ToString()), "ReviewCount" },
-                { new StringContent(dto.StudentCount.ToString()), "StudentCount" },
-                { new StringContent(dto.LikeCount.ToString()), "LikeCount" },
-                { new StringContent(dto.Price?.ToString() ?? ""), "Price" },
-                { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" },
-                { new StringContent(dto.InstructorID?.ToString() ?? ""), "InstructorID" }
-            };
+            var formData = new MultipartFormDataContent
+    {
+        { new StringContent(dto.Title ?? ""), "Title" },
+        { new StringContent(dto.Description ?? ""), "Description" },
+        { new StringContent(dto.ImageUrl ?? ""), "ImageUrl" },
+        { new StringContent(dto.Rating.ToString()), "Rating" }, 
+        { new StringContent(dto.ReviewCount.ToString()), "ReviewCount" },
+        { new StringContent(dto.StudentCount.ToString()), "StudentCount" },
+        { new StringContent(dto.LikeCount.ToString()), "LikeCount" },
+        { new StringContent(dto.Price?.ToString() ?? "0"), "Price" }, 
+        { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" },
+        { new StringContent(dto.InstructorID?.ToString() ?? ""), "InstructorID" }
+    };
+
+            return formData;
         }
+
+
+        //private MultipartFormDataContent GetFormData(CreateCourseDTO dto)
+        //{
+        //    return new MultipartFormDataContent
+        //    {
+        //        { new StringContent(dto.Title ?? ""), "Title" },
+        //        { new StringContent(dto.Description ?? ""), "Description" },
+        //        { new StringContent(dto.ImageUrl ?? ""), "ImageUrl" },
+        //        { new StringContent(dto.Rating.ToString()), "Rating" },
+        //        { new StringContent(dto.ReviewCount.ToString()), "ReviewCount" },
+        //        { new StringContent(dto.StudentCount.ToString()), "StudentCount" },
+        //        { new StringContent(dto.LikeCount.ToString()), "LikeCount" },
+        //        { new StringContent(dto.Price?.ToString() ?? ""), "Price" },
+        //        { new StringContent(dto.CategoryID?.ToString() ?? ""), "CategoryID" },
+        //        { new StringContent(dto.InstructorID?.ToString() ?? ""), "InstructorID" }
+        //    };
+        //}
 
         private StreamContent GetStreamContent(IFormFile file)
         {
