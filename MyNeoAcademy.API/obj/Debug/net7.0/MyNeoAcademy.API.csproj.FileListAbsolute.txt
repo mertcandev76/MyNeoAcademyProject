@@ -72,7 +72,6 @@ C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net7.0\MyNeoAcademy.API.AssemblyInfoInputs.cache
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net7.0\MyNeoAcademy.API.AssemblyInfo.cs
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net7.0\MyNeoAcademy.API.csproj.CoreCompileInputs.cache
-C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net7.0\MyNeoAcademy.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net7.0\MyNeoAcademy.API.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net7.0\staticwebassets\msbuild.MyNeoAcademy.API.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\Mertcan\source\repos\MyNeoAcademyProject\MyNeoAcademy.API\obj\Debug\net7.0\staticwebassets\msbuild.build.MyNeoAcademy.API.props

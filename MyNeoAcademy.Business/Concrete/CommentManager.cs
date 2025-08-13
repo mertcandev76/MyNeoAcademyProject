@@ -14,24 +14,130 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+
 namespace MyNeoAcademy.Business.Concrete
 {
     public class CommentManager : GenericManager<Comment, CreateCommentDTO, UpdateCommentDTO, ResultCommentDTO>, ICommentService
     {
         private readonly ICommentRepository _commentRepository;
+        private readonly ICourseRepository _courseRepository;
         private readonly IFileService _fileService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CommentManager(
             ICommentRepository commentRepository,
+            ICourseRepository courseRepository,
             IMapper mapper,
             IFileService fileService,
             IHttpContextAccessor httpContextAccessor
         ) : base(commentRepository, mapper)
         {
             _commentRepository = commentRepository;
+            _courseRepository = courseRepository;
             _fileService = fileService;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        public override async Task CreateAsync(CreateCommentDTO dto)
+        {
+            var entity = _mapper.Map<Comment>(dto);
+            entity.CreatedDate = DateTime.UtcNow;
+            await _commentRepository.CreateAsync(entity);
+
+            if (dto.CourseID.HasValue && dto.CourseID.Value > 0)
+            {
+                await UpdateCourseRatingAndCommentCountAsync(dto.CourseID.Value);
+            }
+        }
+
+        public override async Task UpdateAsync(UpdateCommentDTO dto)
+        {
+            var entity = await _commentRepository.GetByIdAsync(dto.CommentID);
+            if (entity == null)
+                throw new Exception("Comment not found.");
+
+            _mapper.Map(dto, entity);
+            await _commentRepository.UpdateAsync(entity);
+
+            if (entity.CourseID.HasValue && entity.CourseID.Value > 0)
+            {
+                await UpdateCourseRatingAndCommentCountAsync(entity.CourseID.Value);
+            }
+        }
+
+        public async Task<bool> DeleteByIdAsync(int id)
+        {
+            var entity = await _commentRepository.GetByIdAsync(id);
+            if (entity == null) return false;
+
+            await _commentRepository.DeleteAsync(entity);
+
+            if (entity.CourseID.HasValue && entity.CourseID.Value > 0)
+            {
+                await UpdateCourseRatingAndCommentCountAsync(entity.CourseID.Value);
+            }
+
+            return true;
+        }
+
+
+        private async Task UpdateCourseRatingAndCommentCountAsync(int courseId)
+        {
+            var comments = await _commentRepository.GetByCourseIdAsync(courseId);
+            var course = await _courseRepository.GetByIdAsync(courseId);
+            if (course == null)
+                return;
+
+            // ReviewCount = yorum sayısı
+            course.ReviewCount = comments.Count;
+
+            // Rating ortalaması, int olduğu için yuvarlayıp int'e çevirelim
+            var ratedComments = comments.Where(c => c.Rating > 0).ToList();
+            course.Rating = ratedComments.Any()
+                ? (int)Math.Round(ratedComments.Average(c => c.Rating))
+                : 0;
+
+            await _courseRepository.UpdateAsync(course);
+        }
+
+
+        public async Task CreateUserCommentAsync(CreateCommentDTO dto)
+        {
+            await CreateAsync(dto);
+        }
+
+        public async Task CreateWithFileAsync(CreateCommentWithFileDTO dto, string webRootPath)
+        {
+            if (dto.ImageFile != null)
+                dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/comments");
+
+            await CreateAsync(dto);
+        }
+
+        public async Task UpdateWithFileAsync(UpdateCommentWithFileDTO dto, string webRootPath)
+        {
+            var entity = await _commentRepository.GetByIdAsync(dto.CommentID);
+            if (entity == null)
+                throw new Exception("Comment not found.");
+
+            if (dto.ImageFile != null)
+                dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/comments");
+
+            _mapper.Map(dto, entity);
+            await _commentRepository.UpdateAsync(entity);
+
+            // CourseID nullable int olduğuna göre null kontrolü yapıyoruz
+            if (entity.CourseID.HasValue && entity.CourseID.Value > 0)
+            {
+                await UpdateCourseRatingAndCommentCountAsync(entity.CourseID.Value);
+            }
+        }
+
+
+        public async Task<List<ResultCommentDTO>> GetByCourseIdAsync(int courseId)
+        {
+            var comments = await _commentRepository.GetByCourseIdAsync(courseId);
+            return MapWithImageUrls(comments);
         }
 
         public async Task<List<ResultCommentDTO>> GetAllWithIncludesAsync()
@@ -52,7 +158,7 @@ namespace MyNeoAcademy.Business.Concrete
 
         public async Task<List<ResultCommentDTO>> GetByIdWithIncludesBlogAsync(int blogId)
         {
-            var comments = await _commentRepository.GetByIdWithIncludesBlogAsync(blogId);
+            var comments = await _commentRepository.GetByBlogIdAsync(blogId);
             return MapWithImageUrls(comments);
         }
 
@@ -101,54 +207,11 @@ namespace MyNeoAcademy.Business.Concrete
             };
         }
 
-        public override async Task CreateAsync(CreateCommentDTO dto)
-        {
-            var entity = _mapper.Map<Comment>(dto);
-            entity.CreatedDate = DateTime.UtcNow;
-            await _commentRepository.CreateAsync(entity);
-        }
-
-        public async Task CreateUserCommentAsync(CreateCommentDTO dto)
-        {
-            await CreateAsync(dto);
-        }
-
-        public async Task CreateWithFileAsync(CreateCommentWithFileDTO dto, string webRootPath)
-        {
-            if (dto.ImageFile != null)
-                dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/comments");
-
-            await CreateAsync(dto);
-        }
-
-        public async Task UpdateWithFileAsync(UpdateCommentWithFileDTO dto, string webRootPath)
-        {
-            var entity = await _commentRepository.GetByIdAsync(dto.CommentID);
-            if (entity == null)
-                throw new Exception("Yorum bulunamadı.");
-
-            if (dto.ImageFile != null)
-                dto.ImageUrl = await _fileService.SaveFileAsync(dto.ImageFile, webRootPath, "img/comments");
-
-            _mapper.Map(dto, entity);
-            await _commentRepository.UpdateAsync(entity);
-        }
-
-        public async Task<bool> DeleteByIdAsync(int id)
-        {
-            var entity = await _commentRepository.GetByIdAsync(id);
-            if (entity == null) return false;
-
-            await _commentRepository.DeleteAsync(entity);
-            return true;
-        }
-
         public async Task<List<ResultCommentDTO>> GetByAppUserIdAsync(int appUserId)
         {
             var comments = await _commentRepository.GetByAppUserIdAsync(appUserId);
             return MapWithImageUrls(comments);
         }
-
 
         private string GetBaseUrl()
         {
@@ -174,3 +237,6 @@ namespace MyNeoAcademy.Business.Concrete
         }
     }
 }
+
+
+

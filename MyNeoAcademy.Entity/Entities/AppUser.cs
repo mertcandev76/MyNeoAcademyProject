@@ -19,14 +19,13 @@ namespace MyNeoAcademy.Entity.Entities
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; } = true;
         public bool IsDeleted { get; set; } = false;
-
-
         public ICollection<AppUserRole> UserRoles { get; set; } = new List<AppUserRole>();
-
         public Author? Author { get; set; }
         public Instructor? Instructor { get; set; }
-
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<Testimonial> Testimonials { get; set; } = new List<Testimonial>();
+        public ICollection<CourseLike> CourseLikes { get; set; } = new List<CourseLike>();
+        public ICollection<CourseEnrollment> CourseEnrollments { get; set; } = new List<CourseEnrollment>();
     }
 }
+

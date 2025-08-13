@@ -1,0 +1,115 @@
+﻿@model InstructorDashboardViewModel
+
+@{
+    ViewData["Title"] = "Yazar Gösterge Paneli";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3 fw-bold text-primary">@ViewData["Title"]</h2>
+    <hr class="mb-4" />
+
+    <!-- Genel İstatistikler -->
+    <div class="row text-center mb-5 g-3">
+        <div class="col-md-3 col-sm-6">
+            <div class="card bg-primary text-white shadow-lg border-0 rounded-3">
+                <div class="card-body">
+                    <i class="bi bi-journal-bookmark-fill display-6 mb-2"></i>
+                    <h6 class="card-subtitle mb-1">Total Courses</h6>
+                    <h3 class="fw-bold">@Model.TotalCourses</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card bg-success text-white shadow-lg border-0 rounded-3">
+                <div class="card-body">
+                    <i class="bi bi-people-fill display-6 mb-2"></i>
+                    <h6 class="card-subtitle mb-1">Total Students</h6>
+                    <h3 class="fw-bold">@Model.TotalStudents</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card bg-warning text-dark shadow-lg border-0 rounded-3">
+                <div class="card-body">
+                    <i class="bi bi-hand-thumbs-up-fill display-6 mb-2"></i>
+                    <h6 class="card-subtitle mb-1">Total Likes</h6>
+                    <h3 class="fw-bold">@Model.TotalLikes</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card bg-danger text-white shadow-lg border-0 rounded-3">
+                <div class="card-body">
+                    <i class="bi bi-star-fill display-6 mb-2"></i>
+                    <h6 class="card-subtitle mb-1">Average Rating</h6>
+                    <h3 class="fw-bold">@Model.AverageRating.ToString("0.0") / 5</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Courses -->
+    <div class="mb-5">
+        <h4 class="mb-3 fw-semibold">Recent Courses</h4>
+        <div class="row g-3">
+            @foreach (var course in Model.RecentCourses)
+            {
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden hover-scale">
+                        <img src="@(string.IsNullOrEmpty(course.ImageUrl) ? "/images/placeholder.png" : course.ImageUrl)"
+                             class="card-img-top" style="height:180px; object-fit:cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@course.Title</h5>
+                            <p class="card-text small text-muted mb-1">
+                                Students: <span class="fw-semibold">@course.StudentCount</span> |
+                                Likes: <span class="fw-semibold">@course.LikeCount</span>
+                            </p>
+                            <p class="card-text small text-muted mb-1">
+                                Reviews: <span class="fw-semibold">@course.ReviewCount</span> |
+                                Rating: <span class="fw-semibold">@course.Rating / 5</span>
+                            </p>
+                            <a href="@Url.Action("Detail", "Course", new { area = "Instructor", id = course.CourseID })"
+                               class="btn btn-sm btn-outline-primary mt-2 w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Popular Courses -->
+    <div class="mb-5">
+        <h4 class="mb-3 fw-semibold">Popular Courses</h4>
+        <div class="row g-3">
+            @foreach (var course in Model.PopularCourses)
+            {
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card h-100 shadow-lg border-warning rounded-4 overflow-hidden hover-scale">
+                        <img src="@(string.IsNullOrEmpty(course.ImageUrl) ? "/images/placeholder.png" : course.ImageUrl)"
+                             class="card-img-top" style="height:180px; object-fit:cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@course.Title</h5>
+                            <p class="card-text small text-muted mb-1">
+                                Students: <span class="fw-semibold">@course.StudentCount</span> |
+                                Likes: <span class="fw-semibold">@course.LikeCount</span>
+                            </p>
+                            <p class="card-text small text-muted mb-1">
+                                Reviews: <span class="fw-semibold">@course.ReviewCount</span> |
+                                Rating: <span class="fw-semibold">@course.Rating / 5</span>
+                            </p>
+                            <a href="@Url.Action("Detail", "Course", new { area = "Instructor", id = course.CourseID })"
+                               class="btn btn-sm btn-warning mt-2 w-100 text-white fw-bold">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-scale:hover {
+        transform: scale(1.03);
+        transition: all 0.3s ease-in-out;
+    }
+</style>

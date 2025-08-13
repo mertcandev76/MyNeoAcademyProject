@@ -23,6 +23,14 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
                 PropertyNameCaseInsensitive = true
             };
         }
+        public async Task<List<ResultCommentDTO>> GetAllCourseCommentsAsync(int courseId)
+        {
+            var response = await _httpClient.GetAsync($"comments/bycourse/{courseId}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<ResultCommentDTO>>(json, _jsonOptions) ?? new List<ResultCommentDTO>();
+        }
 
         public async Task<PagedResultDTO<ResultCommentDTO>> GetPagedAsync(int page, int pageSize)
         {
@@ -129,19 +137,27 @@ namespace MyNeoAcademy.WebUI.ApiServices.Concrete
 
             if (!string.IsNullOrEmpty(dto.UserName))
                 formData.Add(new StringContent(dto.UserName), nameof(dto.UserName));
+
             if (!string.IsNullOrEmpty(dto.Email))
                 formData.Add(new StringContent(dto.Email), nameof(dto.Email));
+
             if (!string.IsNullOrEmpty(dto.Content))
                 formData.Add(new StringContent(dto.Content), nameof(dto.Content));
 
-            formData.Add(new StringContent(dto.BlogID.ToString()), nameof(dto.BlogID));
+            if (dto.BlogID.HasValue)
+                formData.Add(new StringContent(dto.BlogID.Value.ToString()), nameof(dto.BlogID));
+
+            if (dto.CourseID.HasValue)
+                formData.Add(new StringContent(dto.CourseID.Value.ToString()), nameof(dto.CourseID));
+
+            if (dto.Rating.HasValue)
+                formData.Add(new StringContent(dto.Rating.Value.ToString()), nameof(dto.Rating));
 
             if (dto.AppUserID.HasValue)
                 formData.Add(new StringContent(dto.AppUserID.Value.ToString()), nameof(dto.AppUserID));
 
             return formData;
         }
-
 
         private StreamContent GetStreamContent(IFormFile file)
         {

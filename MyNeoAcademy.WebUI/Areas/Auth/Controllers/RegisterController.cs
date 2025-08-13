@@ -75,7 +75,7 @@ namespace MyNeoAcademy.WebUI.Areas.Auth.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            return RedirectToAction("Index", "About", new { area = "Admin" });
+            return RedirectToAction("Index", "Login", new { area = "Auth" });
         }
     }
 }

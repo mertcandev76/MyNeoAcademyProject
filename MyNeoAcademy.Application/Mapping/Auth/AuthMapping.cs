@@ -40,7 +40,9 @@ namespace MyNeoAcademy.Application.Mapping.Auth
                 .ForMember(dest => dest.ProfileImageUrl, opt => opt.MapFrom<AppUserTokenImageResolver>()) 
                 .ForMember(dest => dest.Roles, opt => opt.Ignore()) 
                 .ForMember(dest => dest.Expiration, opt => opt.Ignore()) 
-                .ForMember(dest => dest.Token, opt => opt.Ignore());
+                .ForMember(dest => dest.Token, opt => opt.Ignore())
+            .ForMember(dest => dest.InstructorId, opt => opt.MapFrom(src => src.Instructor != null ? src.Instructor.InstructorID : (int?)null));
+
         }
     }
 }

@@ -1,0 +1,52 @@
+﻿@model ResultCourseLikeDTO
+
+@{
+    ViewData["Title"] = "Beğeni Detayı";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded border-success">
+        <div class="card-header">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Beğeni ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Kurs</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Course != null)
+                    {
+                        @Model.Course.Title
+                    }
+                    else
+                    {
+                        <span class="text-muted">Yok</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Beğenen Kullanıcı</dt>
+                <dd class="col-sm-9">
+                    @if (Model.AppUser != null)
+                    {
+                        @Model.AppUser.FullName
+                    }
+                    else
+                    {
+                        <span class="text-muted">Yok</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Beğeni Tarihi</dt>
+                <dd class="col-sm-9">
+                    @Model.LikedDate.ToString("dd MMMM yyyy")
+                </dd>
+            </dl>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" asp-area="Instructor" class="btn btn-secondary">Geri Dön</a>
+            </div>
+        </div>
+    </div>
+</div>

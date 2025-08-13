@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using MyNeoAcademy.Application.Common;
+﻿    using Microsoft.AspNetCore.Http;
+using MyNeoAcademy.Entity.Common;
 using MyNeoAcademy.Entity.Entities;
 using System;
 using System.Collections.Generic;

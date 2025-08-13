@@ -18,11 +18,16 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
     {
         private readonly ICommentApiService _commentApiService;
         private readonly IAppUserApiService _appUserApiService;
+        private readonly ICourseApiService _courseApiService; 
 
-        public CommentController(ICommentApiService commentApiService, IAppUserApiService appUserApiService)
+        public CommentController(
+            ICommentApiService commentApiService,
+            IAppUserApiService appUserApiService,
+            ICourseApiService courseApiService) 
         {
             _commentApiService = commentApiService;
             _appUserApiService = appUserApiService;
+            _courseApiService = courseApiService; 
         }
 
 
@@ -44,7 +49,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            await LoadAppUserDropdownAsync();
+            await LoadDropdownsAsync();
             return View();
         }
 
@@ -53,16 +58,16 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await LoadAppUserDropdownAsync();
+                await LoadDropdownsAsync(dto.CourseID);
                 return View(dto);
             }
 
-            var result = await _commentApiService.CreateAdminCommentAsync(dto); 
+            var result = await _commentApiService.CreateAdminCommentAsync(dto);
             if (result)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yorum eklenemedi.");
-            await LoadAppUserDropdownAsync();
+            await LoadDropdownsAsync(dto.CourseID);
             return View(dto);
         }
 
@@ -80,10 +85,11 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 Email = result.Email,
                 Content = result.Content,
                 ImageUrl = result.ImageUrl,
-                BlogID = result.Blog?.BlogID ?? 0
+                BlogID = result.Blog?.BlogID ?? 0,
+                CourseID = result.Course?.CourseID ?? 0 
             };
 
-            await LoadAppUserDropdownAsync();
+            await LoadDropdownsAsync(dto.CourseID);
             return View(dto);
         }
 
@@ -92,7 +98,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await LoadAppUserDropdownAsync();
+                await LoadDropdownsAsync(dto.CourseID);
                 return View(dto);
             }
 
@@ -101,8 +107,20 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", "Yorum güncellenemedi.");
-            await LoadAppUserDropdownAsync();
+            await LoadDropdownsAsync(dto.CourseID);
             return View(dto);
+        }
+
+        private async Task LoadDropdownsAsync(object? selectedCourse = null, object? selectedUser = null, object? selectedBlog = null)
+        {
+            var appUserList = await _appUserApiService.GetDropdownItemsByRoleAsync("User");
+            ViewBag.AppUserList = new SelectList(appUserList, "Value", "Text", selectedUser);
+
+            var blogList = await _commentApiService.GetBlogDropdownItemsAsync();
+            ViewBag.Blogs = new SelectList(blogList, "Value", "Text", selectedBlog);
+
+            var courses = await _courseApiService.GetDropdownItemsAsync();
+            ViewBag.Courses = new SelectList(courses, "Value", "Text", selectedCourse);
         }
 
         [HttpPost]
@@ -115,12 +133,7 @@ namespace MyNeoAcademy.WebUI.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
-        private async Task LoadAppUserDropdownAsync(object? selectedValue = null)
-        {
-            var appUserList = await _appUserApiService.GetDropdownItemsByRoleAsync("User"); 
-            ViewBag.AppUserList = new SelectList(appUserList, "Value", "Text", selectedValue);
-            ViewBag.Blogs = await _commentApiService.GetBlogDropdownItemsAsync();
-        }
     }
 }
+
 

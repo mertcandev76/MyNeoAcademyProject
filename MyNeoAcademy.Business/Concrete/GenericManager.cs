@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MyNeoAcademy.Application.Abstract;
-using MyNeoAcademy.Application.Common;
+using MyNeoAcademy.Entity.Common;
 using MyNeoAcademy.DataAccess.Abstract;
 using System;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace MyNeoAcademy.Business.Concrete
             await _repository.CreateAsync(entity);
         }
 
-        public async Task UpdateAsync(TUpdateDto dto)
+        public virtual async Task UpdateAsync(TUpdateDto dto)
         {
             var existingEntity = await _repository.GetByIdAsync(dto.Id);
             if (existingEntity is null)

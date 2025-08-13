@@ -5,173 +5,177 @@ using MyNeoAcademy.WebUI.ApiServices.Abstract;
 using System.Data;
 using System.Security.Claims;
 
-namespace MyNeoAcademy.WebUI.Areas.Instructor.Controllers
-{
-    [Authorize(Roles = "Instructor")]
-    [Area("Instructor")]
-    public class CourseController : Controller
+
+    namespace MyNeoAcademy.WebUI.Areas.Instructor.Controllers
     {
-        private readonly ICourseApiService _courseApiService;
-        private readonly ICategoryApiService _categoryApiService;
-        private readonly IInstructorApiService _instructorApiService;
-
-        public CourseController(
-            ICourseApiService courseApiService,
-            ICategoryApiService categoryApiService,
-            IInstructorApiService instructorApiService)
+        [Authorize(Roles = "Instructor")]
+        [Area("Instructor")]
+        public class CourseController : Controller
         {
-            _courseApiService = courseApiService;
-            _categoryApiService = categoryApiService;
-            _instructorApiService = instructorApiService;
-        }
+            private readonly ICourseApiService _courseApiService;
+            private readonly ICategoryApiService _categoryApiService;
+            private readonly IInstructorApiService _instructorApiService;
 
-        private int GetCurrentAppUserId()
-        {
-            return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        }
-
-        private async Task<int?> GetInstructorIdForCurrentUserAsync()
-        {
-            var appUserId = GetCurrentAppUserId();
-            var instructor = await _instructorApiService.GetByAppUserIdAsync(appUserId);
-            return instructor?.InstructorID;
-        }
-
-        private async Task LoadDropdownsAsync()
-        {
-            ViewBag.Categories = await _categoryApiService.GetDropdownItemsAsync();
-        }
-
-        public async Task<IActionResult> MyCourses()
-        {
-            var allCourses = await _courseApiService.GetAllAsync();
-            var instructorId = await GetInstructorIdForCurrentUserAsync();
-            if (instructorId == null)
-                return RedirectToAction("AccessDenied", "Account"); 
-
-            var myCourses = allCourses.Where(c => c.Instructor?.InstructorID == instructorId).ToList();
-            return View(myCourses);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Create()
-        {
-            await LoadDropdownsAsync();
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateCourseWithFileDTO dto)
-        {
-            if (!ModelState.IsValid)
+            public CourseController(
+                ICourseApiService courseApiService,
+                ICategoryApiService categoryApiService,
+                IInstructorApiService instructorApiService)
             {
-                await LoadDropdownsAsync();
-                return View(dto);
+                _courseApiService = courseApiService;
+                _categoryApiService = categoryApiService;
+                _instructorApiService = instructorApiService;
             }
 
-            var instructorId = await GetInstructorIdForCurrentUserAsync();
-            if (instructorId == null)
+            private int GetCurrentAppUserId()
             {
-                ModelState.AddModelError("", "Eğitmen bulunamadı.");
-                await LoadDropdownsAsync();
-                return View(dto);
+                return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             }
 
-            dto.InstructorID = instructorId.Value;
+            private async Task<int?> GetInstructorIdForCurrentUserAsync()
+            {
+                var appUserId = GetCurrentAppUserId();
+                var instructor = await _instructorApiService.GetByAppUserIdAsync(appUserId);
+                return instructor?.InstructorID;
+            }
 
-            var result = await _courseApiService.CreateAsync(dto);
-            if (result)
-                return RedirectToAction("MyCourses");
+            private async Task LoadDropdownsAsync()
+            {
+                ViewBag.Categories = await _categoryApiService.GetDropdownItemsAsync();
+            }
 
-            ModelState.AddModelError("", "Kurs oluşturulamadı.");
-            await LoadDropdownsAsync();
-            return View(dto);
-        }
+            public async Task<IActionResult> MyCourses()
+            {
+                var allCourses = await _courseApiService.GetAllAsync();
+                var instructorId = await GetInstructorIdForCurrentUserAsync();
+                if (instructorId == null)
+                    return RedirectToAction("AccessDenied", "Login", new { area = "Auth" }); // Burayı güncelledik
 
+                var myCourses = allCourses.Where(c => c.Instructor?.InstructorID == instructorId).ToList();
+                return View(myCourses);
+            }
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Detail(int id)
         {
             var course = await _courseApiService.GetByIdAsync(id);
             var instructorId = await GetInstructorIdForCurrentUserAsync();
 
             if (course == null || instructorId == null || course.Instructor?.InstructorID != instructorId)
-                return RedirectToAction("MyCourses");
-
-            var dto = new UpdateCourseWithFileDTO
             {
-                CourseID = course.CourseID,
-                Title = course.Title,
-                Description = course.Description,
-                ImageUrl = course.ImageUrl,
-                Rating = course.Rating,
-                ReviewCount = course.ReviewCount,
-                StudentCount = course.StudentCount,
-                LikeCount = course.LikeCount,
-                Price = course.Price,
-                CategoryID = course.Category?.CategoryID,
-                InstructorID = course.Instructor?.InstructorID
-            };
+                return RedirectToAction("MyCourses");
+            }
 
-            await LoadDropdownsAsync();
-            return View(dto);
+            return View(course);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Edit(UpdateCourseWithFileDTO dto)
-        {
-            if (!ModelState.IsValid)
+        // Diğer actionlar değişmedi, burada bırakıyorum...
+
+        [HttpGet]
+            public async Task<IActionResult> Create()
             {
+                await LoadDropdownsAsync();
+                return View();
+            }
+
+            [HttpPost]
+            public async Task<IActionResult> Create(CreateCourseWithFileDTO dto)
+            {
+                if (!ModelState.IsValid)
+                {
+                    await LoadDropdownsAsync();
+                    return View(dto);
+                }
+
+                var instructorId = await GetInstructorIdForCurrentUserAsync();
+                if (instructorId == null)
+                {
+                    ModelState.AddModelError("", "Eğitmen bulunamadı.");
+                    await LoadDropdownsAsync();
+                    return View(dto);
+                }
+
+                dto.InstructorID = instructorId.Value;
+
+                var result = await _courseApiService.CreateAsync(dto);
+                if (result)
+                    return RedirectToAction("MyCourses");
+
+                ModelState.AddModelError("", "Kurs oluşturulamadı.");
                 await LoadDropdownsAsync();
                 return View(dto);
             }
 
-            var instructorId = await GetInstructorIdForCurrentUserAsync();
-            if (instructorId == null)
+            [HttpGet]
+            public async Task<IActionResult> Edit(int id)
             {
-                ModelState.AddModelError("", "Eğitmen bulunamadı.");
+                var course = await _courseApiService.GetByIdAsync(id);
+                var instructorId = await GetInstructorIdForCurrentUserAsync();
+
+                if (course == null || instructorId == null || course.Instructor?.InstructorID != instructorId)
+                    return RedirectToAction("MyCourses");
+
+                var dto = new UpdateCourseWithFileDTO
+                {
+                    CourseID = course.CourseID,
+                    Title = course.Title,
+                    Description = course.Description,
+                    ImageUrl = course.ImageUrl,
+                    Price = course.Price,
+                    CategoryID = course.Category?.CategoryID,
+                    InstructorID = course.Instructor?.InstructorID
+                };
+
                 await LoadDropdownsAsync();
                 return View(dto);
             }
 
-            dto.InstructorID = instructorId.Value;
+            [HttpPost]
+            public async Task<IActionResult> Edit(UpdateCourseWithFileDTO dto)
+            {
+                if (!ModelState.IsValid)
+                {
+                    await LoadDropdownsAsync();
+                    return View(dto);
+                }
 
-            var result = await _courseApiService.UpdateAsync(dto);
-            if (result)
+                var instructorId = await GetInstructorIdForCurrentUserAsync();
+                if (instructorId == null)
+                {
+                    ModelState.AddModelError("", "Eğitmen bulunamadı.");
+                    await LoadDropdownsAsync();
+                    return View(dto);
+                }
+
+                dto.InstructorID = instructorId.Value;
+
+                var result = await _courseApiService.UpdateAsync(dto);
+                if (result)
+                    return RedirectToAction("MyCourses");
+
+                ModelState.AddModelError("", "Kurs güncellenemedi.");
+                await LoadDropdownsAsync();
+                return View(dto);
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> DeleteConfirmed(int id)
+            {
+                var course = await _courseApiService.GetByIdAsync(id);
+                var instructorId = await GetInstructorIdForCurrentUserAsync();
+
+                if (course == null || instructorId == null || course.Instructor?.InstructorID != instructorId)
+                    return RedirectToAction("MyCourses");
+
+                var result = await _courseApiService.DeleteAsync(id);
+                if (!result)
+                    TempData["Error"] = "Kurs silinemedi.";
+
                 return RedirectToAction("MyCourses");
-
-            ModelState.AddModelError("", "Kurs güncellenemedi.");
-            await LoadDropdownsAsync();
-            return View(dto);
+            }
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var course = await _courseApiService.GetByIdAsync(id);
-            var instructorId = await GetInstructorIdForCurrentUserAsync();
-
-            if (course == null || instructorId == null || course.Instructor?.InstructorID != instructorId)
-                return RedirectToAction("MyCourses");
-
-            var result = await _courseApiService.DeleteAsync(id);
-            if (!result)
-                TempData["Error"] = "Kurs silinemedi.";
-
-            return RedirectToAction("MyCourses");
-        }
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var result = await _courseApiService.DeleteAsync(id);
-        //    if (!result)
-        //        TempData["Error"] = "Silme işlemi başarısız.";
-
-        //    return RedirectToAction("MyCourses");
-        //}
     }
-}
+
+
+
+
 

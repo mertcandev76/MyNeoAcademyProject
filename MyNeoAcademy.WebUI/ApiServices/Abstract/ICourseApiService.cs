@@ -11,5 +11,6 @@ namespace MyNeoAcademy.WebUI.ApiServices.Abstract
         Task<bool> UpdateAsync(UpdateCourseWithFileDTO dto);
         Task<bool> DeleteAsync(int id);
         Task<List<SelectListItem>> GetDropdownItemsAsync();
+        Task<List<ResultCourseDTO>> GetCoursesByInstructorIdAsync(int instructorId);
     }
 }

@@ -12,6 +12,10 @@ namespace MyNeoAcademy.WebUI.Extensions
                 client.BaseAddress = new Uri(baseApiUrl);
             });
 
+
+
+            services.AddScoped<ICourseLikeApiService, CourseLikeApiService>();
+            services.AddScoped<ICourseEnrollmentApiService, CourseEnrollmentApiService>();
             services.AddScoped<IRoleApiService, RoleApiService>();
             services.AddScoped<IAppUserApiService, AppUserApiService>();
             services.AddScoped<IAuthApiService, AuthApiService>();

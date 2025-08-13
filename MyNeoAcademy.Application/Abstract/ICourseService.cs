@@ -25,5 +25,8 @@ namespace MyNeoAcademy.Application.Abstract
         Task UpdateWithFileAsync(UpdateCourseWithFileDTO dto, string webRootPath);
 
         Task<bool> DeleteByIdAsync(int id);
+
+        Task<List<ResultCourseDTO>> GetCoursesByInstructorIdAsync(int instructorId);
+
     }
 }

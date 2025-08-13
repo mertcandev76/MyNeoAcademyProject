@@ -101,5 +101,20 @@ namespace MyNeoAcademy.API.Controllers
                 return StatusCode(500, $"Silme hatası: {ex.Message}");
             }
         }
+
+        [HttpGet("byinstructor/{instructorId}")]
+        public async Task<IActionResult> GetByInstructorId(int instructorId)
+        {
+            try
+            {
+                var courses = await _courseService.GetCoursesByInstructorIdAsync(instructorId);
+                return Ok(courses);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
+        }
+
     }
 }

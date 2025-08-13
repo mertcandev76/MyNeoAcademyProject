@@ -26,18 +26,6 @@ namespace MyNeoAcademy.Application.Validators
                 .WithMessage("ImageUrl must be a valid URL.")
                 .When(x => !string.IsNullOrEmpty(x.ImageUrl));
 
-            RuleFor(x => x.Rating)
-                .InclusiveBetween(0, 5).WithMessage("Rating must be between 0 and 5.");
-
-            RuleFor(x => x.ReviewCount)
-                .GreaterThanOrEqualTo(0).WithMessage("ReviewCount cannot be negative.");
-
-            RuleFor(x => x.StudentCount)
-                .GreaterThanOrEqualTo(0).WithMessage("StudentCount cannot be negative.");
-
-            RuleFor(x => x.LikeCount)
-                .GreaterThanOrEqualTo(0).WithMessage("LikeCount cannot be negative.");
-
             RuleFor(x => x.Price)
                 .GreaterThanOrEqualTo(0).WithMessage("Price cannot be negative.")
                 .When(x => x.Price.HasValue);

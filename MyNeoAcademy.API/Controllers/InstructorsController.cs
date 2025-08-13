@@ -5,6 +5,8 @@ using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
 
+
+
 namespace MyNeoAcademy.API.Controllers
 {
     [Route("api/[controller]")]
@@ -12,11 +14,13 @@ namespace MyNeoAcademy.API.Controllers
     public class InstructorsController : ControllerBase
     {
         private readonly IInstructorService _instructorService;
+        private readonly ICourseService _courseService; // Eklendi
         private readonly IWebHostEnvironment _env;
 
-        public InstructorsController(IInstructorService instructorService, IWebHostEnvironment env)
+        public InstructorsController(IInstructorService instructorService, ICourseService courseService, IWebHostEnvironment env)
         {
             _instructorService = instructorService;
+            _courseService = courseService;  // Atandı
             _env = env;
         }
 
@@ -65,6 +69,21 @@ namespace MyNeoAcademy.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"AppUser verisi alınırken hata: {ex.Message}");
+            }
+        }
+
+        // Yeni endpoint: Eğitmenin kurslarını döner
+        [HttpGet("{instructorId}/courses")]
+        public async Task<IActionResult> GetCoursesByInstructorId(int instructorId)
+        {
+            try
+            {
+                var courses = await _courseService.GetCoursesByInstructorIdAsync(instructorId);
+                return Ok(courses);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Kurslar alınırken hata: {ex.Message}");
             }
         }
 
@@ -120,4 +139,7 @@ namespace MyNeoAcademy.API.Controllers
         }
     }
 }
+
+
+
 

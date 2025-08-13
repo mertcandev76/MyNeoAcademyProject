@@ -24,6 +24,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>(); //val
 // 🔗 API Servislerini ekle
 builder.Services.AddApiServices("https://localhost:7230/api/");
 
+// ** IHttpContextAccessor servis eklemesi buraya **
+builder.Services.AddHttpContextAccessor();
+
 // MVC servisleri
 builder.Services.AddControllersWithViews();
 
@@ -46,8 +49,6 @@ app.UseRouting();
 app.UseAuthentication(); // ⬅️ Authentication önce olmalı
 app.UseAuthorization();
 
-
-
 // Areas route
 app.MapControllerRoute(
     name: "areas",
@@ -58,8 +59,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
-
 // Özel örnek route (isteğe bağlı)
 app.MapControllerRoute(
     name: "blogdetail",
@@ -67,6 +66,12 @@ app.MapControllerRoute(
     defaults: new { controller = "BlogDetail", action = "Detail" });
 
 app.Run();
+
+
+
+
+
+
 
 
 

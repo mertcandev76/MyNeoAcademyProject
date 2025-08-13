@@ -33,7 +33,21 @@
                     <span asp-validation-for="Content" class="text-danger"></span>
                 </div>
 
-             
+                <div class="mb-3">
+                    <label asp-for="CourseID" class="form-label">Bağlı Olduğu Kurs</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-light text-secondary">
+                                <i class="fas fa-graduation-cap"></i>
+                            </span>
+                        </div>
+                        <select asp-for="CourseID" asp-items="(IEnumerable<SelectListItem>)ViewBag.Courses" class="form-control">
+                            <option disabled selected hidden>-- Kurs seçin --</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="CourseID" class="text-danger small"></span>
+                </div>
+
 
                 <div class="mb-3">
                     <label asp-for="BlogID" class="form-label">Bağlı Olduğu Blog</label>
@@ -61,6 +75,11 @@
                         </select>
                     </div>
                     <span asp-validation-for="AppUserID" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Rating" class="form-label">Puan</label>
+                    <input asp-for="Rating" type="number" min="1" max="5" class="form-control" />
+                    <span asp-validation-for="Rating" class="text-danger"></span>
                 </div>
 
 

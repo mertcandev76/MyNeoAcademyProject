@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MyNeoAcademy.Application.Common;
+using MyNeoAcademy.Entity.Common;
 using MyNeoAcademy.Application.DTOs;
 using MyNeoAcademy.Entity.Entities;
 using System;

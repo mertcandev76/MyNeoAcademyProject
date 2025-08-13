@@ -1,4 +1,4 @@
-﻿using MyNeoAcademy.Application.Common;
+﻿using MyNeoAcademy.Entity.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace MyNeoAcademy.Application.Abstract
         Task<List<TResultDto>> GetListAsync();
         Task<TResultDto?> GetByIdAsync(int id);
         Task CreateAsync(TCreateDto dto);
-        Task UpdateAsync(TUpdateDto dto);
+        Task  UpdateAsync(TUpdateDto dto);
         Task DeleteAsync(int id);
         Task<int> CountAsync();
         Task<List<TResultDto>> GetFilteredListAsync(Expression<Func<TEntity, bool>> predicate);

@@ -20,7 +20,8 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             return await Table
                 .Include(c => c.Blog)
-                .Include(c => c.AppUser) 
+                .Include(c => c.Course)  
+                .Include(c => c.AppUser)
                 .ToListAsync();
         }
 
@@ -28,15 +29,26 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             return await Table
                 .Include(c => c.Blog)
-                .Include(c => c.AppUser) 
+                .Include(c => c.Course)   
+                .Include(c => c.AppUser)
                 .FirstOrDefaultAsync(c => c.CommentID == id);
         }
 
-        public async Task<List<Comment>> GetByIdWithIncludesBlogAsync(int blogId)
+        public async Task<List<Comment>> GetByBlogIdAsync(int blogId)
         {
             return await Table
                 .Where(c => c.BlogID == blogId)
-                .Include(c => c.AppUser) 
+                .Include(c => c.AppUser)
+                .Include(c => c.Course)  
+                .ToListAsync();
+        }
+
+        public async Task<List<Comment>> GetByCourseIdAsync(int courseId)
+        {
+            return await Table
+                .Where(c => c.CourseID == courseId)
+                .Include(c => c.AppUser)
+                .Include(c => c.Blog)   
                 .ToListAsync();
         }
 
@@ -44,7 +56,8 @@ namespace MyNeoAcademy.DataAccess.Repositories
         {
             return await Table
                 .Include(c => c.Blog)
-                .Include(c => c.AppUser) 
+                .Include(c => c.Course) 
+                .Include(c => c.AppUser)
                 .OrderByDescending(c => c.CreatedDate)
                 .Skip(skip)
                 .Take(take)
@@ -56,15 +69,15 @@ namespace MyNeoAcademy.DataAccess.Repositories
             return await Table.CountAsync();
         }
 
-
         public async Task<List<Comment>> GetByAppUserIdAsync(int appUserId)
         {
             return await Table
                 .Where(c => c.AppUserID == appUserId)
                 .Include(c => c.Blog)
+                .Include(c => c.Course)  
                 .Include(c => c.AppUser)
                 .ToListAsync();
         }
     }
-
 }
+

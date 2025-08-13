@@ -3,6 +3,7 @@ using MyNeoAcademy.Application.Abstract;
 using MyNeoAcademy.Business.Concrete;
 using MyNeoAcademy.DataAccess.Abstract;
 using MyNeoAcademy.DataAccess.Repositories;
+using MyNeoAcademy.Entity.Entities;
 using MyNeoAcademy.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,9 @@ namespace MyNeoAcademy.Business.DependencyResolvers
         public static IServiceCollection AddDependencyResolvers(this IServiceCollection services)
         {
             // Repositories
+
+            services.AddScoped<ICourseLikeRepository, CourseLikeRepository>();
+            services.AddScoped<ICourseEnrollmentRepository, CourseEnrollmentRepository>();
             services.AddScoped<ITestimonialRepository, TestimonialRepository>();
             services.AddScoped<IInstructorRepository, InstructorRepository>();
             services.AddScoped<IAboutFeatureRepository, AboutFeatureRepository>();
@@ -31,6 +35,9 @@ namespace MyNeoAcademy.Business.DependencyResolvers
 
             // Services
 
+
+            services.AddScoped<ICourseLikeService, CourseLikeManager>();
+            services.AddScoped<ICourseEnrollmentService, CourseEnrollmentManager>();
             services.AddScoped<IAppUserService, AppUserManager>();
             services.AddScoped<IRoleService, RoleManagerService>();
             services.AddScoped<IAboutDetailService, AboutDetailManager>();
@@ -55,6 +62,8 @@ namespace MyNeoAcademy.Business.DependencyResolvers
 
             // Generic
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+            services.AddScoped(typeof(IGenericServiceWithoutUpdate<,,>), typeof(GenericManagerWithoutUpdate<,,>));
             services.AddScoped(typeof(IGenericService<,,,>), typeof(GenericManager<,,,>));
 
             return services;

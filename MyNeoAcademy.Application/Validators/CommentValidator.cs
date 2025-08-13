@@ -13,8 +13,8 @@ namespace MyNeoAcademy.Application.Validators
         public CreateCommentValidator()
         {
             RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("Username cannot be empty.")
-            .MaximumLength(50).WithMessage("Username can be at most 50 characters long.");
+                .NotEmpty().WithMessage("Username cannot be empty.")
+                .MaximumLength(50).WithMessage("Username can be at most 50 characters long.");
 
             RuleFor(x => x.Email)
                 .EmailAddress().WithMessage("Please enter a valid email address.")
@@ -23,9 +23,13 @@ namespace MyNeoAcademy.Application.Validators
             RuleFor(x => x.Content)
                 .NotEmpty().WithMessage("Comment content cannot be empty.")
                 .MaximumLength(500).WithMessage("Comment can be at most 500 characters long.");
-
-            RuleFor(x => x.BlogID)
-                .GreaterThan(0).WithMessage("A valid Blog ID must be provided.");
+            RuleFor(x => x)
+                .Must(x => (x.BlogID.HasValue && x.BlogID > 0) || (x.CourseID.HasValue && x.CourseID > 0))
+                .WithMessage("Yorum bir bloga veya kursa ait olmalıdır.");
+            RuleFor(x => x.Rating)
+    .InclusiveBetween(1, 5)
+    .When(x => x.Rating.HasValue) 
+    .WithMessage("Puan 1 ile 5 arasında olmalıdır.");
 
         }
     }
@@ -35,9 +39,9 @@ namespace MyNeoAcademy.Application.Validators
         public UpdateCommentValidator()
         {
             RuleFor(x => x.CommentID)
-           .GreaterThan(0).WithMessage("Invalid comment ID.");
+                .GreaterThan(0).WithMessage("Invalid comment ID.");
 
-            Include(new CreateCommentValidator()); 
+            Include(new CreateCommentValidator());
         }
     }
 
@@ -54,17 +58,14 @@ namespace MyNeoAcademy.Application.Validators
         }
     }
 
-
     public class UpdateCommentWithFileValidator : AbstractValidator<UpdateCommentWithFileDTO>
     {
         public UpdateCommentWithFileValidator()
         {
             RuleFor(x => x.CommentID)
-       .GreaterThan(0).WithMessage("Invalid Comment ID.");
+                .GreaterThan(0).WithMessage("Invalid Comment ID.");
 
             Include(new CreateCommentWithFileValidator());
         }
     }
-
-
 }

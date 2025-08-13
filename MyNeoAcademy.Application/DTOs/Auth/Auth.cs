@@ -41,6 +41,7 @@ namespace MyNeoAcademy.Application.DTOs.Auth
         public string? ProfileImageUrl { get; set; }
 
         public IList<string> Roles { get; set; } = new List<string>();
+        public int? InstructorId { get; set; }
     }
 
 }

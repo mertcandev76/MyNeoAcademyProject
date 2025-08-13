@@ -33,6 +33,9 @@
                                 <td>@course.StudentCount</td>
                                 <td>@(course.Price.HasValue ? course.Price.Value.ToString("C") : "Ücretsiz")</td>
                                 <td>
+                                    <a asp-action="Detail" asp-route-id="@course.CourseID" class="btn btn-primary btn-sm me-1" title="Detay">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
                                     <a asp-action="Edit" asp-route-id="@course.CourseID" class="btn btn-warning btn-sm me-1" title="Düzenle">
                                         <i class="fas fa-edit"></i>
                                     </a>

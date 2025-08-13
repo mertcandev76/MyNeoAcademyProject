@@ -12,5 +12,7 @@ namespace MyNeoAcademy.DataAccess.Abstract
 
         Task<List<Course>> GetAllWithIncludesAsync();
         Task<Course?> GetByIdWithIncludesAsync(int id);
+        Task<List<Course>> GetCoursesByInstructorIdAsync(int instructorId);
+
     }
 }

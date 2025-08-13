@@ -1,4 +1,4 @@
-﻿using MyNeoAcademy.Application.Common;
+﻿using MyNeoAcademy.Entity.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

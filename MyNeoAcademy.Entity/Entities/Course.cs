@@ -16,24 +16,21 @@ namespace MyNeoAcademy.Entity.Entities
         public string? Description { get; set; }
 
         public string? ImageUrl { get; set; }
+        public int Rating { get; set; }      
+        public int ReviewCount { get; set; }     
+        public int StudentCount { get; set; }   
+        public int LikeCount { get; set; }       
 
-        public int Rating { get; set; } 
-        public int ReviewCount { get; set; }
-
-        public int StudentCount { get; set; }
-
-        public int LikeCount { get; set; }
-
-        public decimal? Price { get; set; } 
-
+        public decimal? Price { get; set; }
 
         public int? CategoryID { get; set; }
         public Category? Category { get; set; }
-        public int? InstructorID { get; set; }       
-        public Instructor? Instructor { get; set; } 
 
+        public int? InstructorID { get; set; }
+        public Instructor? Instructor { get; set; }
 
-
-
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<CourseLike> CourseLikes { get; set; } = new List<CourseLike>();
+        public ICollection<CourseEnrollment> CourseEnrollments { get; set; } = new List<CourseEnrollment>();
     }
 }

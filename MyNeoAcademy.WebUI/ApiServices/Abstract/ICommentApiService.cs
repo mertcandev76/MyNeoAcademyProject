@@ -5,6 +5,8 @@ namespace MyNeoAcademy.WebUI.ApiServices.Abstract
 {
     public interface ICommentApiService
     {
+        Task<List<ResultCommentDTO>> GetAllCourseCommentsAsync(int courseId);
+
         Task<PagedResultDTO<ResultCommentDTO>> GetPagedAsync(int page, int pageSize);
         Task<PagedResultDTO<ResultCommentDTO>> GetPagedByBlogAsync(int blogId, int page, int pageSize);
         Task<List<ResultCommentDTO>> GetAllAsync();

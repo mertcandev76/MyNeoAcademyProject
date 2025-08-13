@@ -466,11 +466,14 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.Property<int?>("AppUserID")
                         .HasColumnType("int");
 
-                    b.Property<int>("BlogID")
+                    b.Property<int?>("BlogID")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseID")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -481,6 +484,9 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -490,6 +496,8 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.HasIndex("AppUserID");
 
                     b.HasIndex("BlogID");
+
+                    b.HasIndex("CourseID");
 
                     b.ToTable("Comments");
                 });
@@ -568,6 +576,60 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.HasIndex("InstructorID");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.CourseEnrollment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppUserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EnrolledDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserID");
+
+                    b.HasIndex("CourseID", "AppUserID")
+                        .IsUnique();
+
+                    b.ToTable("CourseEnrollments");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.CourseLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppUserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LikedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserID");
+
+                    b.HasIndex("CourseID", "AppUserID")
+                        .IsUnique();
+
+                    b.ToTable("CourseLikes");
                 });
 
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Instructor", b =>
@@ -882,12 +944,17 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.HasOne("MyNeoAcademy.Entity.Entities.Blog", "Blog")
                         .WithMany("Comments")
                         .HasForeignKey("BlogID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Course", "Course")
+                        .WithMany("Comments")
+                        .HasForeignKey("CourseID");
 
                     b.Navigation("AppUser");
 
                     b.Navigation("Blog");
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Course", b =>
@@ -905,6 +972,44 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.CourseEnrollment", b =>
+                {
+                    b.HasOne("MyNeoAcademy.Entity.Entities.AppUser", "AppUser")
+                        .WithMany("CourseEnrollments")
+                        .HasForeignKey("AppUserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Course", "Course")
+                        .WithMany("CourseEnrollments")
+                        .HasForeignKey("CourseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.CourseLike", b =>
+                {
+                    b.HasOne("MyNeoAcademy.Entity.Entities.AppUser", "AppUser")
+                        .WithMany("CourseLikes")
+                        .HasForeignKey("AppUserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyNeoAcademy.Entity.Entities.Course", "Course")
+                        .WithMany("CourseLikes")
+                        .HasForeignKey("CourseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Instructor", b =>
@@ -943,6 +1048,10 @@ namespace MyNeoAcademy.DataAccess.Migrations
 
                     b.Navigation("Comments");
 
+                    b.Navigation("CourseEnrollments");
+
+                    b.Navigation("CourseLikes");
+
                     b.Navigation("Instructor");
 
                     b.Navigation("Testimonials");
@@ -967,6 +1076,15 @@ namespace MyNeoAcademy.DataAccess.Migrations
                     b.Navigation("Blogs");
 
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Course", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("CourseEnrollments");
+
+                    b.Navigation("CourseLikes");
                 });
 
             modelBuilder.Entity("MyNeoAcademy.Entity.Entities.Instructor", b =>

@@ -1,0 +1,67 @@
+﻿@model List<ResultCourseLikeDTO>
+
+@{
+    ViewData["Title"] = "Kurs Beğenileri";
+}
+
+<div class="container-fluid px-3">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">@ViewData["Title"]</h3>
+            <a asp-action="Create" asp-area="Instructor" class="btn btn-primary btn-sm">Ekle</a>
+        </div>
+
+        <div class="card-body p-0">
+            @if (Model != null && Model.Any())
+            {
+                <table class="table table-bordered mb-0 text-center align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Beğeni ID</th>
+                            <th>Kurs</th>
+                            <th>Kullanıcı</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var like in Model)
+                        {
+                            <tr>
+                                <td>@like.Id</td>
+                                <td>@like.Course?.Title</td>
+                                <td>@like.AppUser?.FullName</td>
+                                <td>@like.LikedDate.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <a asp-action="Detail" asp-area="Instructor" asp-route-id="@like.Id" class="btn btn-primary btn-sm me-1">
+                                        <i class="fas fa-eye"></i> Detay
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#deleteModal"
+                                            data-id="@like.Id"
+                                            data-name="@like.Course?.Title"
+                                            data-controller="CourseLike"
+                                            data-area="Instructor"
+                                            title="Sil">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-warning m-3 text-center">
+                    Henüz kurs beğenisi bulunmamaktadır.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Silme onay modalı -->
+@await Html.PartialAsync("_DeleteModalPartial")

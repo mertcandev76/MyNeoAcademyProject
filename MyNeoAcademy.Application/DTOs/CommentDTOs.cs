@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MyNeoAcademy.Application.Common;
+using MyNeoAcademy.Entity.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +14,18 @@ namespace MyNeoAcademy.Application.DTOs
         public int CommentID { get; set; }
         public string UserName { get; set; } = null!;
         public string? Content { get; set; }
+        public int Rating { get; set; }
     }
+
     public class CreateCommentDTO
     {
         public string UserName { get; set; } = null!;
         public string? Email { get; set; }
         public string? Content { get; set; }
         public string? ImageUrl { get; set; }
-        public int BlogID { get; set; }
+        public int? Rating { get; set; }
+        public int? BlogID { get; set; }
+        public int? CourseID { get; set; }
         public int? AppUserID { get; set; }
     }
 
@@ -34,18 +38,33 @@ namespace MyNeoAcademy.Application.DTOs
     {
         public int CommentID { get; set; }
         public BlogReferenceDTO? Blog { get; set; }
+        public CourseReferenceDTO? Course { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 
     public class UpdateCommentDTO : CreateCommentDTO, IHasId
     {
         public int CommentID { get; set; }
-        [JsonIgnore] public int Id { get => CommentID; set => CommentID = value; }
+
+        [JsonIgnore]
+        public int Id
+        {
+            get => CommentID;
+            set => CommentID = value;
+        }
     }
 
     public class UpdateCommentWithFileDTO : CreateCommentWithFileDTO, IHasId
     {
         public int CommentID { get; set; }
-        public int Id { get => CommentID; set => CommentID = value; }
+
+        [JsonIgnore]
+        public int Id
+        {
+            get => CommentID;
+            set => CommentID = value;
+        }
     }
 }
+
+

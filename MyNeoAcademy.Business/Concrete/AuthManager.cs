@@ -120,18 +120,17 @@ namespace MyNeoAcademy.Business.Concrete
                 ? $"{request.Scheme}://{request.Host}"
                 : "https://localhost:7230"; 
         }
-
         private async Task<TokenResultDTO> CreateTokenAsync(AppUser user)
         {
             var roles = await _userManager.GetRolesAsync(user);
 
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName ?? ""),
-                new Claim(ClaimTypes.Email, user.Email ?? ""),
-                new Claim("FullName", user.FullName ?? "")
-            };
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, user.UserName ?? ""),
+        new Claim(ClaimTypes.Email, user.Email ?? ""),
+        new Claim("FullName", user.FullName ?? "")
+    };
 
             foreach (var role in roles)
             {
@@ -156,7 +155,6 @@ namespace MyNeoAcademy.Business.Concrete
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-
             string imageUrl = string.IsNullOrWhiteSpace(user.ProfileImageUrl)
                 ? ""
                 : user.ProfileImageUrl.StartsWith("http")
@@ -172,7 +170,8 @@ namespace MyNeoAcademy.Business.Concrete
                 Email = user.Email ?? "",
                 FullName = user.FullName ?? "",
                 ProfileImageUrl = imageUrl,
-                Roles = roles
+                Roles = roles,
+                InstructorId = user.Instructor?.InstructorID  
             };
         }
     }

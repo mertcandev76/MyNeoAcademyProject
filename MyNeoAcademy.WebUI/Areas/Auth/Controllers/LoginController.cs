@@ -43,18 +43,23 @@ namespace MyNeoAcademy.WebUI.Areas.Auth.Controllers
                 ModelState.AddModelError("", "Giriş başarısız.");
                 return View(model);
             }
-
             var claims = new List<Claim>
+{
+    new Claim(ClaimTypes.NameIdentifier, tokenResult.UserId.ToString()),
+    new Claim(ClaimTypes.Name, tokenResult.UserName),
+    new Claim(ClaimTypes.Email, tokenResult.Email),
+    new Claim("FullName", tokenResult.FullName),
+    new Claim("AccessToken", tokenResult.Token)
+};
+            if (tokenResult.InstructorId.HasValue)
             {
-                new Claim(ClaimTypes.NameIdentifier, tokenResult.UserId.ToString()),
-                new Claim(ClaimTypes.Name, tokenResult.UserName),
-                new Claim(ClaimTypes.Email, tokenResult.Email),
-                new Claim("FullName", tokenResult.FullName),
-                new Claim("AccessToken", tokenResult.Token)
-            };
+                claims.Add(new Claim("InstructorId", tokenResult.InstructorId.Value.ToString()));
+            }
+
 
             foreach (var role in tokenResult.Roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
+
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
@@ -67,9 +72,7 @@ namespace MyNeoAcademy.WebUI.Areas.Auth.Controllers
             else if (tokenResult.Roles.Contains("Author"))
                 return RedirectToAction("Index", "Dashboard", new { area = "Author" });
             else if (tokenResult.Roles.Contains("Instructor"))
-                return RedirectToAction("MyCourses", "Course", new { area = "Instructor" });
-            //else if (tokenResult.Roles.Contains("Instructor"))
-            //    return RedirectToAction("Index", "Dashboard", new { area = "Instructor" });
+                return RedirectToAction("Index", "Dashboard", new { area = "Instructor" });
             else if (tokenResult.Roles.Contains("Moderator"))
                 return RedirectToAction("Index", "Panel", new { area = "Moderator" });
             else if (tokenResult.Roles.Contains("User"))
@@ -78,11 +81,19 @@ namespace MyNeoAcademy.WebUI.Areas.Auth.Controllers
                 return RedirectToAction("AccessDenied", "Error");
         }
 
+
+
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

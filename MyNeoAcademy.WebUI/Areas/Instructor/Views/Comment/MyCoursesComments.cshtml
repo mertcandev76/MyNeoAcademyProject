@@ -1,0 +1,126 @@
+﻿@model MyCoursesCommentsViewModel
+
+@{
+    ViewData["Title"] = "Kurs Yorumları";
+}
+
+<div class="container-fluid px-3">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">@ViewData["Title"]</h3>
+    <form method="get"
+      asp-action="MyCoursesComments"
+      asp-controller="Comment"
+      asp-area="Instructor"
+      class="row g-3 align-items-center">
+
+    <div class="col-auto">
+        <label for="courseSelect" class="form-label mb-0 fw-bold">
+            Kurs Seçiniz
+        </label>
+    </div>
+
+    <div class="col-auto">
+        <select id="courseSelect"
+                name="courseId"
+                class="form-control"
+                style="min-width: 220px;"
+                onchange="this.form.submit()">
+            <option value="" disabled selected hidden>-- Tüm Kurslar --</option>
+                        @foreach (var course in Model.Courses)
+                        {
+                            if (Model.SelectedCourseId == course.CourseID)
+                            {
+                                <option value="@course.CourseID" selected>@course.Title</option>
+                            }
+                            else
+                            {
+                                <option value="@course.CourseID">@course.Title</option>
+                            }
+                        }
+
+        </select>
+    </div>
+
+    <noscript class="col-auto">
+        <button type="submit" class="btn btn-primary btn-sm">Filtrele</button>
+    </noscript>
+</form>
+
+         @*   <form method="get"
+                  asp-action="MyCoursesComments"
+                  asp-controller="Comment"
+                  asp-area="Instructor"
+                  class="row g-3 align-items-center">
+
+                <div class="col-auto">
+                    <label for="courseSelect" class="form-label mb-0 fw-bold">
+                        Kurs Seçiniz
+                    </label>
+                </div>
+
+                <div class="col-auto">
+                    <select id="courseSelect"
+                            name="courseId"
+                            class="form-control"
+                            style="min-width: 220px;"
+                            onchange="this.form.submit()">
+                        <option value="">Tüm Kurslar</option>
+                        @foreach (var course in Model.Courses)
+                        {
+                            <option value="@course.CourseID"
+                                    selected="@(Model.SelectedCourseId == course.CourseID ? "selected" : null)">
+                                @course.Title
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <noscript class="col-auto">
+                    <button type="submit" class="btn btn-primary btn-sm">Filtrele</button>
+                </noscript>
+            </form>*@
+
+
+
+        </div>
+
+        <div class="card-body p-0">
+            @if (Model.Comments != null && Model.Comments.Any())
+            {
+                <table class="table table-striped table-bordered mb-0 text-center align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 5%;">#</th>
+                            <th style="width: 20%;">Kullanıcı</th>
+                            <th style="width: 50%;">İçerik</th>
+                            <th style="width: 10%;">Puan</th>
+                            <th style="width: 15%;">Oluşturulma Tarihi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var comment in Model.Comments)
+                        {
+                            <tr>
+                                <td>@comment.CommentID</td>
+                                <td>@comment.UserName</td>
+                                <td class="text-start">@comment.Content</td>
+                                <td>@comment.Rating</td>
+                                <td>@comment.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-warning m-3 text-center">
+                    Henüz yorum bulunmamaktadır.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+

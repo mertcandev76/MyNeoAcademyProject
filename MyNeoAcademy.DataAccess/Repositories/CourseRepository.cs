@@ -19,17 +19,35 @@ namespace MyNeoAcademy.DataAccess.Repositories
         public async Task<List<Course>> GetAllWithIncludesAsync()
         {
             return await Table
-                .Include(c=>c.Category)
-                .Include(c=>c.Instructor)
+                .Include(c => c.Category)
+                .Include(c => c.Instructor)
+                .Include(c => c.Comments)
+                .Include(c => c.CourseEnrollments)
+                .Include(c => c.CourseLikes)
                 .ToListAsync();
         }
 
         public async Task<Course?> GetByIdWithIncludesAsync(int id)
         {
             return await Table
-              .Include(c => c.Category)
-              .Include (c=>c.Instructor)    
-              .FirstOrDefaultAsync(c=>c.CourseID==id);
+                .Include(c => c.Category)
+                .Include(c => c.Instructor)
+                .Include(c => c.Comments)
+                .Include(c => c.CourseEnrollments)
+                .Include(c => c.CourseLikes)
+                .FirstOrDefaultAsync(c => c.CourseID == id);
         }
+        public async Task<List<Course>> GetCoursesByInstructorIdAsync(int instructorId)
+        {
+            return await Table
+                .Where(c => c.InstructorID == instructorId)
+                .Include(c => c.Category)
+                .Include(c => c.Instructor)
+                .Include(c => c.Comments)
+                .Include(c => c.CourseEnrollments)
+                .Include(c => c.CourseLikes)
+                .ToListAsync();
+        }
+
     }
 }
